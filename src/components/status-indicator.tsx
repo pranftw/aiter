@@ -1,4 +1,3 @@
-import { Text, Box } from 'ink';
 import { colors } from '../utils/colors';
 
 
@@ -24,9 +23,9 @@ const getBoxColor = (status: string) => {
 
 export function StatusIndicator({ id, name, status }: StatusIndicatorProps) {
   return (
-    <Box key={`status-indicator-${id}`} flexDirection="row" gap={1} flexWrap='wrap'>
-      <Text color={getBoxColor(status)}>■</Text>
-      <Text italic>{name}</Text>
-    </Box>
+    <box flexDirection="row" gap={1} flexWrap='wrap'>
+      <text fg={getBoxColor(status)}>■</text>
+      <text><i>{name}</i></text>
+    </box>
   );
 }

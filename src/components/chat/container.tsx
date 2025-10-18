@@ -5,7 +5,6 @@ import { useChat } from "@ai-sdk/react";
 import { getStreamFunction } from "@/utils/ai";
 import { ChatSchema } from "@/lib/schema";
 import { z } from "zod";
-import { Text } from "ink";
 import { useEffect, useRef } from "react";
 
 interface ChatContainerProps {
@@ -58,8 +57,10 @@ export function ChatContainer({ chat, prompt, specName }: ChatContainerProps) {
   
   return (
     <>
-      <Text><Text bold>Chat ID:</Text> {chat.id}</Text>
-      <ChatMessages messages={messages} />
+      <text><strong>Chat ID:</strong> {chat.id}</text>
+      <scrollbox>
+        <ChatMessages messages={messages} />
+      </scrollbox>
       <ChatBox chatHook={chatHook} agent={chat.agent} />
     </>
   )

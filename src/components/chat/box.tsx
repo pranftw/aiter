@@ -1,6 +1,4 @@
 import { type useChat } from "@ai-sdk/react";
-import TextInput from "ink-text-input";
-import { Box } from "ink";
 import { useState } from "react";
 import { colors } from "../../utils/colors";
 
@@ -19,24 +17,21 @@ export function ChatBox({ chatHook, agent }: ChatBoxProps) {
     setMessage('');
   };
 
-  const handleInputChange = (value: string) => {
-    setMessage(value);
-  };
-
   return (
-    <Box
-      borderStyle="round"
+    <box
+      border
       borderColor={colors.border.primary}
-      paddingX={2}
-      marginY={0.5}
+      paddingLeft={2}
+      paddingRight={2}
+      marginTop={0.5}
+      marginBottom={0.5}
     >
-      <TextInput
-        value={message}
+      <input
         placeholder="Write a message"
-        onChange={handleInputChange}
-        focus={true}
+        focused
+        onInput={setMessage}
         onSubmit={handleSubmit}
       />
-    </Box>
+    </box>
   )
 }

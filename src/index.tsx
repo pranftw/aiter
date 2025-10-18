@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { render } from 'ink';
+import { render } from '@opentui/react';
 import { ChatContainer } from './components/chat/container';
 import { useEffect, useState, useRef } from 'react';
 import { ChatSchema } from './lib/schema';
@@ -37,4 +37,4 @@ function App({ args }: AppProps) {
   return null;
 }
 
-render(<App args={processedArgs}/>, {maxFps: 60})
+render(<App args={processedArgs}/>)

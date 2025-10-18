@@ -22,7 +22,7 @@ export const argv = yargs(hideBin(process.argv))
   .option('agent', {
     alias: 'a',
     type: 'string',
-    choices: ['scribe', 'elucidator'],
+    choices: ['scribe'],
     description: 'Agent name',
     default: 'scribe'
   })

@@ -1,5 +1,4 @@
 import { type UIMessage } from "ai"
-import { Text, Box } from "ink"
 import { colors } from '../../../utils/colors'
 
 interface UserMessageProps {
@@ -8,24 +7,24 @@ interface UserMessageProps {
 
 export function UserMessage({ message }: UserMessageProps) {
   return (
-    <Box
-      borderStyle="round"
-      borderColor={colors.border.secondary}
-      paddingX={2}
-      marginY={0.5}
+    <box
+      border
+      borderColor={colors.border.secondary} 
+      paddingLeft={2} 
+      paddingRight={2} 
+      marginTop={0.5} 
+      marginBottom={0.5}
     >
-      {message.parts?.map((part, index) => {
+      {message.parts?.map((part) => {
         switch (part.type) {
           case 'text':
             return (
-              <Text key={index} wrap="wrap">
-                {part.text}
-              </Text>
+              <text wrap>{part.text}</text>
             )
           default:
             return null
         }
       })}
-    </Box>
+    </box>
   )
 }

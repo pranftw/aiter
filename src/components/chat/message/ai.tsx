@@ -1,6 +1,5 @@
 import { type UIMessage, type ToolUIPart, type DynamicToolUIPart } from 'ai'
 import { StatusIndicator } from '@/components/status-indicator'
-import { Text, Box } from 'ink'
 import React from 'react'
 import { colors } from '../../../utils/colors'
 import { SubagentToolCallStatusSchema } from '@/lib/schema'
@@ -20,10 +19,14 @@ interface ToolCallDisplayProps {
 function ToolCallDisplay({ toolCallId, name, status, input, marginLeft, children }: ToolCallDisplayProps) {
   return (
     <>
-      <Box flexDirection="row" gap={1} marginLeft={marginLeft} flexWrap='wrap'>
+      <box flexDirection="row" gap={1} marginLeft={marginLeft} flexWrap='wrap'>
+        <StatusIndicator id={toolCallId} name={name} status={status} />
+        <text><i>{JSON.stringify(input)}</i></text>
+      </box>
+      {/* <Box flexDirection="row" gap={1} marginLeft={marginLeft} flexWrap='wrap'>
         <StatusIndicator id={toolCallId} name={name} status={status} />
         <Text color={colors.text.gray} italic>{JSON.stringify(input)}</Text>
-      </Box>
+      </Box> */}
       {status === 'output-available' && children}
     </>
   )
@@ -41,12 +44,12 @@ export function AIMessage({ message }: AIMessageProps) {
       {message.parts?.map((part, index) => {
         switch (part.type) {
           case 'text':
-            return <Text key={index} text={part.text} />
+            return <text key={index} wrap>{part.text}</text>
           default:
             if (part.type.startsWith('tool')) {
               const toolPart = part as ToolUIPart
               return (
-                <React.Fragment key={`ai-message-tool-${index}`}>
+                <React.Fragment>
                   <ToolCallDisplay
                     toolCallId={toolPart.toolCallId}
                     name={part.type}
@@ -66,7 +69,7 @@ export function AIMessage({ message }: AIMessageProps) {
             else if (part.type.startsWith('dynamic-tool')) {
               const dynamicToolPart = part as DynamicToolUIPart
               return (
-                <React.Fragment key={`ai-message-tool-${index}`}>
+                <React.Fragment>
                   <ToolCallDisplay
                     toolCallId={dynamicToolPart.toolCallId}
                     name={`tool-${dynamicToolPart.toolName}`}
@@ -86,7 +89,7 @@ export function AIMessage({ message }: AIMessageProps) {
             else if (part.type === 'data-subagent-tool-call') {
               const subagentToolCallPart = part.data as z.infer<typeof SubagentToolCallStatusSchema>
               return (
-                <React.Fragment key={`ai-message-subagent-tool-call-${index}`}>
+                <React.Fragment>
                   <ToolCallDisplay
                     toolCallId={subagentToolCallPart.id}
                     name={subagentToolCallPart.toolName}

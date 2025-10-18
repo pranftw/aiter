@@ -13,7 +13,7 @@ export function ChatMessages({ messages }: ChatMessagesProps) {
   return (
     <>
       {messages.map((message: UIMessage) => (
-        <React.Fragment key={`message-${message.id}`}>
+        <React.Fragment>
           {message.role==='user'?(
             <UserMessage message={message} />
           ):(

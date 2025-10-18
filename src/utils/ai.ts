@@ -4,7 +4,6 @@ import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/
 import fs from 'fs';
 // stream functions
 import {streamFunction as scribeStreamFunction} from "@/ai/agents/scribe/stream-function";
-import {streamFunction as elucidatorStreamFunction} from "@/ai/agents/elucidator/stream-function";
 
 
 
@@ -108,9 +107,6 @@ export function getPrompt(path: string){
 export function getStreamFunction(agent: string){
   if (agent==='scribe'){
     return scribeStreamFunction;
-  }
-  else if (agent==='elucidator'){
-    return elucidatorStreamFunction;
   }
   throw new Error(`Stream function not found for agent: ${agent}`);
 }
