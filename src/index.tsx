@@ -5,16 +5,19 @@ import { ChatSchema } from './lib/schema';
 import { initializeMCP, cleanup, initializeChat } from './utils/utils';
 import { z } from 'zod';
 import { processedArgs } from './utils/yargs';
+import { getStreamFunction } from './utils/ai';
+import type { StreamFunctionType } from './ai/custom-chat-transport';
 
 
 
 interface AppProps {
   args: typeof processedArgs;
   chat: z.infer<typeof ChatSchema> | null;
+  streamFunction: StreamFunctionType;
 }
 
 
-function App({ args, chat }: AppProps) {
+function App({ args, chat, streamFunction }: AppProps) {
   useKeyboard((key) => {
     if (key.name==='c' && key.ctrl) {
       cleanup();
@@ -22,17 +25,18 @@ function App({ args, chat }: AppProps) {
     }
   });
   if (chat) {
-    return <ChatContainer chat={chat} prompt={args.prompt} specName={args.specName} />
+    return <ChatContainer chat={chat} streamFunction={streamFunction} prompt={args.prompt} />
   }
   return null;
 }
 
 
 async function main(args: typeof processedArgs){
+  await initializeMCP(args.agent);
+  const chat = await initializeChat(args.chatId, args.agent);
+  const streamFunction = await getStreamFunction(args.agent);
   try {
-    await initializeMCP(args.agent);
-    const chat = await initializeChat(args.chatId, args.agent);
-    await render(<App args={args} chat={chat}/>, {exitOnCtrlC: false, enableMouseMovement: true});
+    await render(<App args={args} chat={chat} streamFunction={streamFunction}/>, {exitOnCtrlC: false, enableMouseMovement: true});
   } catch (error) {
     await cleanup();
     console.error('Error:', error);

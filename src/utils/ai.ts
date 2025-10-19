@@ -2,8 +2,6 @@ import { experimental_createMCPClient as createMCPClient, type experimental_MCPC
 import { Experimental_StdioMCPTransport as StdioMCPTransport } from 'ai/mcp-stdio';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import fs from 'fs';
-// stream functions
-import {streamFunction as scribeStreamFunction} from "@/ai/agents/scribe/stream-function";
 
 
 
@@ -104,11 +102,9 @@ export function getPrompt(path: string){
 }
 
 
-export function getStreamFunction(agent: string){
-  if (agent==='scribe'){
-    return scribeStreamFunction;
-  }
-  throw new Error(`Stream function not found for agent: ${agent}`);
+export async function getStreamFunction(agent: string){
+  const streamFunction = await import(`@/ai/agents/${agent}/stream-function`);
+  return streamFunction.default;
 }
 
 

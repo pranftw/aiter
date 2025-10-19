@@ -4,10 +4,9 @@ import { useState } from "react";
 
 interface ChatBoxProps {
   chatHook: ReturnType<typeof useChat>;
-  agent: string;
 }
 
-export function ChatBox({ chatHook, agent }: ChatBoxProps) {
+export function ChatBox({ chatHook }: ChatBoxProps) {
   const { sendMessage, status } = chatHook;
   const [message, setMessage] = useState('');
 

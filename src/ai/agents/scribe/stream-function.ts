@@ -1,5 +1,5 @@
 import { convertToModelMessages, streamText, createUIMessageStream, hasToolCall, generateId } from "ai";
-import { StreamFunctionOptionsType } from "@/ai/custom-chat-transport";
+import type { StreamFunctionOptionsType } from "@/ai/custom-chat-transport";
 import {openrouter} from "@openrouter/ai-sdk-provider";
 import { mcpManager } from "@/utils/mcp-manager";
 import { ToolContextSchema } from "@/lib/schema";
@@ -10,7 +10,7 @@ import * as localTools from "@/ai/agents/scribe/tools";
 
 
 
-export async function streamFunction(chatId: string, agent: string, options: StreamFunctionOptionsType) {
+export default async function streamFunction(chatId: string, agent: string, options: StreamFunctionOptionsType) {
   const mcpTools = mcpManager.tools; // Access MCP tools directly (initialization handled at app level)
   const tools = {
     ...mcpTools, 

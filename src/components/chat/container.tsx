@@ -1,4 +1,4 @@
-import { CustomChatTransport } from "@/ai/custom-chat-transport";
+import { CustomChatTransport, type StreamFunctionType } from "@/ai/custom-chat-transport";
 import { ChatBox } from "./box";
 import { ChatMessages } from "./messages";
 import { useChat } from "@ai-sdk/react";
@@ -9,50 +9,32 @@ import { useEffect, useRef } from "react";
 
 interface ChatContainerProps {
   chat: z.infer<typeof ChatSchema>;
+  streamFunction: StreamFunctionType;
   prompt: string | null;
-  specName: string | null;
 }
 
 const prepareChat = (
   prompt: string | null,
-  specName: string | null,
   hasSentPrompt: { current: boolean },
   sendMessage: (message: { text: string }) => void
 ) => {
-  if ((prompt || specName) && !hasSentPrompt.current) {
+  if (prompt && !hasSentPrompt.current) {
     hasSentPrompt.current = true;
-    
-    let message = '';
-    
-    // Add spec reference if provided
-    if (specName) {
-      message = `Implement based on the spec at specs/${specName}.md Use the read_file tool to read the spec.`;
-    }
-    
-    // Append prompt if provided
-    if (prompt) {
-      if (message) {
-        message += `\n\n${prompt}`;
-      } else {
-        message = prompt;
-      }
-    }
-    
-    sendMessage({ text: message });
+    sendMessage({ text: prompt });
   }
 };
 
-export function ChatContainer({ chat, prompt, specName }: ChatContainerProps) {
+export function ChatContainer({ chat, streamFunction, prompt }: ChatContainerProps) {
   const hasSentPrompt = useRef(false);
   const chatHook = useChat({
     id: chat.id,
-    transport: new CustomChatTransport(getStreamFunction(chat.agent), [chat.id, chat.agent]),
+    transport: new CustomChatTransport(streamFunction, [chat.id, chat.agent]),
     messages: chat.messages
   });
   const {messages, sendMessage} = chatHook;
   
   useEffect(() => {
-    prepareChat(prompt, specName, hasSentPrompt, sendMessage);
+    prepareChat(prompt, hasSentPrompt, sendMessage);
   }, []);
   
   return (
@@ -71,7 +53,7 @@ export function ChatContainer({ chat, prompt, specName }: ChatContainerProps) {
       
       {/* Input box - fixed at bottom */}
       <box paddingTop={1} paddingBottom={1}>
-        <ChatBox chatHook={chatHook} agent={chat.agent} />
+        <ChatBox chatHook={chatHook} />
       </box>
     </box>
   );

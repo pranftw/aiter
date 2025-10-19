@@ -1,7 +1,6 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
-import path from 'path';
 
 
 
@@ -38,12 +37,6 @@ export const argv = yargs(hideBin(process.argv))
     description: 'Prompt string',
     default: null
   })
-  .option('spec', {
-    alias: 's',
-    type: 'string',
-    description: 'Spec file path',
-    default: null
-  })
   .help('h')
   .alias('h', 'help')
   .parseSync();
@@ -51,7 +44,6 @@ export const argv = yargs(hideBin(process.argv))
 
 type ExtendedArguments = typeof argv & {
   chatId: string | null;
-  specName: string | null;
 };
 
 
@@ -68,12 +60,6 @@ const processArgs = (args: typeof argv): ExtendedArguments => {
     args.prompt = readStdin();
   }
   
-  // Validate that spec is only specified for scribe agent
-  if (args.spec !== null && args.agent !== 'scribe') {
-    console.error('Error: --spec can only be used with the scribe agent');
-    process.exit(1);
-  }
-  
   const extendedArgs = {...args};
   if (args.chat) {
     const fname = args.chat.split('/').pop();
@@ -84,15 +70,7 @@ const processArgs = (args: typeof argv): ExtendedArguments => {
       extendedArgs.chatId = null;
     }
   }
-  
-  // Extract specName from spec path
-  if (args.spec) {
-    const basename = path.basename(args.spec);
-    extendedArgs.specName = basename.replace(path.extname(basename), '');
-  } else {
-    extendedArgs.specName = null;
-  }
-  
+
   return extendedArgs as ExtendedArguments;
 };
 
