@@ -70,24 +70,26 @@ const initializeMCP = async (agent: string) => {
 };
 
 
-const initializeChat = async (chatId: string | null, agent: string, setChat: (chat: z.infer<typeof ChatSchema> | null) => void) => {
+const initializeChat = async (chatId: string | null, agent: string): Promise<z.infer<typeof ChatSchema> | null> => {
   if (!fs.existsSync(process.env.CHATS_PATH!)) {
     fs.mkdirSync(process.env.CHATS_PATH!);
   }
+  let chat: z.infer<typeof ChatSchema> | null = null;
   if (!chatId) {
     const chatId = await newChat(agent);
-    const chat = await getChat(chatId);
-    setChat(chat);
+    chat = await getChat(chatId);
   }
   else {
-    const chat = await getChat(chatId);
-    setChat(chat);
+    chat = await getChat(chatId);
   }
+  return chat;
 };
 
 
 const cleanup = async () => {
-  await mcpManager.cleanup();
+  if (mcpManager.isInitialized()) {
+    await mcpManager.cleanup();
+  }
 };
 
 

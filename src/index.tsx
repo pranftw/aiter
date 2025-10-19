@@ -1,7 +1,6 @@
 import 'dotenv/config';
-import { render } from '@opentui/react';
+import { render, useKeyboard } from '@opentui/react';
 import { ChatContainer } from './components/chat/container';
-import { useEffect, useState, useRef } from 'react';
 import { ChatSchema } from './lib/schema';
 import { initializeMCP, cleanup, initializeChat } from './utils/utils';
 import { z } from 'zod';
@@ -11,30 +10,34 @@ import { processedArgs } from './utils/yargs';
 
 interface AppProps {
   args: typeof processedArgs;
+  chat: z.infer<typeof ChatSchema> | null;
 }
 
 
-function App({ args }: AppProps) {
-  const hasInitialized = useRef(false);
-  const [chat, setChat] = useState<z.infer<typeof ChatSchema> | null>(null);
-  
-  useEffect(() => {
-    if (!hasInitialized.current) {
-      hasInitialized.current = true;
-      initializeChat(args.chatId, args.agent, setChat).catch(console.error);
-      initializeMCP(args.agent).catch(console.error);
+function App({ args, chat }: AppProps) {
+  useKeyboard((key) => {
+    if (key.name==='c' && key.ctrl) {
+      cleanup();
+      process.exit(0);
     }
-    return () => {
-      if (hasInitialized.current) {
-        cleanup().catch(console.error);
-      }
-    };
-  }, []);
-
+  });
   if (chat) {
     return <ChatContainer chat={chat} prompt={args.prompt} specName={args.specName} />
   }
   return null;
 }
 
-render(<App args={processedArgs}/>)
+
+async function main(args: typeof processedArgs){
+  try {
+    await initializeMCP(args.agent);
+    const chat = await initializeChat(args.chatId, args.agent);
+    await render(<App args={args} chat={chat}/>, {exitOnCtrlC: false, enableMouseMovement: true});
+  } catch (error) {
+    await cleanup();
+    console.error('Error:', error);
+    process.exit(1);
+  }
+}
+
+await main(processedArgs);

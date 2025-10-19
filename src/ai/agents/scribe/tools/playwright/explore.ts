@@ -83,7 +83,7 @@ The sub-agent has access to browser automation tools including:
     })
     if (result.finishReason==='tool-calls'){
       const lastToolCall = result.toolCalls[result.toolCalls.length-1];
-      if (lastToolCall.toolName==='request_human_intervention'){
+      if (lastToolCall && lastToolCall.toolName==='request_human_intervention'){
         await updateChatMessages(chatId, uiMessages) // update earlier messages because if there is a human intervention and we exit then we dont transfer control back to the main agent
         await mcpManager.cleanup();
         process.exit(0);
