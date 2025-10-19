@@ -2,6 +2,7 @@ import { experimental_createMCPClient as createMCPClient, type experimental_MCPC
 import { Experimental_StdioMCPTransport as StdioMCPTransport } from 'ai/mcp-stdio';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import fs from 'fs';
+import z from 'zod';
 
 
 
@@ -105,6 +106,15 @@ export function getPrompt(path: string){
 export async function getStreamFunction(agent: string){
   const streamFunction = await import(`@/ai/agents/${agent}/stream-function`);
   return streamFunction.default;
+}
+
+
+export async function getDataSchema(agent: string){
+  const schema = await import(`@/ai/agents/${agent}/schema`);
+  if (!schema.DataSchema) {
+    return z.object({}).default({});
+  }
+  return schema.DataSchema;
 }
 
 

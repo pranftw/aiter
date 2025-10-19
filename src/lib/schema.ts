@@ -5,7 +5,8 @@ import { type UIMessage } from "ai";
 export const ChatSchema = z.object({
   id: z.string(),
   agent: z.string(),
-  messages: z.array(z.custom<UIMessage>())
+  messages: z.array(z.custom<UIMessage>()).default([]),
+  data: z.any()
 });
 
 

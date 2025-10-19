@@ -35,7 +35,7 @@ export default async function streamFunction(chatId: string, agent: string, opti
         originalMessages: options.messages,
         generateMessageId: generateId,
         onFinish: async ({messages}) => {
-          await updateChatMessages(chatId, messages)
+          updateChatMessages(chatId, messages)
           const finishReason = await result.finishReason;
           if (finishReason==='tool-calls'){
             await mcpManager.cleanup();

@@ -4,7 +4,7 @@ import fs from 'fs';
 import z from 'zod';
 import { ChatSchema } from '../lib/schema';
 import { mcpManager } from "./mcp-manager";
-import { getMCPJSON } from "./ai";
+import { getDataSchema, getMCPJSON } from "./ai";
 
 
 
@@ -16,16 +16,18 @@ function getChatPath(chatId: string){
 export async function newChat(agent: string){
   const chatId = generateId();
   const chatPath = getChatPath(chatId);
+  const DataSchema = await getDataSchema(agent);
   fs.writeFileSync(chatPath, JSON.stringify(ChatSchema.parse({
     id: chatId,
     agent: agent,
     messages: [],
+    data: DataSchema.parse(undefined)
   }), null, 2));
   return chatId;
 }
 
 
-export async function getChatIds(){
+export function getChatIds(){
   const chatsPath = path.join(process.env.CHATS_PATH!);
   const chats = fs.readdirSync(chatsPath).filter(chat => chat.endsWith('.json'));
   const chatIds = chats.map(chat => {
@@ -35,7 +37,7 @@ export async function getChatIds(){
 }
 
 
-export async function getChat(chatId: string){
+export function getChat(chatId: string){
   const chatPath = getChatPath(chatId);
   const chat = fs.readFileSync(chatPath, 'utf8');
   const parsedChat = ChatSchema.parse(JSON.parse(chat));
@@ -43,22 +45,22 @@ export async function getChat(chatId: string){
 }
 
 
-export async function deleteChat(chatId: string){
+export function deleteChat(chatId: string){
   const chatPath = getChatPath(chatId);
   fs.unlinkSync(chatPath);
 }
 
 
-export async function updateChat(chatId: string, chat: z.infer<typeof ChatSchema>){
+export function updateChat(chatId: string, chat: z.infer<typeof ChatSchema>){
   const chatPath = getChatPath(chatId);
   fs.writeFileSync(chatPath, JSON.stringify(chat, null, 2));
 }
 
 
-export async function updateChatMessages(chatId: string, messages: z.infer<typeof ChatSchema>['messages']){
-  const chat = await getChat(chatId);
+export function updateChatMessages(chatId: string, messages: z.infer<typeof ChatSchema>['messages']){
+  const chat = getChat(chatId);
   chat.messages = messages;
-  await updateChat(chatId, chat);
+  updateChat(chatId, chat);
 }
 
 
@@ -76,10 +78,10 @@ export const initializeChat = async (chatId: string | null, agent: string): Prom
   let chat: z.infer<typeof ChatSchema> | null = null;
   if (!chatId) {
     const chatId = await newChat(agent);
-    chat = await getChat(chatId);
+    chat = getChat(chatId);
   }
   else {
-    chat = await getChat(chatId);
+    chat = getChat(chatId);
   }
   return chat;
 };
