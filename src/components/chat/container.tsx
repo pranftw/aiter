@@ -2,7 +2,6 @@ import { CustomChatTransport, type StreamFunctionType } from "@/ai/custom-chat-t
 import { ChatBox } from "./box";
 import { ChatMessages } from "./messages";
 import { useChat } from "@ai-sdk/react";
-import { getStreamFunction } from "@/utils/ai";
 import { ChatSchema } from "@/lib/schema";
 import { z } from "zod";
 import { useEffect, useRef } from "react";

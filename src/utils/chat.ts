@@ -82,6 +82,9 @@ export const initializeChat = async (chatId: string | null, agent: string): Prom
   }
   else {
     chat = getChat(chatId);
+    if (chat.agent !== agent) {
+      throw new Error(`Agent mismatch: Chat ${chatId} is for agent '${chat.agent}' but you are trying to access it with agent '${agent}'`);
+    }
   }
   return chat;
 };
