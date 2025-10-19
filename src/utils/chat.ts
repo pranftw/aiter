@@ -3,7 +3,6 @@ import { generateId } from 'ai';
 import fs from 'fs';
 import z from 'zod';
 import { ChatSchema } from '../lib/schema';
-import { StatusResponse } from './utils';
 
 
 
@@ -19,9 +18,6 @@ export async function newChat(agent: string){
     id: chatId,
     agent: agent,
     messages: [],
-    todos: {},
-    snippets: {},
-    notes: {},
   }), null, 2));
   return chatId;
 }
@@ -61,43 +57,4 @@ export async function updateChatMessages(chatId: string, messages: z.infer<typeo
   const chat = await getChat(chatId);
   chat.messages = messages;
   await updateChat(chatId, chat);
-}
-
-
-export async function getSnippet(chatId: string, snippetId: string){
-  const chat = await getChat(chatId);
-  if (!chat.snippets[snippetId]) {
-    return StatusResponse(null, 'error', 'Snippet not found!');
-  }
-  return StatusResponse({chat: chat, snippet: chat.snippets[snippetId]}, 'success', 'Snippet found!');
-}
-
-
-export async function getTodo(chatId: string, todoId: string){
-  const chat = await getChat(chatId);
-  if (!chat.todos[todoId]) {
-    return StatusResponse(null, 'error', 'Todo not found!');
-  }
-  return StatusResponse({chat: chat, todo: chat.todos[todoId]}, 'success', 'Todo found!');
-}
-
-
-export async function getTodoItem(chatId: string, todoId: string, itemId: string){
-  const {result: {chat, todo}, status: getTodoStatus, message: getTodoMessage} = await getTodo(chatId, todoId);
-  if (getTodoStatus === 'error') {
-    return StatusResponse(null, 'error', getTodoMessage);
-  }
-  if (!todo.items[itemId]) {
-    return StatusResponse(null, 'error', 'Todo item not found!');
-  }
-  return StatusResponse({chat: chat, todo: todo, todoItem: todo.items[itemId]}, 'success', 'Todo item found!');
-}
-
-
-export async function getNote(chatId: string, noteId: string){
-  const chat = await getChat(chatId);
-  if (!chat.notes[noteId]) {
-    return StatusResponse(null, 'error', 'Note not found!');
-  }
-  return StatusResponse({chat: chat, note: chat.notes[noteId]}, 'success', 'Note found!');
 }
