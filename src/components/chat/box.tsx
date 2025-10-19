@@ -1,3 +1,4 @@
+import { colors } from "@/utils/colors";
 import { type useChat } from "@ai-sdk/react";
 import { useState } from "react";
 
@@ -18,11 +19,12 @@ export function ChatBox({ chatHook, agent }: ChatBoxProps) {
 
   return (
     <input
-      placeholder="Write a message"
+      placeholder='Type a message...'
       value={message}
       focused
       onInput={setMessage}
       onSubmit={handleSubmit}
+      backgroundColor={colors.background.primary}
     />
   )
 }

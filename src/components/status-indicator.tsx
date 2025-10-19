@@ -23,7 +23,7 @@ const getBoxColor = (status: string) => {
 
 export function StatusIndicator({ id, name, status }: StatusIndicatorProps) {
   return (
-    <box flexDirection="row" gap={1} flexWrap='wrap'>
+    <box flexDirection='row' gap={1} flexWrap='wrap'>
       <text fg={getBoxColor(status)}>■</text>
       <text fg={colors.text.gray}><i>{name}</i></text>
     </box>

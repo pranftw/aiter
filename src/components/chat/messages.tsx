@@ -11,16 +11,16 @@ interface ChatMessagesProps {
 
 export function ChatMessages({ messages }: ChatMessagesProps) {
   return (
-    <>
-      {messages.map((message: UIMessage) => (
-        <React.Fragment>
-          {message.role==='user'?(
+    <box flexDirection='column' gap={1}>
+      {messages.map((message: UIMessage, index) => (
+        <box key={index}>
+          {message.role === 'user' ? (
             <UserMessage message={message} />
-          ):(
+          ) : (
             <AIMessage message={message} />
           )}
-        </React.Fragment>
+        </box>
       ))}
-    </>
+    </box>
   )
 }

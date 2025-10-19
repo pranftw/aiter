@@ -56,20 +56,23 @@ export function ChatContainer({ chat, prompt, specName }: ChatContainerProps) {
   }, []);
   
   return (
-    <>
-      <box flexDirection="column" gap={1} padding={2}>
-        <text><strong>Chat ID:</strong> {chat.id}</text>
-        
-        <box flexGrow={1}>
-          <scrollbox>
-            <ChatMessages messages={messages} />
-          </scrollbox>
-        </box>
-        
-        <box flexGrow={1}>
-          <ChatBox chatHook={chatHook} agent={chat.agent} />
-        </box>
+    <box flexDirection='column' height='100%' paddingLeft={2} paddingRight={2} paddingTop={1} paddingBottom={1}>
+      {/* Header */}
+      <box paddingTop={1} paddingBottom={1}>
+        <text fg='#b0b0b0'>Chat: <strong>{chat.id}</strong></text>
       </box>
-    </>
+      
+      {/* Messages area - takes all available space */}
+      <box flexGrow={1}>
+        <scrollbox>
+          <ChatMessages messages={messages} />
+        </scrollbox>
+      </box>
+      
+      {/* Input box - fixed at bottom */}
+      <box paddingTop={1} paddingBottom={1}>
+        <ChatBox chatHook={chatHook} agent={chat.agent} />
+      </box>
+    </box>
   );
 }

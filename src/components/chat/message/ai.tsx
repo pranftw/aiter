@@ -19,7 +19,7 @@ interface ToolCallDisplayProps {
 function ToolCallDisplay({ toolCallId, name, status, input, marginLeft, children }: ToolCallDisplayProps) {
   return (
     <>
-      <box flexDirection="row" gap={1} marginLeft={marginLeft} flexWrap='wrap'>
+      <box flexDirection='row' gap={1} marginLeft={marginLeft} flexWrap='wrap'>
         <StatusIndicator id={toolCallId} name={name} status={status} />
         <text fg={colors.text.gray}><i>{JSON.stringify(input)}</i></text>
       </box>
@@ -36,7 +36,7 @@ interface AIMessageProps {
 
 export function AIMessage({ message }: AIMessageProps) {
   return (
-    <box>
+    <box flexDirection='column' gap={1}>
       {message.parts?.map((part, index) => {
         switch (part.type) {
           case 'text':
@@ -45,7 +45,7 @@ export function AIMessage({ message }: AIMessageProps) {
             if (part.type.startsWith('tool')) {
               const toolPart = part as ToolUIPart
               return (
-                <React.Fragment>
+                <box key={index}>
                   <ToolCallDisplay
                     toolCallId={toolPart.toolCallId}
                     name={part.type}
@@ -59,13 +59,13 @@ export function AIMessage({ message }: AIMessageProps) {
                       }
                     })()}
                   </ToolCallDisplay>
-                </React.Fragment>
+                </box>
               )
             }
             else if (part.type.startsWith('dynamic-tool')) {
               const dynamicToolPart = part as DynamicToolUIPart
               return (
-                <React.Fragment>
+                <box key={index}>
                   <ToolCallDisplay
                     toolCallId={dynamicToolPart.toolCallId}
                     name={`tool-${dynamicToolPart.toolName}`}
@@ -79,13 +79,13 @@ export function AIMessage({ message }: AIMessageProps) {
                       }
                     })()}
                   </ToolCallDisplay>
-                </React.Fragment>
+                </box>
               )
             }
             else if (part.type === 'data-subagent-tool-call') {
               const subagentToolCallPart = part.data as z.infer<typeof SubagentToolCallStatusSchema>
               return (
-                <React.Fragment>
+                <box key={index}>
                   <ToolCallDisplay
                     toolCallId={subagentToolCallPart.id}
                     name={subagentToolCallPart.toolName}
@@ -93,7 +93,7 @@ export function AIMessage({ message }: AIMessageProps) {
                     input={subagentToolCallPart.toolInput}
                     marginLeft={2}
                   />
-                </React.Fragment>
+                </box>
               )
             }
             return null

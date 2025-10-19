@@ -5,6 +5,12 @@ export const colors = {
     secondary: '#b0b0b0',
   },
 
+  // Background colors
+  background: {
+    primary: '#000000',
+    secondary: '#262626',
+  },
+
   // Status indicator colors
   status: {
     started: '#e6d57a', // yellow for start, input-available, input-streaming
