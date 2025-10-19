@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { render, useKeyboard } from '@opentui/react';
 import { ChatContainer } from './components/chat/container';
 import { ChatSchema } from './lib/schema';
-import { initializeMCP, cleanup, initializeChat } from './utils/utils';
+import { initializeMCP, cleanup, initializeChat } from './utils/chat';
 import { z } from 'zod';
 import { processedArgs } from './utils/yargs';
 import { getStreamFunction } from './utils/ai';
