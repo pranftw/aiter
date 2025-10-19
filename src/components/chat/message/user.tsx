@@ -10,16 +10,14 @@ export function UserMessage({ message }: UserMessageProps) {
     <box
       border
       borderColor={colors.border.secondary} 
-      paddingLeft={2} 
-      paddingRight={2} 
-      marginTop={0.5} 
-      marginBottom={0.5}
+      paddingLeft={1} 
+      paddingRight={1}
     >
       {message.parts?.map((part) => {
         switch (part.type) {
           case 'text':
             return (
-              <text wrap>{part.text}</text>
+              <text fg={colors.text.gray} wrap>{part.text}</text>
             )
           default:
             return null

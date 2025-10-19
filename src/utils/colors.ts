@@ -1,22 +1,22 @@
 export const colors = {
   // Border colors
   border: {
-    primary: 'rgb(4, 102, 194)',
-    secondary: 'gray',
+    primary: '#0466c2',
+    secondary: '#b0b0b0',
   },
 
   // Status indicator colors
   status: {
-    started: 'rgb(230, 213, 122)', // yellow for start, input-available, input-streaming
-    success: 'rgb(147, 199, 105)', // green for finish, output-available  
-    error: 'rgb(201, 107, 107)',   // red for error/other states
+    started: '#e6d57a', // yellow for start, input-available, input-streaming
+    success: '#93c769', // green for finish, output-available  
+    error: '#c96b6b',   // red for error/other states
   },
 
   // Text colors
   text: {
     // Standard text colors
-    gray: 'gray',
-    muted: '#DDDDDD',
+    gray: '#b0b0b0',
+    muted: '#262626',
 
     // Markdown styling colors
     bold: '#C6D870',      // light green for bold text

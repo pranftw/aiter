@@ -57,11 +57,19 @@ export function ChatContainer({ chat, prompt, specName }: ChatContainerProps) {
   
   return (
     <>
-      <text><strong>Chat ID:</strong> {chat.id}</text>
-      <scrollbox>
-        <ChatMessages messages={messages} />
-      </scrollbox>
-      <ChatBox chatHook={chatHook} agent={chat.agent} />
+      <box flexDirection="column" gap={1} padding={2}>
+        <text><strong>Chat ID:</strong> {chat.id}</text>
+        
+        <box flexGrow={1}>
+          <scrollbox>
+            <ChatMessages messages={messages} />
+          </scrollbox>
+        </box>
+        
+        <box flexGrow={1}>
+          <ChatBox chatHook={chatHook} agent={chat.agent} />
+        </box>
+      </box>
     </>
-  )
+  );
 }

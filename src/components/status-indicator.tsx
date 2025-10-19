@@ -25,7 +25,7 @@ export function StatusIndicator({ id, name, status }: StatusIndicatorProps) {
   return (
     <box flexDirection="row" gap={1} flexWrap='wrap'>
       <text fg={getBoxColor(status)}>■</text>
-      <text><i>{name}</i></text>
+      <text fg={colors.text.gray}><i>{name}</i></text>
     </box>
   );
 }

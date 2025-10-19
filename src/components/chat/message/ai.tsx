@@ -1,9 +1,9 @@
 import { type UIMessage, type ToolUIPart, type DynamicToolUIPart } from 'ai'
 import { StatusIndicator } from '@/components/status-indicator'
 import React from 'react'
-import { colors } from '../../../utils/colors'
 import { SubagentToolCallStatusSchema } from '@/lib/schema'
 import { z } from 'zod'
+import { colors } from '@/utils/colors'
 
 
 
@@ -21,12 +21,8 @@ function ToolCallDisplay({ toolCallId, name, status, input, marginLeft, children
     <>
       <box flexDirection="row" gap={1} marginLeft={marginLeft} flexWrap='wrap'>
         <StatusIndicator id={toolCallId} name={name} status={status} />
-        <text><i>{JSON.stringify(input)}</i></text>
+        <text fg={colors.text.gray}><i>{JSON.stringify(input)}</i></text>
       </box>
-      {/* <Box flexDirection="row" gap={1} marginLeft={marginLeft} flexWrap='wrap'>
-        <StatusIndicator id={toolCallId} name={name} status={status} />
-        <Text color={colors.text.gray} italic>{JSON.stringify(input)}</Text>
-      </Box> */}
       {status === 'output-available' && children}
     </>
   )
@@ -40,7 +36,7 @@ interface AIMessageProps {
 
 export function AIMessage({ message }: AIMessageProps) {
   return (
-    <>
+    <box>
       {message.parts?.map((part, index) => {
         switch (part.type) {
           case 'text':
@@ -103,6 +99,6 @@ export function AIMessage({ message }: AIMessageProps) {
             return null
         }
       })}
-    </>
+    </box>
   )
 }
