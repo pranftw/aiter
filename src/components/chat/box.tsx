@@ -26,6 +26,7 @@ export function ChatBox({ chatHook, onSubmit }: ChatBoxProps) {
         focused
         onInput={setMessage}
         onSubmit={handleSubmit}
+        onPaste={setMessage}
         backgroundColor={colors.background.secondary}
       />
     </box>
