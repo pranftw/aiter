@@ -71,8 +71,8 @@ export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent
           <ChatMessages messages={messages} AIMessageComponent={AIMessageComponent} />
         </scrollbox>
       </box>
-      
-      <ChatBox chatHook={chatHook} onSubmit={toBottom} />
+
+      <ChatBox chatHook={chatHook} agent={chat.agent} onSubmit={toBottom} />
     </box>
   );
 }
