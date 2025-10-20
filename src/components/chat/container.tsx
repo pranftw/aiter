@@ -2,6 +2,7 @@ import { CustomChatTransport, type StreamFunctionType } from "@/ai/custom-chat-t
 import { ChatBox } from "./box";
 import { ChatMessages } from "./messages";
 import { useChat } from "@ai-sdk/react";
+import type { UIMessage } from "ai";
 import { ChatSchema } from "@/lib/schema";
 import { z } from "zod";
 import { useEffect, useRef } from "react";
@@ -10,8 +11,9 @@ import { colors } from "@/utils/colors";
 
 interface ChatContainerProps {
   chat: z.infer<typeof ChatSchema>;
-  streamFunction: StreamFunctionType;
   prompt: string | null;
+  streamFunction: StreamFunctionType;
+  AIMessageComponent: (props: { message: UIMessage }) => React.ReactElement;
 }
 
 const prepareChat = (
@@ -25,7 +27,7 @@ const prepareChat = (
   }
 };
 
-export function ChatContainer({ chat, streamFunction, prompt }: ChatContainerProps) {
+export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent }: ChatContainerProps) {
   const hasSentPrompt = useRef(false);
   const chatHook = useChat({
     id: chat.id,
@@ -66,7 +68,7 @@ export function ChatContainer({ chat, streamFunction, prompt }: ChatContainerPro
           stickyScroll={true} 
           stickyStart='bottom'
         >
-          <ChatMessages messages={messages} />
+          <ChatMessages messages={messages} AIMessageComponent={AIMessageComponent} />
         </scrollbox>
       </box>
       

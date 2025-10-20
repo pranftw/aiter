@@ -1,6 +1,7 @@
 import { experimental_createMCPClient as createMCPClient, type experimental_MCPClient as AISDKMCPClient } from 'ai';
 import { Experimental_StdioMCPTransport as StdioMCPTransport } from 'ai/mcp-stdio';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+import AIMessage from '@/components/chat/message/ai';
 import fs from 'fs';
 import z from 'zod';
 
@@ -115,6 +116,15 @@ export async function getDataSchema(agent: string){
     return z.object({}).default({});
   }
   return schema.DataSchema;
+}
+
+
+export async function getAIMessageComponent(agent: string){
+  const component = await import(`@/ai/agents/${agent}/components/ai-message`);
+  if (!component.default) {
+    return AIMessage;
+  }
+  return component.default;
 }
 
 
