@@ -50,8 +50,13 @@ export function ChatContainer({ chat, streamFunction, prompt }: ChatContainerPro
   
   return (
     <box flexDirection='column' gap={1} paddingLeft={2} paddingRight={2} paddingTop={1} paddingBottom={1}>
+      <ascii-font text="aiter"/>
       {/* Header */}
-      <text fg={colors.text.gray}>Chat: <strong>{chat.id}</strong></text>
+      <box flexDirection='row' gap={2} flexWrap='wrap'>
+        <text fg={colors.text.gray}><strong>CHAT</strong> {chat.id}</text>
+        <text fg={colors.text.gray}><strong>AGENT</strong> {chat.agent}</text>
+      </box>
+      
       <box></box>
       
       {/* Messages area - takes all available space */}
