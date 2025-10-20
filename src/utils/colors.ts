@@ -7,7 +7,7 @@ export const colors = {
 
   // Background colors
   background: {
-    primary: '#000000',
+    primary: '#363636',
     secondary: '#262626',
   },
 

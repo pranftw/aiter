@@ -19,13 +19,15 @@ export function ChatBox({ chatHook, onSubmit }: ChatBoxProps) {
   };
 
   return (
-    <input
-      placeholder='Type a message...'
-      value={message}
-      focused
-      onInput={setMessage}
-      onSubmit={handleSubmit}
-      backgroundColor={colors.background.primary}
-    />
+    <box margin={0} padding={2} paddingTop={1} backgroundColor={colors.background.secondary}>
+      <input
+        placeholder='Type a message...'
+        value={message}
+        focused
+        onInput={setMessage}
+        onSubmit={handleSubmit}
+        backgroundColor={colors.background.secondary}
+      />
+    </box>
   )
 }

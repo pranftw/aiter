@@ -6,6 +6,7 @@ import { ChatSchema } from "@/lib/schema";
 import { z } from "zod";
 import { useEffect, useRef } from "react";
 import { ScrollBoxRenderable } from "@opentui/core";
+import { colors } from "@/utils/colors";
 
 interface ChatContainerProps {
   chat: z.infer<typeof ChatSchema>;
@@ -50,7 +51,7 @@ export function ChatContainer({ chat, streamFunction, prompt }: ChatContainerPro
   return (
     <box flexDirection='column' gap={1} paddingLeft={2} paddingRight={2} paddingTop={1} paddingBottom={1}>
       {/* Header */}
-      <text>Chat: <strong>{chat.id}</strong></text>
+      <text fg={colors.text.gray}>Chat: <strong>{chat.id}</strong></text>
       
       {/* Messages area - takes all available space */}
       <box flexGrow={1}>
@@ -64,7 +65,6 @@ export function ChatContainer({ chat, streamFunction, prompt }: ChatContainerPro
       </box>
       
       <ChatBox chatHook={chatHook} onSubmit={toBottom} />
-      <box></box>
     </box>
   );
 }
