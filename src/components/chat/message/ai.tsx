@@ -8,7 +8,6 @@ import { colors } from '@/utils/colors'
 
 
 interface ToolCallDisplayProps {
-  toolCallId: string
   name: string
   status: 'in-progress' | 'output-available' | 'error' | 'input-streaming' | 'input-available' | 'output-error'
   input: unknown
@@ -16,11 +15,11 @@ interface ToolCallDisplayProps {
   children?: React.ReactNode
 }
 
-function ToolCallDisplay({ toolCallId, name, status, input, marginLeft, children }: ToolCallDisplayProps) {
+function ToolCallDisplay({ name, status, input, marginLeft, children }: ToolCallDisplayProps) {
   return (
     <>
       <box flexDirection='row' gap={1} marginLeft={marginLeft} flexWrap='wrap'>
-        <StatusIndicator id={toolCallId} name={name} status={status} />
+        <StatusIndicator name={name} status={status} />
         <text fg={colors.text.gray}><i>{JSON.stringify(input)}</i></text>
       </box>
       {status === 'output-available' && children}
@@ -39,6 +38,8 @@ export function AIMessage({ message }: AIMessageProps) {
     <box flexDirection='column' gap={1}>
       {message.parts?.map((part, index) => {
         switch (part.type) {
+          case 'reasoning':
+            return <text key={index} wrap><i>{part.text}</i></text>
           case 'text':
             return <text key={index} wrap>{part.text}</text>
           default:
@@ -47,7 +48,6 @@ export function AIMessage({ message }: AIMessageProps) {
               return (
                 <box key={index}>
                   <ToolCallDisplay
-                    toolCallId={toolPart.toolCallId}
                     name={part.type}
                     status={toolPart.state}
                     input={toolPart.input}
@@ -67,7 +67,6 @@ export function AIMessage({ message }: AIMessageProps) {
               return (
                 <box key={index}>
                   <ToolCallDisplay
-                    toolCallId={dynamicToolPart.toolCallId}
                     name={`tool-${dynamicToolPart.toolName}`}
                     status={dynamicToolPart.state}
                     input={dynamicToolPart.input}
@@ -87,7 +86,6 @@ export function AIMessage({ message }: AIMessageProps) {
               return (
                 <box key={index}>
                   <ToolCallDisplay
-                    toolCallId={subagentToolCallPart.id}
                     name={subagentToolCallPart.toolName}
                     status='output-available'
                     input={subagentToolCallPart.toolInput}

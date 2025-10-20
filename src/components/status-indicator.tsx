@@ -2,7 +2,6 @@ import { colors } from '../utils/colors';
 
 
 interface StatusIndicatorProps {
-  id: string;
   name: string;
   status: string;
 }
@@ -21,7 +20,7 @@ const getBoxColor = (status: string) => {
   }
 }
 
-export function StatusIndicator({ id, name, status }: StatusIndicatorProps) {
+export function StatusIndicator({ name, status }: StatusIndicatorProps) {
   return (
     <box flexDirection='row' gap={1} flexWrap='wrap'>
       <text fg={getBoxColor(status)}>■</text>

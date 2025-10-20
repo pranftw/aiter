@@ -8,10 +8,11 @@ interface UserMessageProps {
 export function UserMessage({ message }: UserMessageProps) {
   return (
     <box
-      border
-      borderColor={colors.border.secondary}
-      paddingLeft={1}
-      paddingRight={1}
+      backgroundColor={colors.background.primary}
+      padding={1}
+      paddingLeft={2}
+      paddingRight={2}
+      margin={0}
     >
       {message.parts?.map((part, index) => {
         switch (part.type) {

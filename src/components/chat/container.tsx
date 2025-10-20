@@ -52,6 +52,7 @@ export function ChatContainer({ chat, streamFunction, prompt }: ChatContainerPro
     <box flexDirection='column' gap={1} paddingLeft={2} paddingRight={2} paddingTop={1} paddingBottom={1}>
       {/* Header */}
       <text fg={colors.text.gray}>Chat: <strong>{chat.id}</strong></text>
+      <box></box>
       
       {/* Messages area - takes all available space */}
       <box flexGrow={1}>

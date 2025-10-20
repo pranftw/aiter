@@ -21,7 +21,7 @@ export const colors = {
   // Text colors
   text: {
     // Standard text colors
-    gray: '#b0b0b0',
+    gray: '#555555',
     muted: '#262626',
 
     // Markdown styling colors
