@@ -5,6 +5,7 @@ import { useChat } from "@ai-sdk/react";
 import { ChatSchema } from "@/lib/schema";
 import { z } from "zod";
 import { useEffect, useRef } from "react";
+import { ScrollBoxRenderable } from "@opentui/core";
 
 interface ChatContainerProps {
   chat: z.infer<typeof ChatSchema>;
@@ -32,28 +33,38 @@ export function ChatContainer({ chat, streamFunction, prompt }: ChatContainerPro
   });
   const {messages, sendMessage} = chatHook;
   
+  let scroll: ScrollBoxRenderable;
+  const toBottom = () => {
+    setTimeout(() => {
+      if (scroll) {
+        scroll.scrollTo(scroll.scrollHeight);
+      }
+    }, 0);
+  };
+  
   useEffect(() => {
     prepareChat(prompt, hasSentPrompt, sendMessage);
+    toBottom();
   }, []);
   
   return (
-    <box flexDirection='column' height='100%' paddingLeft={2} paddingRight={2} paddingTop={1} paddingBottom={1}>
+    <box flexDirection='column' gap={1} paddingLeft={2} paddingRight={2} paddingTop={1} paddingBottom={1}>
       {/* Header */}
-      <box paddingTop={1} paddingBottom={1}>
-        <text fg='#b0b0b0'>Chat: <strong>{chat.id}</strong></text>
-      </box>
+      <text>Chat: <strong>{chat.id}</strong></text>
       
       {/* Messages area - takes all available space */}
       <box flexGrow={1}>
-        <scrollbox>
+        <scrollbox 
+          ref={(r) => { if (r) scroll = r; }} 
+          stickyScroll={true} 
+          stickyStart='bottom'
+        >
           <ChatMessages messages={messages} />
         </scrollbox>
       </box>
       
-      {/* Input box - fixed at bottom */}
-      <box paddingTop={1} paddingBottom={1}>
-        <ChatBox chatHook={chatHook} />
-      </box>
+      <ChatBox chatHook={chatHook} onSubmit={toBottom} />
+      <box></box>
     </box>
   );
 }

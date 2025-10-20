@@ -4,9 +4,10 @@ import { useState } from "react";
 
 interface ChatBoxProps {
   chatHook: ReturnType<typeof useChat>;
+  onSubmit?: () => void;
 }
 
-export function ChatBox({ chatHook }: ChatBoxProps) {
+export function ChatBox({ chatHook, onSubmit }: ChatBoxProps) {
   const { sendMessage, status } = chatHook;
   const [message, setMessage] = useState('');
 
@@ -14,6 +15,7 @@ export function ChatBox({ chatHook }: ChatBoxProps) {
     if (status !== 'ready' || message.trim() === '') return;
     sendMessage({ text: message });
     setMessage('');
+    onSubmit?.();
   };
 
   return (
