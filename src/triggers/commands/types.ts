@@ -1,4 +1,3 @@
-import type { useChat } from '@ai-sdk/react';
 import type { TriggerContext } from '../core/types';
 
 /**

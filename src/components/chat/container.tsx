@@ -1,13 +1,15 @@
 import { CustomChatTransport, type StreamFunctionType } from "@/ai/custom-chat-transport";
-import { ChatBox } from "./box";
+import { ChatBox, type TriggerState } from "./box";
 import { ChatMessages } from "./messages";
 import { useChat } from "@ai-sdk/react";
 import type { UIMessage } from "ai";
 import { ChatSchema } from "@/lib/schema";
 import { z } from "zod";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollBoxRenderable } from "@opentui/core";
 import { colors } from "@/utils/colors";
+import { TriggerWindow } from "@/components/triggers/core";
+import { CommandSuggestions } from "@/components/triggers/commands";
 
 interface ChatContainerProps {
   chat: z.infer<typeof ChatSchema>;
@@ -29,6 +31,7 @@ const prepareChat = (
 
 export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent }: ChatContainerProps) {
   const hasSentPrompt = useRef(false);
+  const [triggerState, setTriggerState] = useState<TriggerState | null>(null);
   const chatHook = useChat({
     id: chat.id,
     transport: new CustomChatTransport(streamFunction, [chat.id, chat.agent]),
@@ -51,7 +54,7 @@ export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent
   }, []);
   
   return (
-    <box flexDirection='column' gap={1} paddingLeft={2} paddingRight={2} paddingTop={1} paddingBottom={1}>
+    <box position='relative' flexDirection='column' gap={1} paddingLeft={2} paddingRight={2} paddingTop={1} paddingBottom={1}>
       <ascii-font text="aiter"/>
       {/* Header */}
       <box flexDirection='row' gap={2} flexWrap='wrap'>
@@ -72,7 +75,30 @@ export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent
         </scrollbox>
       </box>
 
-      <ChatBox chatHook={chatHook} agent={chat.agent} onSubmit={toBottom} />
+      {/* Trigger window overlay - absolutely positioned above chatbox */}
+      {triggerState && (
+        <box position='absolute' bottom={4} left={2} right={2}>
+          <TriggerWindow loading={triggerState.loading} error={triggerState.error}>
+            {triggerState.trigger.pattern === '/' &&
+              !triggerState.loading &&
+              !(triggerState.query?.startsWith('/') && triggerState.query.slice(1).includes(' ')) && (
+                <CommandSuggestions 
+                  commands={triggerState.data} 
+                  query={triggerState.query} 
+                  onSelect={triggerState.onCommandSelect}
+                  onClose={triggerState.onClose}
+                />
+              )}
+          </TriggerWindow>
+        </box>
+      )}
+
+      <ChatBox 
+        chatHook={chatHook} 
+        agent={chat.agent} 
+        onSubmit={toBottom} 
+        onTriggerStateChange={setTriggerState}
+      />
     </box>
   );
 }

@@ -4,16 +4,15 @@ import { useState, useEffect, useRef } from "react";
 import { createTriggerManager } from "@/triggers";
 import type { TriggerDefinition } from "@/triggers/core/types";
 import type { SlashCommand } from "@/triggers/commands/types";
-import { TriggerWindow } from "@/components/triggers/core";
-import { CommandSuggestions } from "@/components/triggers/commands";
 
 interface ChatBoxProps {
   chatHook: ReturnType<typeof useChat>;
   agent: string;
   onSubmit?: () => void;
+  onTriggerStateChange?: (state: TriggerState | null) => void;
 }
 
-interface TriggerState {
+export interface TriggerState {
   trigger: TriggerDefinition;
   data: SlashCommand[];
   query: string;
@@ -24,9 +23,11 @@ interface TriggerState {
     examples?: string[];
     commandName?: string;
   } | null;
+  onCommandSelect: (command: SlashCommand) => void;
+  onClose: () => void;
 }
 
-export function ChatBox({ chatHook, agent, onSubmit }: ChatBoxProps) {
+export function ChatBox({ chatHook, agent, onSubmit, onTriggerStateChange }: ChatBoxProps) {
   const { sendMessage, status } = chatHook;
   const [message, setMessage] = useState('');
   const [triggerManager] = useState(() => createTriggerManager({ agent }));
@@ -43,39 +44,55 @@ export function ChatBox({ chatHook, agent, onSubmit }: ChatBoxProps) {
         // If typing arguments after a command, close trigger window
         const isSlashWithArgs = message.startsWith('/') && message.slice(1).includes(' ');
         if (isSlashWithArgs) {
-          setTriggerState(null);
+          const newState = null;
+          setTriggerState(newState);
+          onTriggerStateChange?.(newState);
           return;
         }
 
         // Same trigger still active - just update query for client-side filtering
         if (prevTrigger?.pattern === trigger.pattern) {
-          setTriggerState((prev) => (prev ? { ...prev, query: message } : null));
+          setTriggerState((prev) => {
+            const newState = prev ? { ...prev, query: message, onCommandSelect: handleCommandSelect, onClose: handleTriggerClose } : null;
+            onTriggerStateChange?.(newState);
+            return newState;
+          });
         }
         // New trigger activated - fetch suggestions
         else {
-          setTriggerState({
+          const loadingState: TriggerState = {
             trigger,
             data: [],
             query: message,
             loading: true,
             error: null,
-          });
+            onCommandSelect: handleCommandSelect,
+            onClose: handleTriggerClose,
+          };
+          setTriggerState(loadingState);
+          onTriggerStateChange?.(loadingState);
 
           try {
             const suggestions = await trigger.getSuggestions(message);
             if (!suggestions || suggestions.length === 0) {
-              setTriggerState(null);
+              const newState = null;
+              setTriggerState(newState);
+              onTriggerStateChange?.(newState);
               return;
             }
-            setTriggerState({
+            const newState: TriggerState = {
               trigger,
               data: suggestions as SlashCommand[],
               query: message,
               loading: false,
               error: null,
-            });
+              onCommandSelect: handleCommandSelect,
+              onClose: handleTriggerClose,
+            };
+            setTriggerState(newState);
+            onTriggerStateChange?.(newState);
           } catch (error) {
-            setTriggerState({
+            const errorState: TriggerState = {
               trigger,
               data: [],
               query: message,
@@ -83,17 +100,29 @@ export function ChatBox({ chatHook, agent, onSubmit }: ChatBoxProps) {
               error: {
                 message: 'Failed to load suggestions',
               },
-            });
+              onCommandSelect: handleCommandSelect,
+              onClose: handleTriggerClose,
+            };
+            setTriggerState(errorState);
+            onTriggerStateChange?.(errorState);
           }
         }
       } else {
         // No trigger - hide window
-        setTriggerState(null);
+        const newState = null;
+        setTriggerState(newState);
+        onTriggerStateChange?.(newState);
       }
     };
 
     handleTriggerDetection();
-  }, [message, triggerManager]);
+  }, [message, triggerManager, onTriggerStateChange]);
+
+  const handleTriggerClose = () => {
+    const newState = null;
+    setTriggerState(newState);
+    onTriggerStateChange?.(newState);
+  };
 
   const handleCommandSelect = async (command: SlashCommand) => {
     const cmdText = `/${command.name}`;
@@ -111,7 +140,7 @@ export function ChatBox({ chatHook, agent, onSubmit }: ChatBoxProps) {
     if (result.wasTriggered) {
       setMessage('');
       if (!result.success && result.error) {
-        setTriggerState({
+        const errorState: TriggerState = {
           trigger,
           data: triggerState?.data || [],
           query: '',
@@ -122,9 +151,15 @@ export function ChatBox({ chatHook, agent, onSubmit }: ChatBoxProps) {
             examples: result.data?.examples,
             commandName: result.data?.commandName,
           },
-        });
+          onCommandSelect: handleCommandSelect,
+          onClose: handleTriggerClose,
+        };
+        setTriggerState(errorState);
+        onTriggerStateChange?.(errorState);
       } else {
-        setTriggerState(null);
+        const newState = null;
+        setTriggerState(newState);
+        onTriggerStateChange?.(newState);
         onSubmit?.();
       }
     }
@@ -154,7 +189,7 @@ export function ChatBox({ chatHook, agent, onSubmit }: ChatBoxProps) {
         
         // Show error if execution failed
         if (!result.success && result.error) {
-          setTriggerState({
+          const errorState: TriggerState = {
             trigger,
             data: triggerState?.data || [],
             query: '',
@@ -165,10 +200,16 @@ export function ChatBox({ chatHook, agent, onSubmit }: ChatBoxProps) {
               examples: result.data?.examples,
               commandName: result.data?.commandName,
             },
-          });
+            onCommandSelect: handleCommandSelect,
+            onClose: handleTriggerClose,
+          };
+          setTriggerState(errorState);
+          onTriggerStateChange?.(errorState);
         } else {
           // Success - clear trigger state
-          setTriggerState(null);
+          const newState = null;
+          setTriggerState(newState);
+          onTriggerStateChange?.(newState);
           onSubmit?.();
         }
         return;
@@ -178,12 +219,14 @@ export function ChatBox({ chatHook, agent, onSubmit }: ChatBoxProps) {
     // Not a trigger, send as normal message
     sendMessage({ text: message });
     setMessage('');
-    setTriggerState(null);
+    const newState = null;
+    setTriggerState(newState);
+    onTriggerStateChange?.(newState);
     onSubmit?.();
   };
 
   return (
-    <box flexDirection='column-reverse' gap={1} margin={0} padding={2} paddingTop={1} backgroundColor={colors.background.secondary}>
+    <box margin={0} padding={2} paddingTop={1} backgroundColor={colors.background.secondary}>
       <input
         placeholder='Type a message...'
         value={message}
@@ -193,45 +236,6 @@ export function ChatBox({ chatHook, agent, onSubmit }: ChatBoxProps) {
         onPaste={setMessage}
         backgroundColor={colors.background.secondary}
       />
-
-      {triggerState && (
-        <TriggerWindow loading={triggerState.loading} error={triggerState.error}>
-          {triggerState.trigger.pattern === '/' &&
-            !triggerState.loading &&
-            !(triggerState.query?.startsWith('/') && triggerState.query.slice(1).includes(' ')) && (
-              <CommandSuggestions commands={triggerState.data} query={triggerState.query} onSelect={handleCommandSelect} />
-            )}
-        </TriggerWindow>
-      )}
     </box>
-    // <box flexDirection='column-reverse' gap={1}>
-    //   {/* Chat Input - always at bottom */}
-    //   <box margin={0} padding={2} paddingTop={1} backgroundColor={colors.background.secondary}>
-    //     <input
-    //       placeholder='Type a message...'
-    //       value={message}
-    //       focused
-    //       onInput={setMessage}
-    //       onSubmit={handleSubmit}
-    //       onPaste={setMessage}
-    //       backgroundColor={colors.background.secondary}
-    //     />
-    //   </box>
-
-    //   {/* Trigger Window - appears above input */}
-    //   {triggerState && (
-    //     <TriggerWindow loading={triggerState.loading} error={triggerState.error}>
-    //       {triggerState.trigger.pattern === '/' &&
-    //         !triggerState.loading &&
-    //         !(triggerState.query?.startsWith('/') && triggerState.query.slice(1).includes(' ')) && (
-    //         <CommandSuggestions
-    //           commands={triggerState.data}
-    //           query={triggerState.query}
-    //           onSelect={handleCommandSelect}
-    //         />
-    //       )}
-    //     </TriggerWindow>
-    //   )}
-    // </box>
   )
 }

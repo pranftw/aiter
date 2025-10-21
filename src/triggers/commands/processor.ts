@@ -51,6 +51,15 @@ export class CommandProcessor {
     const [commandName, ...argsParts] = input.slice(1).split(' ');
     const argsString = argsParts.join(' ');
 
+    // Ensure commandName is valid
+    if (!commandName) {
+      return {
+        wasCommand: true,
+        success: false,
+        error: 'Invalid command format',
+      };
+    }
+
     // Look up the command
     const command = this.registry.get(commandName);
 
