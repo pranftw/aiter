@@ -38,8 +38,6 @@ export default function AIMessage({ message }: AIMessageProps) {
     <box flexDirection='column' gap={1}>
       {message.parts?.map((part, index) => {
         switch (part.type) {
-          case 'reasoning':
-            return <text key={index} wrap><i>{part.text}</i></text>
           case 'text':
             return <text key={index} wrap>{part.text}</text>
           default:
