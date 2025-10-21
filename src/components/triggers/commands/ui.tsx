@@ -23,6 +23,7 @@ export const CommandTriggerUI = {
             query={triggerUI.query} 
             onSelect={triggerUI.onSelect}
             onClose={triggerUI.onClose}
+            onNavigate={triggerUI.onNavigate}
           />
         )}
       </TriggerWindow>

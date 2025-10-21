@@ -8,15 +8,28 @@ interface CommandSuggestionsProps {
   query: string;
   onSelect: (command: SlashCommand) => void | Promise<void>;
   onClose?: () => void;
+  onNavigate?: (command: SlashCommand | null) => void;
 }
 
-export function CommandSuggestions({ commands, query, onSelect, onClose }: CommandSuggestionsProps) {
+export function CommandSuggestions({ commands, query, onSelect, onClose, onNavigate }: CommandSuggestionsProps) {
   const [selectedIndex, setSelectedIndex] = useState(-1); // -1 means no selection
 
   // Reset selection when commands change
   useEffect(() => {
     setSelectedIndex(-1);
   }, [commands]);
+
+  // Call onNavigate when selected index changes
+  useEffect(() => {
+    if (onNavigate) {
+      if (selectedIndex >= 0 && selectedIndex < commands.length) {
+        const selectedCommand = commands[selectedIndex];
+        onNavigate(selectedCommand ?? null);
+      } else {
+        onNavigate(null);
+      }
+    }
+  }, [selectedIndex, commands, onNavigate]);
 
   // Close window when no commands match the query
   useEffect(() => {

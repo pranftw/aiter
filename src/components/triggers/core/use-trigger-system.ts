@@ -22,6 +22,7 @@ export interface TriggerUIData<T = any> {
   /** Callbacks */
   onSelect: (item: T) => void;
   onClose: () => void;
+  onNavigate?: (item: T | null) => void;
 }
 
 interface UseTriggerSystemProps {
@@ -79,6 +80,7 @@ export function useTriggerSystem({
             error: null,
             onSelect: (item) => handleItemSelect(item, trigger),
             onClose: handleClose,
+            onNavigate: (item) => handleNavigate(item, trigger),
           });
 
           try {
@@ -137,6 +139,7 @@ export function useTriggerSystem({
           query: '',
           loading: false,
           error: result.error,
+          onNavigate: (item) => handleNavigate(item, trigger),
         } : null);
       } else {
         setActiveTriggerUI(null);
@@ -147,6 +150,16 @@ export function useTriggerSystem({
 
   const handleClose = () => {
     setActiveTriggerUI(null);
+  };
+
+  const handleNavigate = (item: any, trigger: TriggerDefinition) => {
+    // When navigating through suggestions, update the message field
+    if (item && trigger.pattern === '/') {
+      setMessage(`/${item.name}`);
+    } else if (!item && trigger.pattern === '/') {
+      // When no item is selected (selectedIndex === -1), restore to just the trigger
+      setMessage('/');
+    }
   };
 
   const handleSubmit = async () => {
@@ -176,6 +189,7 @@ export function useTriggerSystem({
             error: result.error,
             onSelect: (item) => handleItemSelect(item, trigger),
             onClose: handleClose,
+            onNavigate: (item) => handleNavigate(item, trigger),
           });
         } else {
           setActiveTriggerUI(null);
