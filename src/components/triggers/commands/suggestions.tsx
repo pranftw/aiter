@@ -47,21 +47,16 @@ export function CommandSuggestions({ commands, query, onSelect, onClose }: Comma
       return;
     }
     if (key.name === 'return') {
-      // Only execute if we have a valid selection
+      // Only execute if user has explicitly selected a command with arrow keys
       if (selectedIndex >= 0 && selectedIndex < commands.length) {
         const selectedCommand = commands[selectedIndex];
         if (selectedCommand) {
           onSelect(selectedCommand);
         }
+        return; // Only prevent default if we actually handled the selection
       }
-      // If no selection but only one command, select it
-      else if (selectedIndex === -1 && commands.length === 1) {
-        const firstCommand = commands[0];
-        if (firstCommand) {
-          onSelect(firstCommand);
-        }
-      }
-      return;
+      // Don't auto-select - let the Enter key pass through to normal submit
+      // This allows invalid commands to be properly validated and show errors
     }
     if (key.name === 'escape') {
       // Close window on escape

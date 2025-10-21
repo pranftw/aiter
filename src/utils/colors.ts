@@ -1,3 +1,5 @@
+import { error } from "console";
+
 export const colors = {
   // Border colors
   border: {
@@ -38,6 +40,11 @@ export const colors = {
       tertiary: '#A7C1A8',  // green for h4+
     },
   },
+
+  error: {
+    primary: '#DE0000',
+    secondary: '#5D0000'
+  }
 } as const;
 
 // Type for accessing color values with intellisense

@@ -1,4 +1,5 @@
 import type { TriggerContext } from '../core/types';
+import type { Options } from 'yargs';
 
 /**
  * Slash command definition
@@ -19,6 +20,9 @@ export interface SlashCommand {
   /** Example usage strings */
   examples?: string[];
   
+  /** yargs options definition for command arguments */
+  options?: Record<string, Options>;
+  
   /** Command action to execute */
   action: (context: CommandContext) => Promise<void> | void;
 }
@@ -30,8 +34,8 @@ export interface CommandContext extends TriggerContext {
   /** The command name that was invoked */
   commandName: string;
   
-  /** Parsed arguments (simple for now, array of strings) */
-  args: string[];
+  /** Parsed arguments as yargs object (includes named options and positional args in _) */
+  args: any;
   
   /** Raw arguments string */
   argsString: string;
@@ -50,17 +54,8 @@ export interface CommandExecuteResult {
   /** Whether execution was successful */
   success?: boolean;
   
-  /** Error message if execution failed */
+  /** Error message if execution failed (includes usage and examples) */
   error?: string;
-  
-  /** Command usage pattern (for error display) */
-  usage?: string;
-  
-  /** Command examples (for error display) */
-  examples?: string[];
-  
-  /** The command name that was executed */
-  commandName?: string;
 }
 
 /**
@@ -70,8 +65,8 @@ export interface ParsedCommandArgs {
   /** Whether parsing was successful */
   success: boolean;
   
-  /** Parsed arguments array */
-  args: string[];
+  /** Parsed arguments object (yargs format with named options and positional args in _) */
+  args?: any;
   
   /** Error message if parsing failed */
   error?: string;

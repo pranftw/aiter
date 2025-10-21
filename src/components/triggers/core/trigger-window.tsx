@@ -1,19 +1,12 @@
 import { colors } from '@/utils/colors';
 import type { ReactNode } from 'react';
-import { ErrorOverlay } from './error-overlay';
 
 interface TriggerWindowProps {
   children: ReactNode;
-  error?: {
-    message: string;
-    usage?: string;
-    examples?: string[];
-    commandName?: string;
-  } | null;
   loading?: boolean;
 }
 
-export function TriggerWindow({ children, error, loading }: TriggerWindowProps) {
+export function TriggerWindow({ children, loading }: TriggerWindowProps) {
   return (
     <box
       flexDirection='column'
@@ -28,12 +21,9 @@ export function TriggerWindow({ children, error, loading }: TriggerWindowProps) 
           <text fg={colors.text.gray}>Loading...</text>
         </box>
       ) : (
-        <box flexDirection='column' gap={1}>
-          {error && <ErrorOverlay error={error} />}
-          <scrollbox flexGrow={1} flexDirection='column' alignItems='flex-start'>
-            {children}
-          </scrollbox>
-        </box>
+        <scrollbox flexGrow={1} flexDirection='column' alignItems='flex-start'>
+          {children}
+        </scrollbox>
       )}
     </box>
   );

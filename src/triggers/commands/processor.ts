@@ -68,7 +68,6 @@ export class CommandProcessor {
         wasCommand: true,
         success: false,
         error: `Unknown command: /${commandName}`,
-        commandName,
       };
     }
 
@@ -76,13 +75,24 @@ export class CommandProcessor {
     const parseResult = parseCommandArgs(command, argsString);
 
     if (!parseResult.success) {
+      // Format error message with usage and examples
+      let errorMsg = `Error: ${parseResult.error}`;
+      
+      if (command.usage) {
+        errorMsg += `\n\nUsage: /${command.name} ${command.usage}`;
+      }
+      
+      if (command.examples && command.examples.length > 0) {
+        errorMsg += '\n\nExamples:';
+        command.examples.forEach(example => {
+          errorMsg += `\n  /${command.name} ${example}`;
+        });
+      }
+      
       return {
         wasCommand: true,
         success: false,
-        error: parseResult.error,
-        usage: command.usage,
-        examples: command.examples,
-        commandName: command.name,
+        error: errorMsg,
       };
     }
 
@@ -107,7 +117,6 @@ export class CommandProcessor {
         wasCommand: true,
         success: false,
         error: `Command /${commandName} failed: ${error instanceof Error ? error.message : String(error)}`,
-        commandName,
       };
     }
   }

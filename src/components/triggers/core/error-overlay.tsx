@@ -1,52 +1,32 @@
 import { colors } from '@/utils/colors';
+import { useKeyboard } from '@opentui/react';
 
 interface ErrorOverlayProps {
-  error: {
-    message: string;
-    usage?: string;
-    examples?: string[];
-    commandName?: string;
-  };
+  message: string;
+  onClose?: () => void;
 }
 
-export function ErrorOverlay({ error }: ErrorOverlayProps) {
+export function ErrorOverlay({ message, onClose }: ErrorOverlayProps) {
+  // Handle escape key to dismiss error
+  useKeyboard((key) => {
+    if (key.name === 'escape') {
+      onClose?.();
+    }
+  });
+
   return (
     <box
       flexDirection='column'
-      borderTop
-      borderStyle='single'
-      borderColor={colors.status.error}
-      paddingLeft={1}
-      paddingRight={1}
+      paddingLeft={2}
+      paddingRight={2}
       paddingTop={1}
-      backgroundColor={colors.background.secondary}
+      paddingBottom={1}
+      marginBottom={1}
+      backgroundColor={colors.error.secondary}
     >
-      <text fg={colors.status.error}>
-        <strong>⚠ Error:</strong> {error.message}
+      <text fg={colors.error.primary}>
+        {message.trim()}
       </text>
-
-      {error.usage && (
-        <box marginTop={1}>
-          <text fg={colors.text.gray}>Usage: </text>
-          <text fg={colors.text.code}>
-            /{error.commandName}{error.usage ? ` ${error.usage}` : ''}
-          </text>
-        </box>
-      )}
-
-      {error.examples && error.examples.length > 0 && (
-        <box flexDirection='column' marginTop={1}>
-          <text fg={colors.text.gray}>Examples:</text>
-          {error.examples.map((example, index) => (
-            <box key={index} paddingLeft={1}>
-              <text fg={colors.text.gray}>• </text>
-              <text fg={colors.text.code}>
-                /{error.commandName} {example}
-              </text>
-            </box>
-          ))}
-        </box>
-      )}
     </box>
   );
 }

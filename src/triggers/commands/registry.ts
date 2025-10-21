@@ -69,5 +69,43 @@ export class CommandRegistry extends TriggerRegistry<SlashCommand> {
   isInitialized(): boolean {
     return this.initialized;
   }
+
+  /**
+   * Override search to also search through command descriptions
+   */
+  override search(query: string): SlashCommand[] {
+    if (!query) {
+      return this.getAll();
+    }
+
+    const lowerQuery = query.toLowerCase();
+    const matches = new Set<SlashCommand>();
+
+    for (const command of this.items.values()) {
+      // Check if name matches
+      if (command.name.toLowerCase().includes(lowerQuery)) {
+        matches.add(command);
+        continue;
+      }
+
+      // Check if any alias matches
+      if (command.aliases) {
+        for (const alias of command.aliases) {
+          if (alias.toLowerCase().includes(lowerQuery)) {
+            matches.add(command);
+            break;
+          }
+        }
+        if (matches.has(command)) continue;
+      }
+
+      // Check if description matches
+      if (command.description && command.description.toLowerCase().includes(lowerQuery)) {
+        matches.add(command);
+      }
+    }
+
+    return Array.from(matches);
+  }
 }
 

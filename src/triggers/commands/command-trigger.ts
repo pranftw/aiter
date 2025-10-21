@@ -61,11 +61,6 @@ export class CommandTrigger implements TriggerDefinition {
       wasTriggered: result.wasCommand,
       success: result.success,
       error: result.error,
-      data: {
-        usage: result.usage,
-        examples: result.examples,
-        commandName: result.commandName,
-      },
     };
   }
 }

@@ -1,15 +1,16 @@
-import { CustomChatTransport, type StreamFunctionType } from "@/ai/custom-chat-transport";
-import { ChatBox, type TriggerState } from "./box";
-import { ChatMessages } from "./messages";
-import { useChat } from "@ai-sdk/react";
-import type { UIMessage } from "ai";
-import { ChatSchema } from "@/lib/schema";
-import { z } from "zod";
-import { useEffect, useRef, useState } from "react";
-import { ScrollBoxRenderable } from "@opentui/core";
-import { colors } from "@/utils/colors";
-import { TriggerWindow } from "@/components/triggers/core";
-import { CommandSuggestions } from "@/components/triggers/commands";
+import { CustomChatTransport, type StreamFunctionType } from '@/ai/custom-chat-transport';
+import { ChatBox } from './box';
+import { ChatMessages } from './messages';
+import { useChat } from '@ai-sdk/react';
+import type { UIMessage } from 'ai';
+import { ChatSchema } from '@/lib/schema';
+import { z } from 'zod';
+import { useEffect, useRef } from 'react';
+import { ScrollBoxRenderable } from '@opentui/core';
+import { colors } from '@/utils/colors';
+import { useTriggerSystem } from '@/components/triggers/core/use-trigger-system';
+import { triggerUIRegistry } from '@/components/triggers/registry';
+import { ErrorOverlay } from '@/components/triggers/core/error-overlay';
 
 interface ChatContainerProps {
   chat: z.infer<typeof ChatSchema>;
@@ -31,13 +32,12 @@ const prepareChat = (
 
 export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent }: ChatContainerProps) {
   const hasSentPrompt = useRef(false);
-  const [triggerState, setTriggerState] = useState<TriggerState | null>(null);
   const chatHook = useChat({
     id: chat.id,
     transport: new CustomChatTransport(streamFunction, [chat.id, chat.agent]),
     messages: chat.messages
   });
-  const {messages, sendMessage} = chatHook;
+  const { messages, sendMessage } = chatHook;
   
   let scroll: ScrollBoxRenderable;
   const toBottom = () => {
@@ -47,6 +47,13 @@ export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent
       }
     }, 0);
   };
+
+  // Use the trigger system hook
+  const { message, setMessage, handleSubmit, activeTriggerUI } = useTriggerSystem({
+    chatHook,
+    agent: chat.agent,
+    onSubmitCallback: toBottom,
+  });
   
   useEffect(() => {
     prepareChat(prompt, hasSentPrompt, sendMessage);
@@ -75,29 +82,22 @@ export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent
         </scrollbox>
       </box>
 
-      {/* Trigger window overlay - absolutely positioned above chatbox */}
-      {triggerState && (
+      {/* Render active trigger UI or error overlay */}
+      {activeTriggerUI && (
         <box position='absolute' bottom={4} left={2} right={2}>
-          <TriggerWindow loading={triggerState.loading} error={triggerState.error}>
-            {triggerState.trigger.pattern === '/' &&
-              !triggerState.loading &&
-              !(triggerState.query?.startsWith('/') && triggerState.query.slice(1).includes(' ')) && (
-                <CommandSuggestions 
-                  commands={triggerState.data} 
-                  query={triggerState.query} 
-                  onSelect={triggerState.onCommandSelect}
-                  onClose={triggerState.onClose}
-                />
-              )}
-          </TriggerWindow>
+          {activeTriggerUI.error ? (
+            <ErrorOverlay message={activeTriggerUI.error} onClose={activeTriggerUI.onClose} />
+          ) : (
+            triggerUIRegistry[activeTriggerUI.trigger.pattern]?.(activeTriggerUI)
+          )}
         </box>
       )}
 
+      {/* Generic ChatBox */}
       <ChatBox 
-        chatHook={chatHook} 
-        agent={chat.agent} 
-        onSubmit={toBottom} 
-        onTriggerStateChange={setTriggerState}
+        message={message}
+        setMessage={setMessage}
+        onSubmit={handleSubmit}
       />
     </box>
   );
