@@ -1,6 +1,13 @@
 import type { useChat } from '@ai-sdk/react';
 
 /**
+ * Trigger matching mode
+ * - 'positional': Trigger must be at the start of input (e.g., commands)
+ * - 'inline': Trigger can appear anywhere in input (e.g., context, mentions)
+ */
+export type TriggerMode = 'positional' | 'inline';
+
+/**
  * Base interface that all triggers must implement
  */
 export interface TriggerDefinition {
@@ -9,6 +16,9 @@ export interface TriggerDefinition {
   
   /** Priority for matching when multiple triggers could match (higher = checked first) */
   priority: number;
+  
+  /** Matching mode - positional (start only) or inline (anywhere) */
+  mode?: TriggerMode; // Defaults to 'positional' for backward compatibility
   
   /** Check if the input matches this trigger pattern */
   matches(input: string): boolean;
@@ -95,5 +105,45 @@ export interface ParsedTrigger {
   
   /** The search query (for suggestions) */
   query: string;
+}
+
+/**
+ * A single trigger occurrence within text
+ */
+export interface TriggerOccurrence {
+  /** The trigger pattern that was matched */
+  pattern: string;
+  
+  /** Start position of the trigger in the input */
+  startIndex: number;
+  
+  /** End position of the trigger content (including any identifier/args) */
+  endIndex: number;
+  
+  /** The full trigger text (e.g., '@context' or '/command args') */
+  content: string;
+  
+  /** The identifier/command after the trigger character */
+  identifier: string;
+  
+  /** Any additional text after the identifier */
+  args?: string;
+}
+
+/**
+ * Result of parsing input for all trigger occurrences
+ */
+export interface MultiTriggerParseResult {
+  /** Original input text */
+  originalInput: string;
+  
+  /** All trigger occurrences found in the input */
+  occurrences: TriggerOccurrence[];
+  
+  /** Input with all triggers removed/replaced */
+  cleanedInput: string;
+  
+  /** Whether any triggers were found */
+  hasTriggers: boolean;
 }
 

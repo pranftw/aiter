@@ -21,9 +21,9 @@ export const argv = yargs(hideBin(process.argv))
   .option('agent', {
     alias: 'a',
     type: 'string',
-    choices: ['basic'],
+    choices: ['example'],
     description: 'Agent name',
-    default: 'basic'
+    default: 'example'
   })
   .option('chat', {
     alias: 'c',

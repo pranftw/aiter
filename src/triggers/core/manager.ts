@@ -1,4 +1,5 @@
-import type { TriggerDefinition, TriggerContext, TriggerResult } from './types';
+import type { TriggerDefinition, TriggerContext, TriggerResult, MultiTriggerParseResult } from './types';
+import { parseMultiTriggerInput } from './utils';
 
 /**
  * Orchestrates multiple triggers and routes input to the appropriate one
@@ -18,6 +19,8 @@ export class TriggerManager {
   /**
    * Detect which trigger matches the input
    * Returns the first matching trigger based on priority
+   * For positional triggers, only returns if trigger is at start
+   * For inline triggers, returns if trigger exists anywhere
    */
   detectTrigger(input: string): TriggerDefinition | null {
     if (!input || input.trim() === '') {
@@ -31,6 +34,34 @@ export class TriggerManager {
     }
 
     return null;
+  }
+
+  /**
+   * Detect all triggers that match the input
+   * Returns all matching triggers (both positional and inline)
+   */
+  detectAllTriggers(input: string): TriggerDefinition[] {
+    if (!input || input.trim() === '') {
+      return [];
+    }
+
+    const matchingTriggers: TriggerDefinition[] = [];
+
+    for (const trigger of this.triggers) {
+      if (trigger.matches(input)) {
+        matchingTriggers.push(trigger);
+      }
+    }
+
+    return matchingTriggers;
+  }
+
+  /**
+   * Parse input to extract all inline trigger occurrences
+   * Useful for extracting context triggers like @mentions
+   */
+  parseInlineTriggers(input: string, pattern: string): MultiTriggerParseResult {
+    return parseMultiTriggerInput(input, pattern);
   }
 
   /**

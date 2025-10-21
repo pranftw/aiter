@@ -9,6 +9,7 @@ import type { SlashCommand } from './types';
 export class CommandTrigger implements TriggerDefinition {
   pattern = '/';
   priority = 10; // High priority for commands
+  mode = 'positional' as const; // Commands must be at the start
 
   private processor: CommandProcessor;
   private agent: string;

@@ -6,7 +6,7 @@ import { ToolContextSchema } from "@/lib/schema";
 import { z } from "zod";
 import { getPrompt } from "@/utils/ai";
 import { updateChatMessages } from "@/utils/chat";
-import * as localTools from "@/ai/agents/basic/tools";
+import * as localTools from "@/ai/agents/example/tools";
 
 
 

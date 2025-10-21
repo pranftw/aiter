@@ -69,8 +69,6 @@ export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent
         <text fg={colors.text.gray}><strong>AGENT</strong> {chat.agent}</text>
       </box>
       
-      <box></box>
-      
       {/* Messages area - takes all available space */}
       <box flexGrow={1}>
         <scrollbox 
