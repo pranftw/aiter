@@ -14,16 +14,17 @@ export function TriggerWindow({ children, loading }: TriggerWindowProps) {
       backgroundColor={colors.background.secondary}
       padding={2}
       paddingTop={1}
-      maxHeight={'25%'}
+      paddingBottom={1}
+      marginBottom={1}
     >
       {loading ? (
         <box flexDirection='column' style={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
           <text fg={colors.text.gray}>Loading...</text>
         </box>
       ) : (
-        <scrollbox flexGrow={1} flexDirection='column' alignItems='flex-start'>
+        <>
           {children}
-        </scrollbox>
+        </>
       )}
     </box>
   );

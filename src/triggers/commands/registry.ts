@@ -1,6 +1,7 @@
 import { TriggerRegistry } from '../core/registry';
 import type { SlashCommand } from './types';
 import * as builtinCommands from './builtin';
+import { getAgentCommands } from '@/utils/ai';
 
 /**
  * Registry for slash commands
@@ -48,19 +49,14 @@ export class CommandRegistry extends TriggerRegistry<SlashCommand> {
    * Load agent-specific commands dynamically
    */
   private async loadAgentCommands(): Promise<void> {
-    try {
-      // Attempt to dynamically import agent-specific commands
-      const agentCommands = await import(`@/ai/agents/${this.agent}/commands`);
+    // Attempt to dynamically import agent-specific commands
+    const agentCommands = await getAgentCommands(this.agent);
 
-      Object.values(agentCommands).forEach((command: any) => {
-        if (command && typeof command === 'object' && command.name && command.action) {
-          this.register(command as SlashCommand);
-        }
-      });
-    } catch (error) {
-      // Agent doesn't have custom commands or directory doesn't exist - that's okay
-      // We'll just use the builtin commands
-    }
+    Object.values(agentCommands).forEach((command: any) => {
+      if (command && typeof command === 'object' && command.name && command.action) {
+        this.register(command as SlashCommand);
+      }
+    });
   }
 
   /**

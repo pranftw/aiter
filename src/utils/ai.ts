@@ -133,3 +133,14 @@ export function getMCPJSON(agent: string, name: string){
   const mcpJSON = JSON.parse(contents);
   return mcpJSON;
 }
+
+
+export async function getAgentCommands(agent: string){
+  try {
+    const commands = await import(`@/ai/agents/${agent}/commands`);
+    return commands;
+  } catch (error) {
+    // Agent doesn't have custom commands - return empty object
+    return {};
+  }
+}
