@@ -11,7 +11,7 @@ export function ChatBox({
   message, 
   setMessage, 
   onSubmit, 
-  placeholder = 'Type a message...' 
+  placeholder = 'Write, / for commands' 
 }: ChatBoxProps) {
 
   return (

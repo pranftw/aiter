@@ -144,3 +144,11 @@ export async function getAgentCommands(agent: string){
     return {};
   }
 }
+
+
+export function getAgents(){
+  const ignored = ['template', '.DS_Store'];
+  let agents = fs.readdirSync('src/ai/agents');
+  agents = agents.filter(agent => !ignored.includes(agent));
+  return agents;
+}

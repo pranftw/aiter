@@ -1,6 +1,7 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
+import { getAgents } from './ai';
 
 
 
@@ -21,7 +22,7 @@ export const argv = yargs(hideBin(process.argv))
   .option('agent', {
     alias: 'a',
     type: 'string',
-    choices: ['example'],
+    choices: getAgents(),
     description: 'Agent name',
     default: 'example'
   })
