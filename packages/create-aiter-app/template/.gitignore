@@ -35,7 +35,3 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 chats/
 **/mcps/*.json
-
-# dev workspace (generated from template)
-dev/
-
