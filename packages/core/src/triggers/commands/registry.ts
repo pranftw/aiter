@@ -8,6 +8,7 @@ import * as builtinCommands from './builtin';
  */
 export class CommandRegistry extends TriggerRegistry<SlashCommand> {
   private initialized = false;
+  private loadedCommandsHash = '';
 
   constructor() {
     super();
@@ -17,8 +18,17 @@ export class CommandRegistry extends TriggerRegistry<SlashCommand> {
    * Initialize the registry by loading commands
    */
   async initialize(agentCommands: Record<string, any> = {}): Promise<void> {
-    if (this.initialized) {
+    // Create a hash of the commands to detect changes
+    const commandsHash = JSON.stringify(Object.keys(agentCommands).sort());
+    
+    // If already initialized with the same commands, skip
+    if (this.initialized && this.loadedCommandsHash === commandsHash) {
       return;
+    }
+
+    // Clear existing commands if reinitializing
+    if (this.initialized) {
+      this.clear();
     }
 
     // Load builtin commands
@@ -28,6 +38,7 @@ export class CommandRegistry extends TriggerRegistry<SlashCommand> {
     this.loadAgentCommands(agentCommands);
 
     this.initialized = true;
+    this.loadedCommandsHash = commandsHash;
   }
 
   /**

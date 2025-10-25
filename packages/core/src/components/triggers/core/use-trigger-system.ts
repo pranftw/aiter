@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { createTriggerManager } from '@/triggers';
 import type { TriggerDefinition } from '@/triggers/core/types';
 import type { ChatHook } from '@/lib/types';
@@ -28,6 +28,7 @@ export interface TriggerUIData<T = any> {
 interface UseTriggerSystemProps {
   chatHook: ChatHook;
   agent: string;
+  agentCommands?: Record<string, any>;
   onSubmitCallback?: () => void;
 }
 
@@ -40,12 +41,15 @@ interface UseTriggerSystemReturn {
 
 export function useTriggerSystem({ 
   chatHook, 
-  agent, 
+  agent,
+  agentCommands = {},
   onSubmitCallback 
 }: UseTriggerSystemProps): UseTriggerSystemReturn {
   const { sendMessage, status } = chatHook;
   const [message, setMessage] = useState('');
-  const [triggerManager] = useState(() => createTriggerManager({ agent }));
+  const triggerManager = useMemo(() => {
+    return createTriggerManager({ agent, agentCommands });
+  }, [agent, agentCommands]);
   
   // Single active trigger UI state - only ONE can be active at a time
   const [activeTriggerUI, setActiveTriggerUI] = useState<TriggerUIData | null>(null);

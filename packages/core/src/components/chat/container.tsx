@@ -17,6 +17,7 @@ interface ChatContainerProps {
   prompt: string | null;
   streamFunction: StreamFunctionType;
   AIMessageComponent: AIMessageComponent;
+  agentCommands?: Record<string, any>;
 }
 
 const prepareChat = (
@@ -30,7 +31,7 @@ const prepareChat = (
   }
 };
 
-export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent }: ChatContainerProps) {
+export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent, agentCommands }: ChatContainerProps) {
   const hasSentPrompt = useRef(false);
   const chatHook = useChat({
     id: chat.id,
@@ -52,6 +53,7 @@ export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent
   const { message, setMessage, handleSubmit, activeTriggerUI } = useTriggerSystem({
     chatHook,
     agent: chat.agent,
+    agentCommands,
     onSubmitCallback: toBottom,
   });
   

@@ -13,9 +13,11 @@ export class CommandTrigger implements TriggerDefinition {
 
   private processor: CommandProcessor;
   private agent: string;
+  private agentCommands: Record<string, any>;
 
-  constructor(agent: string) {
+  constructor(agent: string, agentCommands: Record<string, any> = {}) {
     this.agent = agent;
+    this.agentCommands = agentCommands;
     this.processor = new CommandProcessor();
   }
 
@@ -41,11 +43,11 @@ export class CommandTrigger implements TriggerDefinition {
     
     // If only '/' is typed, show all commands
     if (!parsed.command || parsed.command === '') {
-      return await this.processor.getCommands(this.agent);
+      return await this.processor.getCommands(this.agent, this.agentCommands);
     }
 
     // Otherwise, search for matching commands
-    return await this.processor.findCommands(parsed.command, this.agent);
+    return await this.processor.findCommands(parsed.command, this.agent, this.agentCommands);
   }
 
   /**
@@ -55,7 +57,8 @@ export class CommandTrigger implements TriggerDefinition {
     const result = await this.processor.execute(
       context.rawInput,
       context.chatHook,
-      this.agent
+      this.agent,
+      this.agentCommands
     );
 
     return {

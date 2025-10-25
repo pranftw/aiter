@@ -8,6 +8,9 @@ export interface TriggerManagerConfig {
   /** Current agent type */
   agent: string;
   
+  /** Agent-specific commands */
+  agentCommands?: Record<string, any>;
+  
   /** Workspace root directory (for future context trigger) */
   workspaceRoot?: string;
 }
@@ -19,7 +22,7 @@ export function createTriggerManager(config: TriggerManagerConfig): TriggerManag
   const manager = new TriggerManager();
 
   // Register command trigger
-  manager.register(new CommandTrigger(config.agent));
+  manager.register(new CommandTrigger(config.agent, config.agentCommands));
 
   // Future: Register other triggers here
   // manager.register(new ContextTrigger(config.workspaceRoot));

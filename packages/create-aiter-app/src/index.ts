@@ -41,14 +41,14 @@ async function main() {
     const packageJson = await fs.readJson(packageJsonPath);
     packageJson.name = argv.name;
     
-    // Check if we're in a monorepo by looking for @aiter/core in node_modules
-    const isInMonorepo = await fs.pathExists(path.join(process.cwd(), 'node_modules/@aiter/core'));
+    // Check if we're creating inside the aiter monorepo
+    const isInMonorepo = await fs.pathExists(path.join(process.cwd(), 'packages/core/package.json'));
 
     // Handle dependencies based on environment
     if (packageJson.dependencies) {
       for (const [key, value] of Object.entries(packageJson.dependencies)) {
         if (value === 'workspace:*') {
-          // If we're in monorepo, keep workspace:*, otherwise use relative path
+          // If NOT in monorepo, replace with latest from npm
           if (!isInMonorepo) {
             packageJson.dependencies[key] = 'latest';
           }
@@ -58,12 +58,30 @@ async function main() {
     
     await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
 
-    // Install dependencies
-    console.log(chalk.cyan('Installing dependencies...'));
-    execSync('bun install', {
-      cwd: targetPath,
-      stdio: 'inherit',
-    });
+    // If in monorepo, add to workspaces and install from root
+    if (isInMonorepo) {
+      const rootPackageJsonPath = path.join(process.cwd(), 'package.json');
+      const rootPackageJson = await fs.readJson(rootPackageJsonPath);
+      const relativePath = path.relative(process.cwd(), targetPath);
+      
+      if (!rootPackageJson.workspaces.includes(relativePath)) {
+        rootPackageJson.workspaces.push(relativePath);
+        await fs.writeJson(rootPackageJsonPath, rootPackageJson, { spaces: 2 });
+        console.log(chalk.cyan('Added to workspaces...'));
+      }
+      
+      console.log(chalk.cyan('Linking workspace dependencies...'));
+      execSync('bun install', {
+        cwd: process.cwd(),
+        stdio: 'inherit',
+      });
+    } else {
+      console.log(chalk.cyan('Installing dependencies...'));
+      execSync('bun install', {
+        cwd: targetPath,
+        stdio: 'inherit',
+      });
+    }
 
     console.log(chalk.green('\n✓ Project created successfully!\n'));
     console.log(chalk.bold('Next steps:\n'));

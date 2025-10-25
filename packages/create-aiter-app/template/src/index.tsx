@@ -25,10 +25,11 @@ interface AppProps {
   chat: z.infer<typeof ChatSchema> | null;
   streamFunction: StreamFunctionType;
   AIMessageComponent: AIMessageComponent;
+  agentCommands: Record<string, any>;
 }
 
 
-function App({ args, chat, streamFunction, AIMessageComponent }: AppProps) {
+function App({ args, chat, streamFunction, AIMessageComponent, agentCommands }: AppProps) {
   useKeyboard((key) => {
     if (key.name==='c' && key.ctrl) {
       cleanup();
@@ -41,7 +42,8 @@ function App({ args, chat, streamFunction, AIMessageComponent }: AppProps) {
         chat={chat} 
         prompt={args.prompt} 
         streamFunction={streamFunction} 
-        AIMessageComponent={AIMessageComponent} 
+        AIMessageComponent={AIMessageComponent}
+        agentCommands={agentCommands}
       />
     )
   }
@@ -55,8 +57,9 @@ async function main(args: typeof processedArgs){
   const chat = await initializeChat(args.chatId, args.agent, agent.dataSchema);
   const streamFunction = agent.streamFunction;
   const AIMessageComponent = agent.components.default;
+  const agentCommands = agent.commands;
   try {
-    await render(<App args={args} chat={chat} streamFunction={streamFunction} AIMessageComponent={AIMessageComponent}/>, {exitOnCtrlC: false, enableMouseMovement: true});
+    await render(<App args={args} chat={chat} streamFunction={streamFunction} AIMessageComponent={AIMessageComponent} agentCommands={agentCommands}/>, {exitOnCtrlC: false, enableMouseMovement: true});
   } catch (error) {
     await cleanup();
     console.error('Error:', error);
