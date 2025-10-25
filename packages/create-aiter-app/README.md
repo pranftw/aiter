@@ -6,10 +6,10 @@ CLI tool for creating new aiter applications.
 
 ```bash
 # From the monorepo root
-bun run create-aiter-app --path ~/projects --project my-chat-app
+bun run @pranftw/create-aiter-app --path ~/projects --project my-chat-app
 
 # Or directly with npx/bunx
-npx create-aiter-app --path ~/projects --project my-chat-app
+npx @pranftw/create-aiter-app --path ~/projects --project my-chat-app
 ```
 
 ## Options

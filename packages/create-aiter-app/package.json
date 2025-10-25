@@ -1,17 +1,16 @@
 {
-  "name": "create-aiter-app",
+  "name": "@pranftw/create-aiter-app",
   "version": "0.1.0",
   "type": "module",
   "bin": {
-    "create-aiter-app": "./dist/index.js"
+    "create-aiter-app": "./src/index.ts"
   },
   "files": [
-    "dist",
+    "src",
     "template"
   ],
   "scripts": {
-    "build": "bun build src/index.ts --outdir dist --target node --format esm --sourcemap=external && chmod +x dist/index.js",
-    "clean": "rm -rf dist"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.2.0",

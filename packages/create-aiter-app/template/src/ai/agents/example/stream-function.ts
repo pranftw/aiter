@@ -1,7 +1,7 @@
 import { convertToModelMessages, streamText, createUIMessageStream, generateId, stepCountIs } from 'ai';
-import type { StreamFunctionOptionsType } from '@aiter/core';
+import type { StreamFunctionOptionsType } from '@pranftw/aiter';
 import {openrouter} from '@openrouter/ai-sdk-provider';
-import { mcpManager, ToolContextSchema, getPrompt, updateChatMessages } from '@aiter/core';
+import { mcpManager, ToolContextSchema, getPrompt, updateChatMessages } from '@pranftw/aiter';
 import { z } from 'zod';
 import * as localTools from './tools';
 

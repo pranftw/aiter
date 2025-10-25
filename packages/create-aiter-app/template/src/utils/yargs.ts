@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
-import { createAgentResolver } from '@aiter/core';
+import { createAgentResolver } from '@pranftw/aiter';
 import path from 'path';
 
 const agentResolver = createAgentResolver({

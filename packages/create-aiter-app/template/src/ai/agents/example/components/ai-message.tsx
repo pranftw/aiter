@@ -1,5 +1,5 @@
 import type { UIMessage } from 'ai';
-import { AIMessage as DefaultAIMessage } from '@aiter/core';
+import { AIMessage as DefaultAIMessage } from '@pranftw/aiter';
 
 
 interface AIMessageProps {

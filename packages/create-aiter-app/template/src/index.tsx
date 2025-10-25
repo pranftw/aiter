@@ -9,7 +9,7 @@ import {
   createAgentResolver,
   type StreamFunctionType,
   type AIMessageComponent
-} from '@aiter/core';
+} from '@pranftw/aiter';
 import path from 'path';
 import { z } from 'zod';
 import { processedArgs } from './utils/yargs';

@@ -1,15 +1,13 @@
 {
-  "name": "@aiter/core",
+  "name": "@pranftw/aiter",
   "version": "0.1.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
-  "files": ["dist"],
+  "files": ["src"],
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "build": "bun build src/index.ts --outdir dist --target node --format esm --sourcemap=external && tsc --emitDeclarationOnly --declaration --declarationMap",
-    "clean": "rm -rf dist"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",

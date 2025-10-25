@@ -21,10 +21,10 @@ export async function detectAiterProject(projectPath: string): Promise<boolean> 
     return false;
   }
 
-  // Check if package.json has @aiter/core dependency
+  // Check if package.json has @pranftw/aiter dependency
   try {
     const packageJson = await fs.readJson(packageJsonPath);
-    return !!packageJson.dependencies?.['@aiter/core'];
+    return !!packageJson.dependencies?.['@pranftw/aiter'];
   } catch {
     return false;
   }
