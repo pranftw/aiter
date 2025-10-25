@@ -1,6 +1,6 @@
 {
   "name": "@pranftw/create-aiter-app",
-  "version": "0.1.3",
+  "version": "0.1.8",
   "type": "module",
   "bin": {
     "create-aiter-app": "./src/index.ts"
