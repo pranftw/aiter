@@ -5,14 +5,17 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import chalk from 'chalk';
-import { argv } from './utils/yargs.js';
+import { args } from './utils/yargs.js';
+import { detectContext } from './utils/context.js';
+import { createProjectWithAgent, createAgentInProject } from './operations/create.js';
+import { addCapabilities } from './capabilities/operations.js';
+import { promptForCapabilities, promptForTargetAgent } from './interactive.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-async function main() {
-
-  const targetPath = path.resolve(argv.path, argv.name);
+async function createProjectLegacy() {
+  const targetPath = path.resolve(args.path, args.name);
   const templatePath = path.join(__dirname, '..', 'template');
 
   console.log(chalk.blue('\nCreating aiter app...'));
@@ -39,7 +42,7 @@ async function main() {
     // Update package.json with project name and replace workspace dependencies
     const packageJsonPath = path.join(targetPath, 'package.json');
     const packageJson = await fs.readJson(packageJsonPath);
-    packageJson.name = argv.name;
+    packageJson.name = args.name;
     
     // Check if we're creating inside the aiter monorepo
     const isInMonorepo = await fs.pathExists(path.join(process.cwd(), 'packages/core/package.json'));
@@ -89,6 +92,92 @@ async function main() {
     console.log(chalk.cyan('  bun run src/index.tsx --agent example\n'));
   } catch (error) {
     console.error(chalk.red('\nError creating project:'), error);
+    process.exit(1);
+  }
+}
+
+async function createProjectWithCapabilitySystem() {
+  const templatePath = path.join(__dirname, '..', 'template');
+  
+  // Check if template directory exists
+  if (!(await fs.pathExists(templatePath))) {
+    console.error(chalk.red('Error: Template directory not found!'));
+    console.error(chalk.gray(`Expected at: ${templatePath}`));
+    process.exit(1);
+  }
+
+  // Determine the target path
+  const targetPath = path.resolve(args.path, args.name);
+  
+  // Check if target already exists and is an aiter project
+  const targetExists = await fs.pathExists(targetPath);
+  const context = targetExists ? await detectContext(targetPath) : { isAiterProject: false, agents: [], projectPath: targetPath };
+
+  let capabilities = args.capabilities;
+
+  // Handle interactive mode (only if capabilities weren't explicitly specified)
+  if (args.shouldPromptCapabilities) {
+    capabilities = await promptForCapabilities();
+  }
+
+  if (!context.isAiterProject) {
+    // Creating new project with agent
+    
+    // Check if target directory already exists
+    if (targetExists) {
+      console.error(chalk.red(`Error: Directory ${targetPath} already exists and is not an aiter project!`));
+      process.exit(1);
+    }
+
+    console.log(chalk.blue('\nCreating new project with agent...'));
+    console.log(chalk.gray(`Target: ${targetPath}`));
+    console.log(chalk.gray(`Agent: ${args.agent}\n`));
+
+    await createProjectWithAgent(targetPath, args.agent!, capabilities, templatePath);
+
+    console.log(chalk.green('\n✓ Project created successfully!\n'));
+    console.log(chalk.bold('Next steps:\n'));
+    console.log(chalk.cyan(`  cd ${path.relative(process.cwd(), targetPath)}`));
+    console.log(chalk.cyan(`  bun run src/index.tsx --agent ${args.agent}\n`));
+  } else {
+    // Existing project - add or create agent
+    console.log(chalk.blue('\n✓ Detected existing aiter project\n'));
+
+    const agentExists = context.agents.includes(args.agent!);
+
+    if (agentExists) {
+      // Add capabilities to existing agent
+      console.log(chalk.cyan(`Adding capabilities to agent: ${args.agent}`));
+      const agentPath = path.join(targetPath, 'src/ai/agents', args.agent!);
+      const templateAgentPath = path.join(templatePath, 'src/ai/agents/template');
+      
+      await addCapabilities(agentPath, capabilities, templateAgentPath);
+      
+      console.log(chalk.green('\n✓ Done!\n'));
+    } else {
+      // Create new agent in existing project
+      console.log(chalk.cyan(`Creating new agent: ${args.agent}`));
+      
+      await createAgentInProject(targetPath, args.agent!, capabilities, templatePath);
+      
+      console.log(chalk.green('\n✓ Agent created successfully!\n'));
+      console.log(chalk.bold('Next steps:\n'));
+      console.log(chalk.cyan(`  bun run src/index.tsx --agent ${args.agent}\n`));
+    }
+  }
+}
+
+async function main() {
+  try {
+    if (!args.agent) {
+      // Legacy mode: copy entire template
+      await createProjectLegacy();
+    } else {
+      // New capability system mode
+      await createProjectWithCapabilitySystem();
+    }
+  } catch (error) {
+    console.error(chalk.red('\nError:'), error);
     process.exit(1);
   }
 }
