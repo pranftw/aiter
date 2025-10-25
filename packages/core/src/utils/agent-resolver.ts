@@ -23,8 +23,12 @@ export function createAgentResolver(config: AgentResolverConfig) {
   async function getAgent(agentName: string): Promise<AgentConfig> {
     const agentPath = path.join(basePath, agentName);
     
-    const components = await import(`${agentPath}/components`);
     const streamFunction = await import(`${agentPath}/stream-function`);
+    
+    let components = {};
+    try {
+      components = await import(`${agentPath}/components`);
+    } catch {}
     
     let tools = {};
     try {

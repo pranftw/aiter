@@ -9,7 +9,7 @@ import { args } from './utils/yargs.js';
 import { detectContext } from './utils/context.js';
 import { createProjectWithAgent, createAgentInProject } from './operations/create.js';
 import { addCapabilities } from './capabilities/operations.js';
-import { promptForCapabilities, promptForTargetAgent } from './interactive.js';
+import { promptForCapabilities } from './interactive.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

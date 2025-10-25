@@ -15,7 +15,7 @@ export function ChatBox({
 }: ChatBoxProps) {
 
   return (
-    <box margin={0} padding={2} paddingTop={1} backgroundColor={colors.background.secondary}>
+    <box padding={2} paddingTop={1} backgroundColor={colors.background.secondary}>
       <input
         placeholder={placeholder}
         value={message}

@@ -12,13 +12,12 @@ export function UserMessage({ message }: UserMessageProps) {
       padding={1}
       paddingLeft={2}
       paddingRight={2}
-      margin={0}
     >
       {message.parts?.map((part, index) => {
         switch (part.type) {
           case 'text':
             return (
-              <text key={index} fg={colors.text.gray}>{part.text}</text>
+              <text fg={colors.text.gray}>{part.text}</text>
             )
           default:
             return null

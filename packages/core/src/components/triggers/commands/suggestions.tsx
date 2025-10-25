@@ -106,7 +106,6 @@ export function CommandSuggestions({ commands, query, onSelect, onClose, onNavig
         const parts = getHighlightParts(cmd.name, query);
         return (
           <box 
-            key={`${cmd.name}-${index}`}
             flexDirection='row'
             gap={1}
             width='100%'

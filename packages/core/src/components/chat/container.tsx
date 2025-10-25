@@ -64,23 +64,22 @@ export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent
   
   return (
     <box position='relative' flexDirection='column' gap={1} paddingLeft={2} paddingRight={2} paddingTop={1} paddingBottom={1}>
-      <ascii-font text="aiter"/>
+      <ascii-font text="aiter" flexShrink={0}/>
       {/* Header */}
-      <box flexDirection='row' gap={2} flexWrap='wrap'>
+      <box flexDirection='row' gap={2} flexWrap='wrap' flexShrink={0}>
         <text fg={colors.text.gray}><strong>CHAT</strong> {chat.id}</text>
         <text fg={colors.text.gray}><strong>AGENT</strong> {chat.agent}</text>
       </box>
       
-      {/* Messages area - takes all available space */}
-      <box flexGrow={1}>
-        <scrollbox 
-          ref={(r) => { if (r) scroll = r; }} 
-          stickyScroll={true} 
-          stickyStart='bottom'
-        >
-          <ChatMessages messages={messages} AIMessageComponent={AIMessageComponent} />
-        </scrollbox>
-      </box>
+      {/* Messages area */}
+      <scrollbox 
+        ref={(r) => { if (r) scroll = r; }} 
+        stickyScroll={true} 
+        stickyStart='bottom'
+        flexGrow={1}
+      >
+        <ChatMessages messages={messages} AIMessageComponent={AIMessageComponent} />
+      </scrollbox>
 
       {/* Render active trigger UI or error overlay */}
       {activeTriggerUI && (
@@ -94,11 +93,13 @@ export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent
       )}
 
       {/* Generic ChatBox */}
-      <ChatBox 
-        message={message}
-        setMessage={setMessage}
-        onSubmit={handleSubmit}
-      />
+      <box flexShrink={0}>
+        <ChatBox 
+          message={message}
+          setMessage={setMessage}
+          onSubmit={handleSubmit}
+        />
+      </box>
     </box>
   );
 }
