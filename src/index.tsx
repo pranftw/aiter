@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { processedArgs } from './utils/yargs';
 import { getStreamFunction, getAIMessageComponent } from './utils/ai';
 import type { StreamFunctionType } from './ai/custom-chat-transport';
-import type { UIMessage } from 'ai';
+import type { AIMessageComponent } from './lib/types';
 
 
 
@@ -15,7 +15,7 @@ interface AppProps {
   args: typeof processedArgs;
   chat: z.infer<typeof ChatSchema> | null;
   streamFunction: StreamFunctionType;
-  AIMessageComponent: (props: { message: UIMessage }) => React.ReactElement;
+  AIMessageComponent: AIMessageComponent;
 }
 
 

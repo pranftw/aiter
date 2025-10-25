@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import type { useChat } from '@ai-sdk/react';
 import { createTriggerManager } from '@/triggers';
 import type { TriggerDefinition } from '@/triggers/core/types';
+import type { ChatHook } from '@/lib/types';
 
 export interface TriggerUIData<T = any> {
   /** The active trigger */
@@ -26,7 +26,7 @@ export interface TriggerUIData<T = any> {
 }
 
 interface UseTriggerSystemProps {
-  chatHook: ReturnType<typeof useChat>;
+  chatHook: ChatHook;
   agent: string;
   onSubmitCallback?: () => void;
 }

@@ -1,5 +1,3 @@
-import { error } from "console";
-
 export const colors = {
   // Border colors
   border: {
@@ -41,6 +39,14 @@ export const colors = {
     },
   },
 
+  // Suggestion/autocomplete colors
+  suggestions: {
+    item: '#cccccc',        // default item text
+    highlight: '#ffffff',   // highlighted/matched characters
+    selected: '#ffffff',    // selected item indicator
+    description: '#555555', // item description text
+  },
+  
   error: {
     primary: '#DE0000',
     secondary: '#5D0000'

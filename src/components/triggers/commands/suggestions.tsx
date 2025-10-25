@@ -111,18 +111,18 @@ export function CommandSuggestions({ commands, query, onSelect, onClose, onNavig
             gap={1}
             width='100%'
           >
-            <text fg={isSelected ? colors.status.success : colors.text.gray}>■</text>
+            <text fg={isSelected ? colors.suggestions.selected : colors.text.gray}>■</text>
             {parts ? (
               <box flexDirection='row' gap={0}>
-                <text fg={colors.text.code}>/</text>
-                {parts.prefix && <text fg={colors.text.code}>{parts.prefix}</text>}
-                <text fg={colors.text.bold}>{parts.highlight}</text>
-                {parts.suffix && <text fg={colors.text.code}>{parts.suffix}</text>}
+                <text fg={colors.suggestions.item}>/</text>
+                {parts.prefix && <text fg={colors.suggestions.item}>{parts.prefix}</text>}
+                <text fg={colors.suggestions.highlight}>{parts.highlight}</text>
+                {parts.suffix && <text fg={colors.suggestions.item}>{parts.suffix}</text>}
               </box>
             ) : (
-              <text fg={colors.text.code}>/{cmd.name}</text>
+              <text fg={colors.suggestions.item}>/{cmd.name}</text>
             )}
-            <text fg={colors.text.gray}>{cmd.description || ''}</text>
+            <text fg={colors.suggestions.description}>{cmd.description || ''}</text>
           </box>
         );
       })}

@@ -1,7 +1,7 @@
-import type { useChat } from '@ai-sdk/react';
 import { CommandRegistry } from './registry';
 import type { CommandContext, CommandExecuteResult } from './types';
 import { isSlashCommand, parseCommandArgs } from './utils';
+import type { ChatHook } from '@/lib/types';
 
 /**
  * Processes command execution lifecycle
@@ -33,7 +33,7 @@ export class CommandProcessor {
    */
   async execute(
     input: string,
-    chatHook: ReturnType<typeof useChat>,
+    chatHook: ChatHook,
     agent: string
   ): Promise<CommandExecuteResult> {
     await this.ensureInitialized(agent);

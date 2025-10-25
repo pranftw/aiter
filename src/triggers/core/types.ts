@@ -1,4 +1,4 @@
-import type { useChat } from '@ai-sdk/react';
+import type { ChatHook } from '@/lib/types';
 
 /**
  * Trigger matching mode
@@ -38,7 +38,7 @@ export interface TriggerDefinition {
  */
 export interface TriggerContext {
   /** The chat hook from @ai-sdk/react */
-  chatHook: ReturnType<typeof useChat>;
+  chatHook: ChatHook;
   
   /** The raw input string */
   rawInput: string;

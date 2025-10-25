@@ -1,11 +1,12 @@
 import { type UIMessage } from "ai"
 import { UserMessage } from "./message/user"
+import type { AIMessageComponent } from '@/lib/types';
 
 
 
 interface ChatMessagesProps {
   messages: UIMessage[]
-  AIMessageComponent: (props: { message: UIMessage }) => React.ReactElement;
+  AIMessageComponent: AIMessageComponent;
 }
 
 export function ChatMessages({ messages, AIMessageComponent }: ChatMessagesProps) {

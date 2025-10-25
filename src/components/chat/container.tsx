@@ -2,7 +2,6 @@ import { CustomChatTransport, type StreamFunctionType } from '@/ai/custom-chat-t
 import { ChatBox } from './box';
 import { ChatMessages } from './messages';
 import { useChat } from '@ai-sdk/react';
-import type { UIMessage } from 'ai';
 import { ChatSchema } from '@/lib/schema';
 import { z } from 'zod';
 import { useEffect, useRef } from 'react';
@@ -11,12 +10,13 @@ import { colors } from '@/utils/colors';
 import { useTriggerSystem } from '@/components/triggers/core/use-trigger-system';
 import { triggerUIRegistry } from '@/components/triggers/registry';
 import { ErrorOverlay } from '@/components/triggers/core/error-overlay';
+import type { AIMessageComponent } from '@/lib/types';
 
 interface ChatContainerProps {
   chat: z.infer<typeof ChatSchema>;
   prompt: string | null;
   streamFunction: StreamFunctionType;
-  AIMessageComponent: (props: { message: UIMessage }) => React.ReactElement;
+  AIMessageComponent: AIMessageComponent;
 }
 
 const prepareChat = (
