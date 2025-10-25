@@ -50,7 +50,7 @@ export async function createProjectWithAgent(
   packageJson.name = path.basename(targetPath);
 
   // Check if we're creating inside the aiter monorepo
-  const isInMonorepo = await fs.pathExists(path.join(process.cwd(), 'packages/core/package.json'));
+  const isInMonorepo = await fs.pathExists(path.join(process.cwd(), 'packages/aiter/package.json'));
 
   // Handle dependencies based on environment
   if (packageJson.dependencies) {

@@ -6,7 +6,7 @@ A powerful terminal-based AI chat interface with a modular agent system and Mode
 
 This repository uses Bun workspaces to manage multiple packages:
 
-- **`packages/core`** - Core runtime library (`@pranftw/aiter`)
+- **`packages/aiter`** - Core runtime library (`@pranftw/aiter`)
 - **`packages/create-aiter-app`** - CLI tool for creating new aiter projects
 - **`dev/`** - Development workspace (gitignored, created from template)
 
@@ -34,7 +34,7 @@ bun setup-dev
 # Run the dev workspace
 bun dev -a example
 
-# Make changes to packages/core/src/*
+# Make changes to packages/aiter/src/*
 # Changes are instantly reflected - no rebuild needed! ✨
 
 # Type check all packages
