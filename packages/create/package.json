@@ -16,7 +16,7 @@
     "directory": "dist"
   },
   "scripts": {
-    "build": "bun run ../../scripts/build-pkg.ts --pkg create-aiter",
+    "build": "bun run ../../scripts/build-pkg.ts --pkg create",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "bun run build"
   },
