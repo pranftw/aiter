@@ -1,16 +1,24 @@
 {
   "name": "@pranftw/create-aiter-app",
-  "version": "0.1.8",
+  "version": "0.2.5",
   "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "bin": {
-    "create-aiter-app": "./src/index.ts"
+    "create-aiter-app": "./dist/index.js"
   },
   "files": [
-    "src",
+    "dist",
     "template"
   ],
+  "publishConfig": {
+    "directory": "dist"
+  },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "build": "bun run ../../scripts/build-pkg.ts --pkg create-aiter-app",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "bun run build"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.2.0",
@@ -25,4 +33,3 @@
     "typescript": "^5.9.2"
   }
 }
-

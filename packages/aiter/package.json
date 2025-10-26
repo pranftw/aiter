@@ -1,13 +1,22 @@
 {
   "name": "@pranftw/aiter",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
-  "files": ["src"],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "directory": "dist"
+  },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "build": "bun run ../../scripts/build-pkg.ts --pkg aiter",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "bun run build"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
@@ -41,4 +50,3 @@
     "zod": "^4.1.8"
   }
 }
-

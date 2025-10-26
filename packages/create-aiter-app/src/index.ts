@@ -14,9 +14,28 @@ import { promptForCapabilities } from './interactive.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Get template path - check both production (./template) and dev (../template) locations
+function getTemplatePath(): string {
+  const prodPath = path.join(__dirname, 'template');
+  const devPath = path.join(__dirname, '..', 'template');
+  
+  // Check production path first (when running from dist)
+  if (fs.existsSync(prodPath)) {
+    return prodPath;
+  }
+  
+  // Fall back to dev path (when running from src)
+  if (fs.existsSync(devPath)) {
+    return devPath;
+  }
+  
+  // Return prod path as default (will trigger error later with correct path)
+  return prodPath;
+}
+
 async function createProjectLegacy() {
   const targetPath = path.resolve(args.path, args.name);
-  const templatePath = path.join(__dirname, '..', 'template');
+  const templatePath = getTemplatePath();
 
   console.log(chalk.blue('\nCreating aiter app...'));
   console.log(chalk.gray(`Target: ${targetPath}\n`));
@@ -97,7 +116,7 @@ async function createProjectLegacy() {
 }
 
 async function createProjectWithCapabilitySystem() {
-  const templatePath = path.join(__dirname, '..', 'template');
+  const templatePath = getTemplatePath();
   
   // Check if template directory exists
   if (!(await fs.pathExists(templatePath))) {

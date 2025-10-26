@@ -6,7 +6,9 @@
       "devDependencies": {
         "@tsconfig/recommended": "^1.0.10",
         "@types/bun": "latest",
+        "@types/yargs": "^17.0.33",
         "typescript": "^5.9.2",
+        "yargs": "^18.0.0",
       },
     },
     "dev": {
@@ -43,7 +45,7 @@
     },
     "packages/aiter": {
       "name": "@pranftw/aiter",
-      "version": "0.1.0",
+      "version": "0.1.6",
       "dependencies": {
         "@ai-sdk/react": "2.0.76",
         "@modelcontextprotocol/sdk": "^1.18.1",
@@ -78,7 +80,7 @@
     },
     "packages/create-aiter-app": {
       "name": "@pranftw/create-aiter-app",
-      "version": "0.1.0",
+      "version": "0.1.8",
       "bin": {
         "create-aiter-app": "./src/index.ts",
       },
