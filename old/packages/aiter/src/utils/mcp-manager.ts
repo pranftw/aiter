@@ -1,4 +1,5 @@
 import { getMCPClientsFromJSON, getToolsFromMCPClients, closeMCPClients, type MCPClient } from './mcp';
+import type { MCPConfig } from '../lib/types';
 
 export class MCPClientManager {
   private clients: MCPClient[] = [];
@@ -6,7 +7,7 @@ export class MCPClientManager {
   private initialized = false;
   private isShuttingDown = false;
 
-  async initialize(mcpJSON: any): Promise<void> {
+  async initialize(mcpJSON: MCPConfig): Promise<void> {
     if (this.initialized || this.isShuttingDown) {
       return;
     }

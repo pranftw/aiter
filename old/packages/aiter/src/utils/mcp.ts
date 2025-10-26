@@ -1,14 +1,20 @@
 import { experimental_createMCPClient as createMCPClient, type experimental_MCPClient as AISDKMCPClient } from 'ai';
 import { Experimental_StdioMCPTransport as StdioMCPTransport } from 'ai/mcp-stdio';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+import type { MCPConfig, MCPServerConfig } from '../lib/types';
 
 export interface MCPClient {
   name: string;
   client: AISDKMCPClient;
 }
 
-async function createMCPClients(configs: any[], serverType: 'stdio' | 'sse' | 'http'	): Promise<MCPClient[]> {
-  function getTransport(config: any): any {
+interface MCPClientConfig {
+  name: string;
+  config: MCPServerConfig;
+}
+
+async function createMCPClients(configs: MCPClientConfig[], serverType: 'stdio' | 'sse' | 'http'	): Promise<MCPClient[]> {
+  function getTransport(config: MCPServerConfig): any {
     switch (serverType) {
       case 'stdio':
         return new StdioMCPTransport({
@@ -36,14 +42,14 @@ async function createMCPClients(configs: any[], serverType: 'stdio' | 'sse' | 'h
   })))
 }
 
-export async function getMCPClientsFromJSON(mcpJSON: any): Promise<MCPClient[]> {
+export async function getMCPClientsFromJSON(mcpJSON: MCPConfig): Promise<MCPClient[]> {
   const mcpServerConfigs = mcpJSON.mcpServers;
-  const stdioConfigs = []
-  const sseConfigs = []
-  const httpConfigs = []
+  const stdioConfigs: MCPClientConfig[] = []
+  const sseConfigs: MCPClientConfig[] = []
+  const httpConfigs: MCPClientConfig[] = []
   // getting configs for different transports
-  for (const [mcpServerName, mcpServerConfig] of Object.entries(mcpServerConfigs) as any[]) {
-    const config = {name: mcpServerName, config: mcpServerConfig}
+  for (const [mcpServerName, mcpServerConfig] of Object.entries(mcpServerConfigs)) {
+    const config: MCPClientConfig = {name: mcpServerName, config: mcpServerConfig}
     switch (mcpServerConfig.type) {
       case 'stdio':
         stdioConfigs.push(config)
@@ -55,7 +61,7 @@ export async function getMCPClientsFromJSON(mcpJSON: any): Promise<MCPClient[]> 
         httpConfigs.push(config)
         break
       default:
-        throw new Error(`Unknown MCP server type: ${mcpServerConfig.type}`)
+        throw new Error(`Unknown MCP server type: ${(mcpServerConfig as any).type}`)
     }
   }
   const clients = await Promise.all([

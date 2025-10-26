@@ -3,7 +3,8 @@ import { generateId } from 'ai';
 import fs from 'fs';
 import z from 'zod';
 import { ChatSchema } from '../lib/schema';
-import { mcpManager } from "./mcp-manager";
+import { mcpManager } from './mcp-manager';
+import type { MCPConfig } from '../lib/types';
 
 
 
@@ -62,7 +63,7 @@ export function updateChatMessages(chatId: string, messages: z.infer<typeof Chat
 }
 
 
-export const initializeMCP = async (mcpConfig: any) => {
+export const initializeMCP = async (mcpConfig: MCPConfig) => {
   if (!mcpManager.isInitialized()) {
     await mcpManager.initialize(mcpConfig);
   }

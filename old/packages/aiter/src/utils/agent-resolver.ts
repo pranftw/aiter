@@ -1,17 +1,7 @@
 import { z } from 'zod';
 import fs from 'fs';
 import path from 'path';
-
-export interface AgentConfig {
-  name: string;
-  components: any;
-  streamFunction: any;
-  dataSchema: z.ZodSchema;
-  tools: Record<string, any>;
-  commands: Record<string, any>;
-  mcpConfig: any;
-  systemPrompt: string;
-}
+import type { AgentConfig, MCPConfig } from '../lib/types';
 
 export interface AgentResolverConfig {
   basePath: string;
@@ -58,7 +48,7 @@ export function createAgentResolver(config: AgentResolverConfig) {
     };
   }
 
-  function resolveMCPConfig(agentPath: string, configName: string = 'main'): any {
+  function resolveMCPConfig(agentPath: string, configName: string = 'main'): MCPConfig {
     try {
       const contents = fs.readFileSync(
         path.join(agentPath, 'mcps', `${configName}.json`),
