@@ -6,8 +6,8 @@ A powerful terminal-based AI chat interface with a modular agent system and Mode
 
 This repository uses Bun workspaces to manage multiple packages:
 
-- **`packages/aiter`** - Core runtime library (`@pranftw/aiter`)
-- **`packages/create-aiter-app`** - CLI tool for creating new aiter projects
+- **`packages/aiter`** - Core runtime library (`@aiter/aiter`)
+- **`packages/create`** - CLI tool for creating new aiter projects and agents
 - **`dev/`** - Development workspace (gitignored, created from template)
 
 ## Development Setup
@@ -49,7 +49,7 @@ bun run clean
 
 ## Packages
 
-### @pranftw/aiter
+### @aiter/aiter
 
 The core runtime library that provides:
 - UI components for building terminal interfaces
@@ -58,12 +58,12 @@ The core runtime library that provides:
 - Chat session management
 - Agent resolution system
 
-### create-aiter-app
+### create
 
-CLI tool that scaffolds new aiter applications with:
+CLI tool that scaffolds new aiter applications and agents with:
 - Pre-configured project structure
-- Example agent
-- Template for creating new agents
+- Example agent template
+- Modular capability system (commands, tools, mcps, system-prompts, components)
 - Component override system
 
 ## Creating a Standalone App
@@ -71,17 +71,33 @@ CLI tool that scaffolds new aiter applications with:
 To create a new aiter app outside the monorepo:
 
 ```bash
-# From outside the aiter directory
-cd ~/projects
-bun run /path/to/aiter/packages/create-aiter-app/src/index.ts -n my-chat-app
+# Create a new application (in current directory)
+npx @aiter/create --type app --name my-chat-app
 
-# Or after publishing to npm
-npx create-aiter-app -n my-chat-app
+# Or specify a path
+npx @aiter/create --type app --name my-chat-app --path ~/projects
 
-# Then run it
-cd my-chat-app
+# Or from monorepo
+bun run create --type app --name my-chat-app
+
+# Run it
+cd ~/projects/my-chat-app
 bun install
 bun run src/index.tsx --agent example
+```
+
+## Creating Agents
+
+```bash
+# Create an agent in current directory (auto-detects existing project)
+cd my-chat-app
+npx @aiter/create --type agent --name my-agent --capabilities commands,tools
+
+# Interactive mode (prompts for capabilities)
+npx @aiter/create --type agent --name my-agent
+
+# Non-interactive with all capabilities
+npx @aiter/create --type agent --name my-agent --capabilities all --interactive false
 ```
 
 ## License

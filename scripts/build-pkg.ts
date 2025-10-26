@@ -10,7 +10,7 @@ const argv = yargs(hideBin(process.argv))
     alias: 'p',
     type: 'string',
     description: 'Package name to build',
-    choices: ['aiter', 'create-aiter-app'],
+    choices: ['aiter', 'create'],
     demandOption: true,
   })
   .option('prod', {
@@ -83,7 +83,7 @@ if (!result.success) {
 await $`tsc --emitDeclarationOnly`
 
 // Copy additional files/directories that need to be published
-if (argv.pkg === 'create-aiter-app') {
+if (argv.pkg === 'create') {
   console.log('Copying template directory...')
   await $`cp -r template dist/template`
 }

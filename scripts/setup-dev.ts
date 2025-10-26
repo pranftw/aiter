@@ -11,7 +11,7 @@ if (fs.existsSync(devPath)) {
   console.log('✓ dev/ already exists');
   console.log('  To recreate: rm -rf dev && bun setup-dev\n');
 } else {
-  execSync('bun run packages/create-aiter-app/src/index.ts -n dev -i false', { 
+  execSync('bun run packages/create/src/index.ts --type app --name dev --path .', { 
     stdio: 'inherit',
     cwd: process.cwd()
   });

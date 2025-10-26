@@ -1,4 +1,4 @@
-# @pranftw/aiter
+# @aiter/aiter
 
 Core runtime library for aiter - provides the infrastructure for building AI terminal user interfaces.
 
@@ -13,13 +13,13 @@ Core runtime library for aiter - provides the infrastructure for building AI ter
 ## Installation
 
 ```bash
-bun add @pranftw/aiter
+bun add @aiter/aiter
 ```
 
 ## Usage
 
 ```typescript
-import { ChatContainer, initializeMCP, getAgent } from '@pranftw/aiter';
+import { ChatContainer, initializeMCP, getAgent } from '@aiter/aiter';
 ```
 
 ## API

@@ -9,13 +9,13 @@
   "scripts": {
     "setup-dev": "bun run scripts/setup-dev.ts",
     "dev": "cd dev && bun run src/index.tsx",
-    "typecheck": "bun run typecheck:aiter && bun run typecheck:create-aiter-app",
+    "typecheck": "bun run typecheck:aiter && bun run typecheck:create",
     "typecheck:aiter": "cd packages/aiter && bun run typecheck",
-    "typecheck:create-aiter-app": "cd packages/create-aiter-app && bun run typecheck",
-    "build": "bun run scripts/build-pkg.ts --pkg aiter && bun run scripts/build-pkg.ts --pkg create-aiter-app",
+    "typecheck:create": "cd packages/create && bun run typecheck",
+    "build": "bun run scripts/build-pkg.ts --pkg aiter && bun run scripts/build-pkg.ts --pkg create",
     "build:aiter": "cd packages/aiter && bun run build",
-    "build:create-aiter-app": "cd packages/create-aiter-app && bun run build",
-    "create-aiter-app": "bun run packages/create-aiter-app/src/index.ts",
+    "build:create": "cd packages/create && bun run build",
+    "create": "bun run packages/create/src/index.ts",
     "clean": "rm -rf packages/*/dist packages/*/node_modules node_modules"
   },
   "devDependencies": {
