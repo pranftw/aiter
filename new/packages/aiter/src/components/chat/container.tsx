@@ -10,11 +10,13 @@ import { colors } from '@/utils/colors';
 import { useTriggerSystem } from '@/components/triggers/core/use-trigger-system';
 import { triggerUIRegistry } from '@/components/triggers/registry';
 import { ErrorOverlay } from '@/components/triggers/core/error-overlay';
+import type { AIMessageComponent } from '@/lib/types';
 
-export interface ChatContainerProps {
+interface ChatContainerProps {
   chat: z.infer<typeof ChatSchema>;
   prompt: string | null;
   streamFunction: StreamFunctionType;
+  AIMessageComponent: AIMessageComponent;
   agentCommands?: Record<string, any>;
 }
 
@@ -29,7 +31,7 @@ const prepareChat = (
   }
 };
 
-export function ChatContainer({ chat, prompt, streamFunction, agentCommands }: ChatContainerProps) {
+export function ChatContainer({ chat, prompt, streamFunction, AIMessageComponent, agentCommands }: ChatContainerProps) {
   const hasSentPrompt = useRef(false);
   const chatHook = useChat({
     id: chat.id,
@@ -76,7 +78,7 @@ export function ChatContainer({ chat, prompt, streamFunction, agentCommands }: C
         stickyStart='bottom'
         flexGrow={1}
       >
-        <ChatMessages messages={messages} />
+        <ChatMessages messages={messages} AIMessageComponent={AIMessageComponent} />
       </scrollbox>
 
       {/* Render active trigger UI or error overlay */}

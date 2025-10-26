@@ -3,6 +3,7 @@ export const CAPABILITIES = {
   'tools': 'tools',
   'mcps': 'mcps',
   'system-prompts': 'system-prompts',
+  'components': 'components',
 } as const;
 
 export type Capability = keyof typeof CAPABILITIES;

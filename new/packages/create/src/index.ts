@@ -5,14 +5,11 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import chalk from 'chalk';
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
+import { args } from './utils/yargs.js';
 import { detectContext } from './utils/context.js';
 import { createProjectWithAgent, createAgentInProject } from './operations/create.js';
 import { addCapabilities } from './capabilities/operations.js';
 import { promptForCapabilities } from './interactive.js';
-import { customizeComponents } from './commands/component.js';
-import { resolveCapabilities, validateCapabilities, type Capability } from './capabilities/registry.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,8 +33,8 @@ function getTemplatePath(): string {
   return prodPath;
 }
 
-async function createApp(name: string, targetDir: string) {
-  const targetPath = path.resolve(targetDir, name);
+async function createApp() {
+  const targetPath = path.resolve(args.path, args.name);
   const templatePath = getTemplatePath();
 
   console.log(chalk.blue('\nCreating aiter app...'));
@@ -64,7 +61,7 @@ async function createApp(name: string, targetDir: string) {
     // Update package.json with project name and replace workspace dependencies
     const packageJsonPath = path.join(targetPath, 'package.json');
     const packageJson = await fs.readJson(packageJsonPath);
-    packageJson.name = name;
+    packageJson.name = args.name;
     
     // Check if we're creating inside the aiter monorepo
     const isInMonorepo = await fs.pathExists(path.join(process.cwd(), 'packages/aiter/package.json'));
@@ -118,12 +115,7 @@ async function createApp(name: string, targetDir: string) {
   }
 }
 
-async function createAgent(
-  name: string,
-  targetDir: string,
-  capabilities?: Capability[],
-  shouldPrompt: boolean = false
-) {
+async function createAgent() {
   const templatePath = getTemplatePath();
   
   // Check if template directory exists
@@ -134,21 +126,21 @@ async function createAgent(
   }
 
   // Determine the target path
-  const currentDir = path.resolve(targetDir);
+  const currentDir = path.resolve(args.path);
   
   // Detect if we're in an existing aiter project
   const context = await detectContext(currentDir);
 
-  let finalCapabilities = capabilities || [];
+  let capabilities = args.capabilities;
 
   // Handle interactive mode (only if capabilities weren't explicitly specified)
-  if (shouldPrompt) {
-    finalCapabilities = await promptForCapabilities();
+  if (args.shouldPromptCapabilities) {
+    capabilities = await promptForCapabilities();
   }
 
   if (!context.isAiterProject) {
     // Not in an aiter project - create new project with agent
-    const targetPath = path.resolve(targetDir, name);
+    const targetPath = path.resolve(args.path, args.name);
     
     // Check if target directory already exists
     if (await fs.pathExists(targetPath)) {
@@ -158,137 +150,56 @@ async function createAgent(
 
     console.log(chalk.blue('\nCreating new project with agent...'));
     console.log(chalk.gray(`Target: ${targetPath}`));
-    console.log(chalk.gray(`Agent: ${name}\n`));
+    console.log(chalk.gray(`Agent: ${args.name}\n`));
 
-    await createProjectWithAgent(targetPath, name, finalCapabilities, templatePath);
+    await createProjectWithAgent(targetPath, args.name, capabilities, templatePath);
 
     console.log(chalk.green('\n✓ Project created successfully!\n'));
     console.log(chalk.bold('Next steps:\n'));
     console.log(chalk.cyan(`  cd ${path.relative(process.cwd(), targetPath)}`));
-    console.log(chalk.cyan(`  bun run src/index.tsx --agent ${name}\n`));
+    console.log(chalk.cyan(`  bun run src/index.tsx --agent ${args.name}\n`));
   } else {
     // Existing aiter project
     console.log(chalk.blue('\n✓ Detected existing aiter project\n'));
 
-    const agentExists = context.agents.includes(name);
+    const agentExists = context.agents.includes(args.name);
 
     if (agentExists) {
       // Add capabilities to existing agent
-      console.log(chalk.cyan(`Adding capabilities to agent: ${name}`));
-      const agentPath = path.join(currentDir, 'src/ai/agents', name);
+      console.log(chalk.cyan(`Adding capabilities to agent: ${args.name}`));
+      const agentPath = path.join(currentDir, 'src/ai/agents', args.name);
       const templateAgentPath = path.join(templatePath, 'src/ai/agents/template');
       
-      await addCapabilities(agentPath, finalCapabilities, templateAgentPath);
+      await addCapabilities(agentPath, capabilities, templateAgentPath);
       
       console.log(chalk.green('\n✓ Done!\n'));
     } else {
       // Create new agent in existing project
-      console.log(chalk.cyan(`Creating new agent: ${name}`));
+      console.log(chalk.cyan(`Creating new agent: ${args.name}`));
       
-      await createAgentInProject(currentDir, name, finalCapabilities, templatePath);
+      await createAgentInProject(currentDir, args.name, capabilities, templatePath);
       
       console.log(chalk.green('\n✓ Agent created successfully!\n'));
       console.log(chalk.bold('Next steps:\n'));
-      console.log(chalk.cyan(`  bun run src/index.tsx --agent ${name}\n`));
+      console.log(chalk.cyan(`  bun run src/index.tsx --agent ${args.name}\n`));
     }
   }
 }
 
-// Parse CLI arguments
-yargs(hideBin(process.argv))
-  .command(
-    'app <name>',
-    'Create a new aiter app',
-    (yargs) => {
-      return yargs
-        .positional('name', {
-          type: 'string',
-          description: 'Project name',
-          demandOption: true,
-        })
-        .option('path', {
-          alias: 'p',
-          type: 'string',
-          description: 'Target directory path',
-          default: '.',
-        });
-    },
-    async (argv) => {
-      await createApp(argv.name as string, argv.path as string);
+async function main() {
+  try {
+    if (args.type === 'app') {
+      await createApp();
+    } else {
+      await createAgent();
     }
-  )
-  .command(
-    'agent <name>',
-    'Create a new agent or add to existing project',
-    (yargs) => {
-      return yargs
-        .positional('name', {
-          type: 'string',
-          description: 'Agent name',
-          demandOption: true,
-        })
-        .option('path', {
-          alias: 'p',
-          type: 'string',
-          description: 'Target directory path',
-          default: '.',
-        })
-        .option('capabilities', {
-          alias: 'c',
-          type: 'array',
-          description: 'Capabilities to include (commands, tools, mcps, system-prompts, all)',
-        })
-        .option('interactive', {
-          alias: 'i',
-          type: 'boolean',
-          description: 'Interactive mode',
-          default: true,
-        });
-    },
-    async (argv) => {
-      let capabilities: Capability[] = [];
-      let shouldPrompt = false;
-      
-      if (argv.capabilities) {
-        const requested = argv.capabilities as string[];
-        capabilities = resolveCapabilities(requested);
-        const { valid, invalid } = validateCapabilities(capabilities);
-        
-        if (invalid.length > 0) {
-          console.error(chalk.red(`Error: Unknown capabilities: ${invalid.join(', ')}`));
-          process.exit(1);
-        }
-        
-        capabilities = valid;
-      } else if (argv.interactive) {
-        shouldPrompt = true;
-      }
-      
-      await createAgent(
-        argv.name as string,
-        argv.path as string,
-        capabilities,
-        shouldPrompt
-      );
-    }
-  )
-  .command(
-    'component',
-    'Customize components in your aiter project',
-    (yargs) => {
-      return yargs.option('path', {
-        alias: 'p',
-        type: 'string',
-        description: 'Target directory path',
-        default: '.',
-      });
-    },
-    async (argv) => {
-      await customizeComponents(argv.path as string);
-    }
-  )
-  .demandCommand(1, 'You must specify a command (app, agent, or component)')
-  .help('h')
-  .alias('h', 'help')
-  .strict()
-  .parse();
+  } catch (error) {
+    console.error(chalk.red('\nError:'), error);
+    process.exit(1);
+  }
+}
+
+main().catch((error) => {
+  console.error(chalk.red('Unexpected error:'), error);
+  process.exit(1);
+});

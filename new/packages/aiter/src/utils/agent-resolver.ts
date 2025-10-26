@@ -4,6 +4,7 @@ import path from 'path';
 
 export interface AgentConfig {
   name: string;
+  components: any;
   streamFunction: any;
   dataSchema: z.ZodSchema;
   tools: Record<string, any>;
@@ -24,6 +25,11 @@ export function createAgentResolver(config: AgentResolverConfig) {
     
     const streamFunction = await import(`${agentPath}/stream-function`);
     
+    let components = {};
+    try {
+      components = await import(`${agentPath}/components`);
+    } catch {}
+    
     let tools = {};
     try {
       tools = await import(`${agentPath}/tools`);
@@ -42,6 +48,7 @@ export function createAgentResolver(config: AgentResolverConfig) {
     
     return {
       name: agentName,
+      components,
       streamFunction: streamFunction.default,
       dataSchema,
       tools,

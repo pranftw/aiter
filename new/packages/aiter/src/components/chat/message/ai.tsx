@@ -7,7 +7,7 @@ import { colors } from '@/utils/colors'
 
 
 
-export interface ToolCallDisplayProps {
+interface ToolCallDisplayProps {
   name: string
   status: 'in-progress' | 'output-available' | 'error' | 'input-streaming' | 'input-available' | 'output-error'
   input: unknown
@@ -29,7 +29,7 @@ function ToolCallDisplay({ name, status, input, marginLeft, children }: ToolCall
 
 
 
-export interface AIMessageProps {
+interface AIMessageProps {
   message: UIMessage
 }
 

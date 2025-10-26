@@ -1,4 +1,4 @@
-import type { SlashCommand } from '@pranftw/aiter';
+import type { SlashCommand } from '@aiter/aiter';
 
 /**
  * example command with required name argument

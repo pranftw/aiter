@@ -1,7 +1,7 @@
 import { type UIMessage } from "ai"
 import { colors } from '../../../utils/colors'
 
-export interface UserMessageProps {
+interface UserMessageProps {
   message: UIMessage
 }
 

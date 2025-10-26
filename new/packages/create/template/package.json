@@ -22,7 +22,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@pranftw/aiter": "workspace:*",
+    "@aiter/aiter": "workspace:*",
     "@ai-sdk/react": "^2.0.44",
     "@modelcontextprotocol/sdk": "^1.18.1",
     "@openrouter/ai-sdk-provider": "^1.2.0",

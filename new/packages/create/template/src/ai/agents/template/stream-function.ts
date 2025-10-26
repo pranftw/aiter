@@ -1,4 +1,4 @@
-import type { StreamFunctionOptionsType } from '@pranftw/aiter';
+import type { StreamFunctionOptionsType } from '@aiter/aiter';
 
 
 

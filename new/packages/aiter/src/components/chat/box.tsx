@@ -1,6 +1,6 @@
 import { colors } from '@/utils/colors';
 
-export interface ChatBoxProps {
+interface ChatBoxProps {
   message: string;
   setMessage: (msg: string) => void;
   onSubmit: () => void;

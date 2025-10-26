@@ -1,7 +1,8 @@
 import { colors } from '../utils/colors';
 import React from 'react';
 
-export interface StatusIndicatorProps {
+
+interface StatusIndicatorProps {
   name: string;
   status: string;
 }
