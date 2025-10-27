@@ -4,14 +4,15 @@
   "private": true,
   "workspaces": [
     "packages/*",
+    "packages/create/template",
     "dev"
   ],
   "scripts": {
-    "setup-dev": "bun run scripts/setup-dev.ts",
-    "dev": "cd dev && bun run src/index.tsx",
-    "typecheck": "bun run typecheck:aiter && bun run typecheck:create",
+    "dev": "cd packages/create/template && bun run src/index.tsx",
+    "typecheck": "bun run typecheck:aiter && bun run typecheck:create && bun run typecheck:template",
     "typecheck:aiter": "cd packages/aiter && bun run typecheck",
     "typecheck:create": "cd packages/create && bun run typecheck",
+    "typecheck:template": "cd packages/create/template && bun run typecheck",
     "build": "bun run scripts/build-pkg.ts --pkg aiter && bun run scripts/build-pkg.ts --pkg create",
     "build:aiter": "cd packages/aiter && bun run build",
     "build:create": "cd packages/create && bun run build",

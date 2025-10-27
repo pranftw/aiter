@@ -8,7 +8,7 @@ This repository uses Bun workspaces to manage multiple packages:
 
 - **`packages/aiter`** - Core runtime library (`@aiter/aiter`)
 - **`packages/create`** - CLI tool for creating new aiter projects and agents
-- **`dev/`** - Development workspace (gitignored, created from template)
+- **`packages/create/template`** - Template used for creating new projects (also serves as development workspace)
 
 ## Development Setup
 
@@ -20,10 +20,7 @@ This monorepo uses **direct source imports** - no build step needed during devel
 # Install dependencies
 bun install
 
-# Create dev workspace from template
-bun setup-dev
-
-# Create dev/.env with your configuration
+# Create packages/create/template/.env with your configuration
 # Example: MAIN_AGENT_MODEL=anthropic/claude-3.5-sonnet
 # Example: CHATS_PATH=./chats
 ```
@@ -31,10 +28,10 @@ bun setup-dev
 ### Development Workflow
 
 ```bash
-# Run the dev workspace
+# Run the template workspace (development environment)
 bun dev -a example
 
-# Make changes to packages/aiter/src/*
+# Make changes to packages/aiter/src/* or packages/create/template/src/*
 # Changes are instantly reflected - no rebuild needed! ✨
 
 # Type check all packages

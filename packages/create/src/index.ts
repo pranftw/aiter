@@ -7,7 +7,7 @@ import { execSync } from 'child_process';
 import chalk from 'chalk';
 import { args } from './utils/yargs.js';
 import { detectContext } from './utils/context.js';
-import { createProjectWithAgent, createAgentInProject } from './operations/create.js';
+import { createAgentInProject, createTemplateCopyFilter } from './operations/create.js';
 import { addCapabilities } from './capabilities/operations.js';
 import { promptForCapabilities } from './interactive.js';
 
@@ -56,7 +56,14 @@ async function createApp() {
   try {
     // Copy template to target directory
     console.log(chalk.cyan('Copying template files...'));
-    await fs.copy(templatePath, targetPath);
+    await fs.copy(templatePath, targetPath, {
+      filter: createTemplateCopyFilter(templatePath)
+    });
+
+    // Create empty chats directory with .gitkeep
+    const chatsDir = path.join(targetPath, 'chats');
+    await fs.ensureDir(chatsDir);
+    await fs.writeFile(path.join(chatsDir, '.gitkeep'), '');
 
     // Update package.json with project name and replace workspace dependencies
     const packageJsonPath = path.join(targetPath, 'package.json');
@@ -139,25 +146,11 @@ async function createAgent() {
   }
 
   if (!context.isAiterProject) {
-    // Not in an aiter project - create new project with agent
-    const targetPath = path.resolve(args.path, args.name);
-    
-    // Check if target directory already exists
-    if (await fs.pathExists(targetPath)) {
-      console.error(chalk.red(`Error: Directory ${targetPath} already exists!`));
-      process.exit(1);
-    }
-
-    console.log(chalk.blue('\nCreating new project with agent...'));
-    console.log(chalk.gray(`Target: ${targetPath}`));
-    console.log(chalk.gray(`Agent: ${args.name}\n`));
-
-    await createProjectWithAgent(targetPath, args.name, capabilities, templatePath);
-
-    console.log(chalk.green('\n✓ Project created successfully!\n'));
-    console.log(chalk.bold('Next steps:\n'));
-    console.log(chalk.cyan(`  cd ${path.relative(process.cwd(), targetPath)}`));
-    console.log(chalk.cyan(`  bun run src/index.tsx --agent ${args.name}\n`));
+    // Not in an aiter project - error
+    console.error(chalk.red('\nError: Not in an aiter project!'));
+    console.error(chalk.gray('To create an agent, you must be in an existing aiter project.'));
+    console.error(chalk.gray('To create a new project, use: bun create app <name>\n'));
+    process.exit(1);
   } else {
     // Existing aiter project
     console.log(chalk.blue('\n✓ Detected existing aiter project\n'));
