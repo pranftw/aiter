@@ -13,14 +13,9 @@ export function createAgentResolver(config: AgentResolverConfig) {
   async function getAgent(agentName: string): Promise<AgentConfig> {
     const agentPath = path.join(basePath, agentName);
     
-    const streamFunction = await import(`${agentPath}/stream-function`);
-    
-    let components = {};
-    try {
-      components = await import(`${agentPath}/components`);
-    } catch {}
-    
-    let tools = {};
+  const streamFunction = await import(`${agentPath}/stream-function`);
+  
+  let tools = {};
     try {
       tools = await import(`${agentPath}/tools`);
     } catch {}
@@ -38,7 +33,6 @@ export function createAgentResolver(config: AgentResolverConfig) {
     
     return {
       name: agentName,
-      components,
       streamFunction: streamFunction.default,
       dataSchema,
       tools,

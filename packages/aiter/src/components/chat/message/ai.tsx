@@ -33,7 +33,7 @@ interface AIMessageProps {
   message: UIMessage
 }
 
-export default function AIMessage({ message }: AIMessageProps) {
+export function AIMessage({ message }: AIMessageProps) {
   return (
     <box flexDirection='column' gap={1}>
       {message.parts?.map((part, index) => {

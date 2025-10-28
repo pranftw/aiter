@@ -4,8 +4,7 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "packages/create/template",
-    "dev"
+    "packages/create/template"
   ],
   "scripts": {
     "dev": "cd packages/create/template && bun run src/index.tsx",

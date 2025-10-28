@@ -7,8 +7,7 @@ import {
   cleanup, 
   initializeChat,
   createAgentResolver,
-  type StreamFunctionType,
-  type AIMessageComponent
+  type StreamFunctionType
 } from '@aiter/aiter';
 import path from 'path';
 import { z } from 'zod';
@@ -24,12 +23,11 @@ interface AppProps {
   args: typeof processedArgs;
   chat: z.infer<typeof ChatSchema> | null;
   streamFunction: StreamFunctionType;
-  AIMessageComponent: AIMessageComponent;
   agentCommands: Record<string, any>;
 }
 
 
-function App({ args, chat, streamFunction, AIMessageComponent, agentCommands }: AppProps) {
+function App({ args, chat, streamFunction, agentCommands }: AppProps) {
   useKeyboard((key) => {
     if (key.name==='c' && key.ctrl) {
       cleanup();
@@ -42,7 +40,6 @@ function App({ args, chat, streamFunction, AIMessageComponent, agentCommands }: 
         chat={chat} 
         prompt={args.prompt} 
         streamFunction={streamFunction} 
-        AIMessageComponent={AIMessageComponent}
         agentCommands={agentCommands}
       />
     )
@@ -56,10 +53,9 @@ async function main(args: typeof processedArgs){
   await initializeMCP(agent.mcpConfig);
   const chat = await initializeChat(args.chatId, args.agent, agent.dataSchema);
   const streamFunction = agent.streamFunction;
-  const AIMessageComponent = agent.components.default;
   const agentCommands = agent.commands;
   try {
-    await render(<App args={args} chat={chat} streamFunction={streamFunction} AIMessageComponent={AIMessageComponent} agentCommands={agentCommands}/>, {exitOnCtrlC: false, enableMouseMovement: true});
+    await render(<App args={args} chat={chat} streamFunction={streamFunction} agentCommands={agentCommands}/>, {exitOnCtrlC: false, enableMouseMovement: true});
   } catch (error) {
     await cleanup();
     console.error('Error:', error);

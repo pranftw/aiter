@@ -7,7 +7,6 @@ import type { SlashCommand } from '../triggers/commands/types';
 
 
 export type ChatHook = ReturnType<typeof useChat>;
-export type AIMessageComponent = (props: { message: UIMessage }) => React.ReactNode;
 
 // MCP Server Configuration for stdio transport
 export interface MCPServerStdioConfig {
@@ -39,16 +38,9 @@ export interface MCPConfig {
   mcpServers: Record<string, MCPServerConfig>;
 }
 
-// Agent component module structure
-export interface AgentComponents {
-  default: AIMessageComponent;
-  [key: string]: any;
-}
-
 // Agent configuration containing all agent-specific settings and modules
 export interface AgentConfig {
   name: string;
-  components: AgentComponents;
   streamFunction: StreamFunctionType;
   dataSchema: z.ZodSchema;
   tools: Record<string, any>;
