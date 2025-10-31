@@ -16,7 +16,7 @@
     "directory": "dist"
   },
   "scripts": {
-    "build": "bun run ../../scripts/build-pkg.ts --pkg create",
+    "build": "bun run ../../scripts/build-pkg.ts --pkg cli",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "bun run build"
   },
