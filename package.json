@@ -4,18 +4,18 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "packages/create/template"
+    "packages/cli/template"
   ],
   "scripts": {
-    "dev": "cd packages/create/template && bun run src/index.tsx",
-    "typecheck": "bun run typecheck:aiter && bun run typecheck:create && bun run typecheck:template",
-    "typecheck:aiter": "cd packages/aiter && bun run typecheck",
-    "typecheck:create": "cd packages/create && bun run typecheck",
-    "typecheck:template": "cd packages/create/template && bun run typecheck",
-    "build": "bun run scripts/build-pkg.ts --pkg aiter && bun run scripts/build-pkg.ts --pkg create",
-    "build:aiter": "cd packages/aiter && bun run build",
-    "build:create": "cd packages/create && bun run build",
-    "create": "bun run packages/create/src/index.ts",
+    "dev:core": "cd packages/cli/template && bun run src/index.tsx",
+    "typecheck": "bun run typecheck:core && bun run typecheck:cli && bun run typecheck:template",
+    "typecheck:core": "cd packages/core && bun run typecheck",
+    "typecheck:cli": "cd packages/cli && bun run typecheck",
+    "typecheck:template": "cd packages/cli/template && bun run typecheck",
+    "build": "bun run scripts/build-pkg.ts --pkg core && bun run scripts/build-pkg.ts --pkg cli",
+    "build:core": "cd packages/core && bun run build",
+    "build:cli": "cd packages/cli && bun run build",
+    "dev:cli": "bun run packages/cli/src/index.ts",
     "clean": "rm -rf packages/*/dist packages/*/node_modules node_modules"
   },
   "devDependencies": {
