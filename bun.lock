@@ -13,7 +13,7 @@
     },
     "packages/cli": {
       "name": "@aiter/cli",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "bin": {
         "aiter": "./dist/index.js",
       },
@@ -37,8 +37,8 @@
         "@aiter/core": "workspace:*",
         "@modelcontextprotocol/sdk": "^1.18.1",
         "@openrouter/ai-sdk-provider": "^1.2.0",
-        "@opentui/core": "^0.1.27",
-        "@opentui/react": "^0.1.27",
+        "@opentui/core": "0.1.30",
+        "@opentui/react": "0.1.30",
         "@types/node": "^24.3.3",
         "@types/yargs": "^17.0.33",
         "ai": "^5.0.44",
@@ -64,7 +64,7 @@
     },
     "packages/core": {
       "name": "@aiter/core",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "dependencies": {
         "@ai-sdk/react": "2.0.76",
         "@modelcontextprotocol/sdk": "^1.18.1",
