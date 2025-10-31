@@ -10,10 +10,12 @@ const __dirname = path.dirname(__filename);
 
 // Get template path - check both production (./template) and dev (../template) locations
 function getTemplatePath(): string {
-  const prodPath = path.join(__dirname, '..', '..', 'template');
-  const devPath = path.join(__dirname, '..', '..', '..', 'template');
+  // When bundled into index.js: __dirname = package root -> template is at ./template
+  const prodPath = path.join(__dirname, 'template');
+  // When running from dev src: src/commands/create.ts -> ../../template = template/
+  const devPath = path.join(__dirname, '..', '..', 'template');
   
-  // Check production path first (when running from dist)
+  // Check production path first (when running from bundled code)
   if (fs.existsSync(prodPath)) {
     return prodPath;
   }
