@@ -1,8 +1,8 @@
 import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
-import { CORE_FILES, type Customization } from '../customizations/registry.js';
-import { copyCustomization } from '../customizations/operations.js';
+import { CORE_FILES, type Customization } from '../customizations/registry';
+import { copyCustomization } from '../customizations/operations';
 
 const USER_SPECIFIC_FILES = [
   'node_modules',

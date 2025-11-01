@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
-import { CUSTOMIZATIONS, type Customization } from './registry.js';
+import { CUSTOMIZATIONS, type Customization } from './registry';
 
 export interface AddCustomizationsResult {
   added: Customization[];

@@ -2,8 +2,8 @@
 
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { createCommand } from './commands/create.js';
-import { addCommand } from './commands/add.js';
+import { createCommand } from './commands/create';
+import { addCommand } from './commands/add';
 
 yargs(hideBin(process.argv))
   .scriptName('@aiter/cli')

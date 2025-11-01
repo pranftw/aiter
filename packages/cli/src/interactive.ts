@@ -1,5 +1,5 @@
 import { input, checkbox } from '@inquirer/prompts';
-import { getAllCustomizations, type Customization } from './customizations/registry.js';
+import { getAllCustomizations, type Customization } from './customizations/registry';
 
 export async function promptForCustomizations(): Promise<Customization[]> {
   const allCustomizations = getAllCustomizations();

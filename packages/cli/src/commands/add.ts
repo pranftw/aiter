@@ -2,11 +2,11 @@ import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
-import { detectContext } from '../utils/context.js';
-import { createAgentInProject } from '../operations/create.js';
-import { addCustomizations } from '../customizations/operations.js';
-import { resolveCustomizations, validateCustomizations, type Customization } from '../customizations/registry.js';
-import { promptForCustomizations } from '../interactive.js';
+import { detectContext } from '../utils/context';
+import { createAgentInProject } from '../operations/create';
+import { addCustomizations } from '../customizations/operations';
+import { resolveCustomizations, validateCustomizations, type Customization } from '../customizations/registry';
+import { promptForCustomizations } from '../interactive';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
