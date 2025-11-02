@@ -4,6 +4,8 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import { join, resolve } from 'path'
 import { existsSync } from 'fs'
+import fs from 'fs-extra'
+import { createTemplateCopyFilter } from '../packages/cli/src/operations/create.js'
 
 const argv = yargs(hideBin(process.argv))
   .option('pkg', {
@@ -85,7 +87,11 @@ await $`tsc --emitDeclarationOnly`
 // Copy additional files/directories that need to be published
 if (argv.pkg === 'cli') {
   console.log('Copying template directory...')
-  await $`cp -r template dist/template`
+  const templateSrc = join(pkgDir, 'template')
+  const templateDest = join(pkgDir, 'dist/template')
+  await fs.copy(templateSrc, templateDest, {
+    filter: createTemplateCopyFilter(templateSrc)
+  })
 }
 
 // Create package.json for dist
