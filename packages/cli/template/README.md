@@ -34,7 +34,6 @@ While tools like Claude Code and other CLI AI agents offer powerful AI assistanc
 - **Custom Slash Commands**: Define agent-specific or global slash commands with yargs-style argument parsing
 - **Custom AI Tools**: Add local tools that the AI can use during conversations
 - **Flexible System Prompts**: Customize AI behavior with markdown-based system prompts
-- **Custom Message Rendering**: Override default message display with custom React components
 - **Custom Data Schema**: Define typed data structures for agent-specific state management
 - **Stdin Support**: Pipe prompts directly from shell commands or scripts
 
@@ -78,8 +77,6 @@ Each agent directory contains:
 src/ai/agents/<AGENT_NAME>/
 ├── commands/           # Custom slash commands
 │   └── index.ts       # Export all commands
-├── components/        # Custom React components
-│   └── ai-message.tsx # Custom message rendering (optional)
 ├── mcps/              # MCP server configurations
 │   └── main.json      # MCP servers for this agent
 ├── system-prompts/    # System prompts
@@ -128,9 +125,6 @@ Edit `src/ai/agents/<AGENT_NAME>/mcps/main.json`:
 
 ### Customizing System Prompts
 Edit `src/ai/agents/<AGENT_NAME>/system-prompts/main.md` to define the AI's behavior and personality.
-
-### Custom Message Rendering
-Optionally create `src/ai/agents/<AGENT_NAME>/components/ai-message.tsx` to customize how AI messages are displayed. If not provided, defaults to the built-in message renderer.
 
 ### Custom Data Schema
 Edit `src/ai/agents/<AGENT_NAME>/schema.ts` to define typed data structures for agent-specific state using Zod schemas.

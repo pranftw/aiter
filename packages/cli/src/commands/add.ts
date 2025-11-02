@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import { detectContext } from '../utils/context';
 import { createAgentInProject } from '../operations/create';
 import { addCustomizations } from '../customizations/operations';
-import { resolveCustomizations, validateCustomizations, type Customization } from '../customizations/registry';
+import { resolveCustomizations, validateCustomizations, type Customization, getAllCustomizations } from '../customizations/registry';
 import { promptForCustomizations } from '../interactive';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -55,7 +55,8 @@ export const addCommand = {
       .option('customize', {
         alias: 'c',
         type: 'array',
-        description: 'Customizations to include (commands, tools, mcps, system-prompts, components, all)',
+        description: 'Customizations to include',
+        choices: [...getAllCustomizations(), 'all'],
       })
       .option('interactive', {
         alias: 'i',

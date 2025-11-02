@@ -3,7 +3,6 @@ export const CUSTOMIZATIONS = {
   'tools': 'tools',
   'mcps': 'mcps',
   'system-prompts': 'system-prompts',
-  'components': 'components',
 } as const;
 
 export type Customization = keyof typeof CUSTOMIZATIONS;

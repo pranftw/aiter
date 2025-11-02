@@ -69,7 +69,7 @@ Add a resource to an existing aiter project.
 
 **Options:**
 - `--path`, `-p` - Project directory path (default: current directory)
-- `--customize`, `-c` - Customizations to include: commands, tools, mcps, system-prompts, components, all
+- `--customize`, `-c` - Customizations to include: commands, tools, mcps, system-prompts, all
 - `--interactive`, `-i` - Interactive mode (default: true)
 
 ## Customizations
@@ -80,7 +80,6 @@ When adding agents, you can choose which customizations to include:
 - **tools** - AI tools/functions for the agent
 - **mcps** - Model Context Protocol server configurations
 - **system-prompts** - Custom system prompts for the agent
-- **components** - Custom React components for the UI
 - **all** - Include all customizations
 
 ## What Gets Created
