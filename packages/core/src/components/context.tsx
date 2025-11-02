@@ -11,4 +11,5 @@ export function useComponents() {
 }
 
 export const ComponentsProvider = ComponentsContext.Provider
+export { coreComponents }
 

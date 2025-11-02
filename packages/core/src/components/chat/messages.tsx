@@ -14,9 +14,9 @@ export function ChatMessages({ messages }: ChatMessagesProps) {
     <box flexDirection='column' gap={1}>
       {messages.map((message: UIMessage, index) => 
         message.role === 'user' ? (
-          <UserMessage message={message} key={index} />
+          <UserMessage message={message} />
         ) : (
-          <AIMessage message={message} key={index} />
+          <AIMessage message={message} />
         )
       )}
     </box>

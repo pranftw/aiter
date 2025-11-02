@@ -1,11 +1,11 @@
 import type { TriggerUIData } from '@/components/triggers/core/use-trigger-system';
-import type { ReactElement } from 'react';
+import type { ReactNode } from 'react';
 import { CommandTriggerUI } from '@/components/triggers/commands/ui';
 
 // Define the shape of a trigger UI component
 export interface TriggerUIComponent {
   pattern: string;
-  render: (triggerUI: TriggerUIData) => ReactElement | null;
+  render: (triggerUI: TriggerUIData) => ReactNode;
 }
 
 // Array of all trigger UI components
@@ -18,9 +18,9 @@ const triggerUIComponents: TriggerUIComponent[] = [
 ];
 
 // Automatically build the registry from the components array
-export const triggerUIRegistry: Record<string, (triggerUI: TriggerUIData) => ReactElement | null> = 
+export const triggerUIRegistry: Record<string, (triggerUI: TriggerUIData) => ReactNode> = 
   triggerUIComponents.reduce((registry, component) => {
     registry[component.pattern] = component.render;
     return registry;
-  }, {} as Record<string, (triggerUI: TriggerUIData) => ReactElement | null>);
+  }, {} as Record<string, (triggerUI: TriggerUIData) => ReactNode>);
 

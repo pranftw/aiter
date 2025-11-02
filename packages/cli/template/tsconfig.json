@@ -23,7 +23,8 @@
     "noPropertyAccessFromIndexSignature": false,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*", "../../core/src/*"]
+      "@/*": ["./src/*", "../../core/src/*"],
+      "@aiter/core/*": ["../../core/src/*"]
     }
   }
 }

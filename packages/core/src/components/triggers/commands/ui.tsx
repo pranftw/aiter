@@ -1,12 +1,11 @@
 import { useComponents } from '@aiter/core/components/context';
 import type { TriggerUIData } from '@aiter/core/components/triggers/core/use-trigger-system';
 import type { SlashCommand } from '@aiter/core/triggers/commands/types';
-import type { ReactElement } from 'react';
 
 const isCommandWithArgs = (query: string) => 
   query.startsWith('/') && query.slice(1).includes(' ');
 
-function CommandTriggerUIComponent(triggerUI: TriggerUIData<SlashCommand>): ReactElement {
+function CommandTriggerUIComponent(triggerUI: TriggerUIData<SlashCommand>) {
   const { TriggerWindow, CommandSuggestions } = useComponents();
   
   return (
