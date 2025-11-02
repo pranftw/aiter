@@ -13,10 +13,6 @@ import path from 'path';
 import { z } from 'zod';
 import { processedArgs } from './utils/yargs';
 
-const agentResolver = createAgentResolver({
-  basePath: path.join(process.cwd(), 'src/ai/agents')
-});
-
 
 
 interface AppProps {
@@ -49,6 +45,9 @@ function App({ args, chat, streamFunction, agentCommands }: AppProps) {
 
 
 async function main(args: typeof processedArgs){
+  const agentResolver = createAgentResolver({
+    basePath: path.join(process.cwd(), 'src/ai/agents')
+  });
   const agent = await agentResolver.getAgent(args.agent);
   await initializeMCP(agent.mcpConfig);
   const chat = await initializeChat(args.chatId, args.agent, agent.dataSchema);
