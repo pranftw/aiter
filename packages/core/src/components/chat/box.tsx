@@ -1,6 +1,6 @@
-import { colors } from '@/utils/colors';
+import { colors } from '@aiter/core/utils/colors';
 
-interface ChatBoxProps {
+export interface ChatBoxProps {
   message: string;
   setMessage: (msg: string) => void;
   onSubmit: () => void;

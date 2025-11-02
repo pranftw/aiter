@@ -1,22 +1,13 @@
-import { CustomChatTransport, type StreamFunctionType } from '@/ai/custom-chat-transport';
-import { ChatBox } from './box';
-import { ChatMessages } from './messages';
+import { CustomChatTransport, type StreamFunctionType } from '@aiter/core/ai/custom-chat-transport';
 import { useChat } from '@ai-sdk/react';
-import { ChatSchema } from '@/lib/schema';
+import { ChatSchema } from '@aiter/core/lib/schema';
 import { z } from 'zod';
 import { useEffect, useRef } from 'react';
 import { ScrollBoxRenderable } from '@opentui/core';
-import { colors } from '@/utils/colors';
-import { useTriggerSystem } from '@/components/triggers/core/use-trigger-system';
-import { triggerUIRegistry } from '@/components/triggers/registry';
-import { ErrorOverlay } from '@/components/triggers/core/error-overlay';
-
-interface ChatContainerProps {
-  chat: z.infer<typeof ChatSchema>;
-  prompt: string | null;
-  streamFunction: StreamFunctionType;
-  agentCommands?: Record<string, any>;
-}
+import { colors } from '@aiter/core/utils/colors';
+import { useTriggerSystem } from '@aiter/core/components/triggers/core/use-trigger-system';
+import { triggerUIRegistry } from '@aiter/core/components/triggers/registry';
+import { useComponents } from '@aiter/core/components/context';
 
 const prepareChat = (
   prompt: string | null,
@@ -29,7 +20,17 @@ const prepareChat = (
   }
 };
 
+export interface ChatContainerProps {
+  chat: z.infer<typeof ChatSchema>;
+  prompt: string | null;
+  streamFunction: StreamFunctionType;
+  agentCommands?: Record<string, any>;
+}
+
 export function ChatContainer({ chat, prompt, streamFunction, agentCommands }: ChatContainerProps) {
+  // Get components from context instead of direct imports
+  const { ChatBox, ChatMessages, ErrorOverlay } = useComponents();
+  
   const hasSentPrompt = useRef(false);
   const chatHook = useChat({
     id: chat.id,

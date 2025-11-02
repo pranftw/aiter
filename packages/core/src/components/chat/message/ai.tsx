@@ -1,9 +1,9 @@
 import { type UIMessage, type ToolUIPart, type DynamicToolUIPart } from 'ai'
-import { StatusIndicator } from '@/components/status-indicator'
+import { StatusIndicator } from '@aiter/core/components/status-indicator'
 import React from 'react'
-import { SubagentToolCallStatusSchema } from '@/lib/schema'
+import { SubagentToolCallStatusSchema } from '@aiter/core/lib/schema'
 import { z } from 'zod'
-import { colors } from '@/utils/colors'
+import { colors } from '@aiter/core/utils/colors'
 
 
 
@@ -29,7 +29,7 @@ function ToolCallDisplay({ name, status, input, marginLeft, children }: ToolCall
 
 
 
-interface AIMessageProps {
+export interface AIMessageProps {
   message: UIMessage
 }
 

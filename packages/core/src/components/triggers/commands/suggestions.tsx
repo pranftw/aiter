@@ -1,9 +1,9 @@
-import type { SlashCommand } from '@/triggers/commands/types';
-import { colors } from '@/utils/colors';
+import type { SlashCommand } from '@aiter/core/triggers/commands/types';
+import { colors } from '@aiter/core/utils/colors';
 import { useState, useEffect } from 'react';
 import { useKeyboard } from '@opentui/react';
 
-interface CommandSuggestionsProps {
+export interface CommandSuggestionsProps {
   commands: SlashCommand[];
   query: string;
   onSelect: (command: SlashCommand) => void | Promise<void>;

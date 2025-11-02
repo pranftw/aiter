@@ -1,33 +1,31 @@
-import { CommandSuggestions } from '@/components/triggers/commands/suggestions';
-import type { TriggerUIData } from '@/components/triggers/core/use-trigger-system';
-import type { SlashCommand } from '@/triggers/commands/types';
-import { TriggerWindow } from '@/components/triggers/core/trigger-window';
+import { useComponents } from '@aiter/core/components/context';
+import type { TriggerUIData } from '@aiter/core/components/triggers/core/use-trigger-system';
+import type { SlashCommand } from '@aiter/core/triggers/commands/types';
 import type { ReactElement } from 'react';
 
 const isCommandWithArgs = (query: string) => 
   query.startsWith('/') && query.slice(1).includes(' ');
 
-// Command trigger UI component with self-describing pattern
-export const CommandTriggerUI = {
-  // The trigger pattern this component handles
-  pattern: '/',
+function CommandTriggerUIComponent(triggerUI: TriggerUIData<SlashCommand>): ReactElement {
+  const { TriggerWindow, CommandSuggestions } = useComponents();
   
-  // The render function for this trigger
-  render: (triggerUI: TriggerUIData<SlashCommand>): ReactElement => {
-    return (
-      <TriggerWindow loading={triggerUI.loading}>
-        {!triggerUI.loading && 
-         !isCommandWithArgs(triggerUI.query) && (
-          <CommandSuggestions 
-            commands={triggerUI.data} 
-            query={triggerUI.query} 
-            onSelect={triggerUI.onSelect}
-            onClose={triggerUI.onClose}
-            onNavigate={triggerUI.onNavigate}
-          />
-        )}
-      </TriggerWindow>
-    ) as ReactElement;
-  },
-};
+  return (
+    <TriggerWindow loading={triggerUI.loading}>
+      {!triggerUI.loading && 
+       !isCommandWithArgs(triggerUI.query) && (
+        <CommandSuggestions 
+          commands={triggerUI.data} 
+          query={triggerUI.query} 
+          onSelect={triggerUI.onSelect}
+          onClose={triggerUI.onClose}
+          onNavigate={triggerUI.onNavigate}
+        />
+      )}
+    </TriggerWindow>
+  );
+}
 
+export const CommandTriggerUI = {
+  pattern: '/',
+  render: CommandTriggerUIComponent,
+};

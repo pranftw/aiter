@@ -1,7 +1,7 @@
-import { colors } from '@/utils/colors';
+import { colors } from '@aiter/core/utils/colors';
 import { useKeyboard } from '@opentui/react';
 
-interface ErrorOverlayProps {
+export interface ErrorOverlayProps {
   message: string;
   onClose?: () => void;
 }

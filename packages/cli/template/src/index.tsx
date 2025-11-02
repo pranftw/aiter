@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { render, useKeyboard } from '@opentui/react';
 import { 
-  ChatContainer, 
+  ChatContainerWrapper, 
   ChatSchema, 
   initializeMCP, 
   cleanup, 
@@ -12,6 +12,7 @@ import {
 import path from 'path';
 import { z } from 'zod';
 import { processedArgs } from './utils/yargs';
+import * as customComponents from './components'
 
 
 
@@ -32,11 +33,12 @@ function App({ args, chat, streamFunction, agentCommands }: AppProps) {
   });
   if (chat) {
     return (
-      <ChatContainer 
+      <ChatContainerWrapper 
         chat={chat} 
         prompt={args.prompt} 
         streamFunction={streamFunction} 
         agentCommands={agentCommands}
+        customComponents={customComponents}
       />
     )
   }
