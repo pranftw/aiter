@@ -4,12 +4,7 @@ import { ChatSchema } from '@aiter/core/lib/schema';
 import { type StreamFunctionType } from '@aiter/core/ai/custom-chat-transport';
 import { ComponentsProvider, coreComponents, type CustomComponents } from '@aiter/core/components/context';
 
-function validateCustomComponents(customComponents?: CustomComponents) {
-  if (!customComponents) return;
-  
-  const validKeys = Object.keys(coreComponents);
-  const providedKeys = Object.keys(customComponents);
-  
+function validateCustomComponents(customComponents: CustomComponents) {
   // Ensure ChatContainerWrapper cannot be customized
   if ('ChatContainerWrapper' in customComponents) {
     throw new Error(
@@ -17,14 +12,12 @@ function validateCustomComponents(customComponents?: CustomComponents) {
     );
   }
   
-  // Validate all provided keys are recognized components
-  providedKeys.forEach(key => {
-    if (!validKeys.includes(key)) {
-      throw new Error(
-        `Unknown component "${key}". Valid customizable components are: ${validKeys.join(', ')}`
-      );
-    }
-  });
+  // Only require ChatContainer - it uses other components internally
+  if (!customComponents.ChatContainer) {
+    throw new Error(
+      'customComponents must include a ChatContainer component'
+    );
+  }
 }
 
 export interface ChatContainerWrapperProps {
@@ -32,7 +25,7 @@ export interface ChatContainerWrapperProps {
   prompt: string | null;
   streamFunction: StreamFunctionType;
   agentCommands?: Record<string, any>;
-  customComponents?: CustomComponents;
+  customComponents: CustomComponents;
 }
 
 export function ChatContainerWrapper({ chat, prompt, streamFunction, agentCommands, customComponents }: ChatContainerWrapperProps) {
@@ -41,7 +34,7 @@ export function ChatContainerWrapper({ chat, prompt, streamFunction, agentComman
   
   // Merge core and custom components with memoization
   const mergedComponents = useMemo(
-    () => ({ ...coreComponents, ...customComponents }),
+    () => ({ ...coreComponents, ...customComponents }) as typeof coreComponents & CustomComponents,
     [customComponents]
   );
   

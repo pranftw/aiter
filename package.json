@@ -21,7 +21,9 @@
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.10",
     "@types/bun": "latest",
+    "@types/fs-extra": "^11.0.4",
     "@types/yargs": "^17.0.33",
+    "fs-extra": "^11.2.0",
     "typescript": "^5.9.2",
     "yargs": "^18.0.0"
   }

@@ -5,7 +5,7 @@ import { hideBin } from 'yargs/helpers'
 import { join, resolve } from 'path'
 import { existsSync } from 'fs'
 import fs from 'fs-extra'
-import { createTemplateCopyFilter } from '../packages/cli/src/operations/create.js'
+import { createTemplateCopyFilter } from '../packages/cli/src/operations/create'
 
 const argv = yargs(hideBin(process.argv))
   .option('pkg', {

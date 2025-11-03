@@ -2,9 +2,9 @@ import { createContext, useContext } from 'react'
 import * as coreComponents from '@aiter/core/components'
 
 export type CoreComponentsMap = typeof coreComponents
-export type CustomComponents = Partial<CoreComponentsMap>
+export type CustomComponents = Record<string, any>
 
-const ComponentsContext = createContext<CoreComponentsMap>(coreComponents)
+const ComponentsContext = createContext<CoreComponentsMap & CustomComponents>(coreComponents)
 
 export function useComponents() {
   return useContext(ComponentsContext)
