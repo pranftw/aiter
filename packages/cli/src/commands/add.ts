@@ -67,80 +67,80 @@ export const addCommand = {
   },
   handler: async (argv: any) => {
     try {
-      // Validate type
-      if (argv.type !== 'agent') {
-        console.error(chalk.red(`Error: Unknown resource type '${argv.type}'. Valid types: agent`));
+    // Validate type
+    if (argv.type !== 'agent') {
+      console.error(chalk.red(`Error: Unknown resource type '${argv.type}'. Valid types: agent`));
+      process.exit(1);
+    }
+    
+    // Add agent
+    const templatePath = getTemplatePath();
+    
+    // Check if template directory exists
+    if (!(await fs.pathExists(templatePath))) {
+      console.error(chalk.red('Error: Template directory not found!'));
+      console.error(chalk.gray(`Expected at: ${templatePath}`));
+      process.exit(1);
+    }
+
+    // Determine the target path
+    const currentDir = path.resolve(argv.path);
+    
+    // Detect if we're in an existing aiter project
+    const context = await detectContext(currentDir);
+
+    let customizations: Customization[] = [];
+
+    // Handle customizations
+    if (argv.customize) {
+      // User explicitly specified customizations
+      const requestedCustomizations = argv.customize as string[];
+      customizations = resolveCustomizations(requestedCustomizations);
+      
+      const { valid, invalid } = validateCustomizations(customizations);
+      
+      if (invalid.length > 0) {
+        console.error(chalk.red(`Error: Unknown customizations: ${invalid.join(', ')}`));
         process.exit(1);
       }
       
-      // Add agent
-      const templatePath = getTemplatePath();
-      
-      // Check if template directory exists
-      if (!(await fs.pathExists(templatePath))) {
-        console.error(chalk.red('Error: Template directory not found!'));
-        console.error(chalk.gray(`Expected at: ${templatePath}`));
-        process.exit(1);
-      }
+      customizations = valid;
+    } else if (argv.interactive) {
+      // Interactive mode and no explicit customizations = prompt
+      customizations = await promptForCustomizations();
+    }
 
-      // Determine the target path
-      const currentDir = path.resolve(argv.path);
-      
-      // Detect if we're in an existing aiter project
-      const context = await detectContext(currentDir);
+    if (!context.isAiterProject) {
+      // Not in an aiter project - error
+      console.error(chalk.red('\nError: Not in an aiter project!'));
+      console.error(chalk.gray('To add an agent, you must be in an existing aiter project.'));
+      console.error(chalk.gray('To create a new project, use: bunx @aiter/cli create <name>\n'));
+      process.exit(1);
+    } else {
+      // Existing aiter project
+      console.log(chalk.blue('\n✓ Detected existing aiter project\n'));
 
-      let customizations: Customization[] = [];
+      const agentExists = context.agents.includes(argv.name);
 
-      // Handle customizations
-      if (argv.customize) {
-        // User explicitly specified customizations
-        const requestedCustomizations = argv.customize as string[];
-        customizations = resolveCustomizations(requestedCustomizations);
+      if (agentExists) {
+        // Add customizations to existing agent
+        console.log(chalk.cyan(`Adding customizations to agent: ${argv.name}`));
+        const agentPath = path.join(currentDir, 'src/ai/agents', argv.name);
+        const templateAgentPath = path.join(templatePath, 'src/ai/agents/template');
         
-        const { valid, invalid } = validateCustomizations(customizations);
+        await addCustomizations(agentPath, customizations, templateAgentPath);
         
-        if (invalid.length > 0) {
-          console.error(chalk.red(`Error: Unknown customizations: ${invalid.join(', ')}`));
-          process.exit(1);
-        }
-        
-        customizations = valid;
-      } else if (argv.interactive) {
-        // Interactive mode and no explicit customizations = prompt
-        customizations = await promptForCustomizations();
-      }
-
-      if (!context.isAiterProject) {
-        // Not in an aiter project - error
-        console.error(chalk.red('\nError: Not in an aiter project!'));
-        console.error(chalk.gray('To add an agent, you must be in an existing aiter project.'));
-        console.error(chalk.gray('To create a new project, use: bunx @aiter/cli create <name>\n'));
-        process.exit(1);
+        console.log(chalk.green('\n✓ Done!\n'));
       } else {
-        // Existing aiter project
-        console.log(chalk.blue('\n✓ Detected existing aiter project\n'));
-
-        const agentExists = context.agents.includes(argv.name);
-
-        if (agentExists) {
-          // Add customizations to existing agent
-          console.log(chalk.cyan(`Adding customizations to agent: ${argv.name}`));
-          const agentPath = path.join(currentDir, 'src/ai/agents', argv.name);
-          const templateAgentPath = path.join(templatePath, 'src/ai/agents/template');
-          
-          await addCustomizations(agentPath, customizations, templateAgentPath);
-          
-          console.log(chalk.green('\n✓ Done!\n'));
-        } else {
-          // Create new agent in existing project
-          console.log(chalk.cyan(`Creating new agent: ${argv.name}`));
-          
-          await createAgentInProject(currentDir, argv.name, customizations, templatePath);
-          
-          console.log(chalk.green('\n✓ Agent created successfully!\n'));
-          console.log(chalk.bold('Next steps:\n'));
-          console.log(chalk.cyan(`  bun run src/index.tsx --agent ${argv.name}\n`));
-        }
+        // Create new agent in existing project
+        console.log(chalk.cyan(`Creating new agent: ${argv.name}`));
+        
+        await createAgentInProject(currentDir, argv.name, customizations, templatePath);
+        
+        console.log(chalk.green('\n✓ Agent created successfully!\n'));
+        console.log(chalk.bold('Next steps:\n'));
+        console.log(chalk.cyan(`  bun run src/index.tsx --agent ${argv.name}\n`));
+      }
       }
     } catch (error: any) {
       if (error?.name === 'ExitPromptError') {

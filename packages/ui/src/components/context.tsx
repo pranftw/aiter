@@ -4,15 +4,8 @@ import { ChatMessages } from './chat/messages'
 import { ChatBox } from './chat/box'
 import { AIMessage } from './chat/message/ai'
 import { UserMessage } from './chat/message/user'
+import { coreComponentsRegistry } from './registry'
 
-
-export const coreComponentsWithPath = {
-  'chat/container': ChatContainer,
-  'chat/messages': ChatMessages,
-  'chat/box': ChatBox,
-  'chat/message/ai': AIMessage,
-  'chat/message/user': UserMessage,
-}
 export const coreComponents = {
   ChatContainer,
   ChatMessages,
@@ -20,6 +13,14 @@ export const coreComponents = {
   AIMessage,
   UserMessage,
 }
+
+// Programmatically build coreComponentsWithPath from registry
+export const coreComponentsWithPath = Object.fromEntries(
+  Object.entries(coreComponentsRegistry).map(([path, componentName]) => [
+    path,
+    coreComponents[componentName as keyof typeof coreComponents]
+  ])
+) as Record<keyof typeof coreComponentsRegistry, React.ComponentType<any>>
 export type CoreComponentsMap = typeof coreComponents
 export type CustomComponents = Partial<CoreComponentsMap>
 

@@ -1,9 +1,10 @@
 {
   "name": "@aiter/ui",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./registry": "./src/components/registry.ts"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

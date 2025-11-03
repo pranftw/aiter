@@ -1,5 +1,6 @@
 export * from './chat';
 export * from './context';
+export * from './registry';
 
 // Export trigger utilities for internal use (not customizable)
 export { StatusIndicator } from './status-indicator';

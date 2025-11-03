@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
 import { confirm } from '@inquirer/prompts';
-import { coreComponentsWithPath } from '@aiter/ui';
+import { coreComponentsWithPath } from '@aiter/ui/registry';
 
 /**
  * Get list of core components from coreComponentsWithPath
