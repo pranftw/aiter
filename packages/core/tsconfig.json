@@ -11,8 +11,7 @@
     "allowImportingTsExtensions": false,
     "verbatimModuleSyntax": false,
     "paths": {
-      "@/*": ["./src/*"],
-      "@aiter/core/*": ["./src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*"],

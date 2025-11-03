@@ -1,5 +1,5 @@
-import { type UIMessage } from "ai"
-import { colors } from '@aiter/core/utils/colors'
+import { type UIMessage } from 'ai'
+import { colors } from '@aiter/core'
 
 export interface UserMessageProps {
   message: UIMessage

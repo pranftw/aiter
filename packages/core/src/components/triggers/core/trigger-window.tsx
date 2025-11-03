@@ -1,4 +1,4 @@
-import { colors } from '@aiter/core/utils/colors';
+import { colors } from '@/utils/colors';
 import type { ReactNode } from 'react';
 
 export interface TriggerWindowProps {

@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { z } from 'zod';
-import { ChatSchema } from '@aiter/core/lib/schema';
-import { type StreamFunctionType } from '@aiter/core/ai/custom-chat-transport';
-import { ComponentsProvider, coreComponents, type CustomComponents } from '@aiter/core/components/context';
+import { ChatSchema } from '@/lib/schema';
+import { type StreamFunctionType } from '@/ai/custom-chat-transport';
+import { ComponentsProvider, coreComponents, type CustomComponents } from '@/components/context';
 
 function validateCustomComponents(customComponents: CustomComponents) {
   // Ensure ChatContainerWrapper cannot be customized

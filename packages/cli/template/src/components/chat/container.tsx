@@ -1,13 +1,8 @@
-import { CustomChatTransport, type StreamFunctionType } from '@aiter/core/ai/custom-chat-transport';
+import { CustomChatTransport, type StreamFunctionType, ChatSchema, colors, useTriggerSystem, triggerUIRegistry, ErrorOverlay } from '@aiter/core';
 import { useChat } from '@ai-sdk/react';
-import { ChatSchema } from '@aiter/core/lib/schema';
 import { z } from 'zod';
 import { useEffect, useRef } from 'react';
 import { ScrollBoxRenderable } from '@opentui/core';
-import { colors } from '@aiter/core/utils/colors';
-import { useTriggerSystem } from '@aiter/core/components/triggers/core/use-trigger-system';
-import { triggerUIRegistry } from '@aiter/core/components/triggers/registry';
-import { ErrorOverlay } from '@aiter/core/components/triggers/core/error-overlay';
 import { ChatBox } from '@/components/chat/box';
 import { ChatMessages } from '@/components/chat/messages';
 

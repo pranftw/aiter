@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import * as coreComponents from '@aiter/core/components'
+import * as coreComponents from '@/components'
 
 export type CoreComponentsMap = typeof coreComponents
 export type CustomComponents = Record<string, any>
