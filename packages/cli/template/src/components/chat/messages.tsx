@@ -1,5 +1,6 @@
 import { type UIMessage } from 'ai'
-import { useComponents } from '@aiter/core/components/context'
+import { AIMessage } from '@/components/chat/message/ai'
+import { UserMessage } from '@/components/chat/message/user'
 
 
 export interface ChatMessagesProps {
@@ -7,9 +8,6 @@ export interface ChatMessagesProps {
 }
 
 export function ChatMessages({ messages }: ChatMessagesProps) {
-  // Resolve components from context instead of imports
-  const { AIMessage, UserMessage } = useComponents();
-  
   return (
     <box flexDirection='column' gap={1}>
       {messages.map((message: UIMessage, index) => 

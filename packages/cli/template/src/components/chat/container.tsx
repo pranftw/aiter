@@ -7,7 +7,9 @@ import { ScrollBoxRenderable } from '@opentui/core';
 import { colors } from '@aiter/core/utils/colors';
 import { useTriggerSystem } from '@aiter/core/components/triggers/core/use-trigger-system';
 import { triggerUIRegistry } from '@aiter/core/components/triggers/registry';
-import { useComponents } from '@aiter/core/components/context';
+import { ErrorOverlay } from '@aiter/core/components/triggers/core/error-overlay';
+import { ChatBox } from '@/components/chat/box';
+import { ChatMessages } from '@/components/chat/messages';
 
 const prepareChat = (
   prompt: string | null,
@@ -28,9 +30,6 @@ export interface ChatContainerProps {
 }
 
 export function ChatContainer({ chat, prompt, streamFunction, agentCommands }: ChatContainerProps) {
-  // Get components from context instead of direct imports
-  const { ChatBox, ChatMessages, ErrorOverlay } = useComponents();
-  
   const hasSentPrompt = useRef(false);
   const chatHook = useChat({
     id: chat.id,
