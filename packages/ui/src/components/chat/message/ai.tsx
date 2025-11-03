@@ -1,9 +1,8 @@
 import { type UIMessage, type ToolUIPart, type DynamicToolUIPart } from 'ai'
-import { StatusIndicator } from '@aiter/ui/components/status-indicator'
+import { StatusIndicator } from '@aiter/ui'
 import React from 'react'
-import { SubagentToolCallStatusSchema } from '@aiter/core/lib/schema'
+import { SubagentToolCallStatusSchema, colors } from '@aiter/core'
 import { z } from 'zod'
-import { colors } from '@aiter/core/utils/colors'
 
 
 

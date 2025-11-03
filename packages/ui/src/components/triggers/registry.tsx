@@ -1,6 +1,6 @@
-import type { TriggerUIData } from '@aiter/ui/components/triggers/core/use-trigger-system';
+import type { TriggerUIData } from '@aiter/ui';
 import type { ReactNode } from 'react';
-import { CommandTriggerUI } from '@aiter/ui/components/triggers/commands/ui';
+import { CommandTriggerUI } from '@aiter/ui';
 
 // Define the shape of a trigger UI component
 export interface TriggerUIComponent {

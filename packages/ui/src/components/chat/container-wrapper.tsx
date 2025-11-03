@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { z } from 'zod';
-import { ChatSchema } from '@aiter/core/lib/schema';
-import { type StreamFunctionType } from '@aiter/core/ai/custom-chat-transport';
-import { ComponentsProvider, coreComponents, type CustomComponents } from '@aiter/ui/components/context';
+import { ChatSchema, type StreamFunctionType } from '@aiter/core';
+import { ComponentsProvider, coreComponents, type CustomComponents } from '@aiter/ui';
 
 function validateCustomComponents(customComponents?: CustomComponents) {
   if (!customComponents) return;

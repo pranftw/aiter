@@ -1,6 +1,5 @@
-import { useComponents } from '@aiter/ui/components/context';
-import type { TriggerUIData } from '@aiter/ui/components/triggers/core/use-trigger-system';
-import type { SlashCommand } from '@aiter/core/triggers/commands/types';
+import { useComponents, type TriggerUIData } from '@aiter/ui';
+import type { SlashCommand } from '@aiter/core';
 
 const isCommandWithArgs = (query: string) => 
   query.startsWith('/') && query.slice(1).includes(' ');

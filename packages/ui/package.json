@@ -1,6 +1,6 @@
 {
   "name": "@aiter/ui",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
@@ -37,4 +37,3 @@
     "zod": "^4.1.8"
   }
 }
-

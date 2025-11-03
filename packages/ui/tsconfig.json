@@ -12,8 +12,7 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": ["./src/*", "../core/src/*"],
-      "@aiter/ui/*": ["./src/*"],
-      "@aiter/core/*": ["../core/src/*"]
+      "@aiter/ui": ["./src/index.ts"]
     }
   },
   "include": ["src/**/*"],
