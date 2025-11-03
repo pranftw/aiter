@@ -4,10 +4,6 @@ import { ChatMessages } from './chat/messages'
 import { ChatBox } from './chat/box'
 import { AIMessage } from './chat/message/ai'
 import { UserMessage } from './chat/message/user'
-import { StatusIndicator } from './status-indicator'
-import { ErrorOverlay } from './triggers/core/error-overlay'
-import { TriggerWindow } from './triggers/core/trigger-window'
-import { CommandSuggestions } from './triggers/commands/suggestions'
 
 export const coreComponents = {
   ChatContainer,
@@ -15,10 +11,6 @@ export const coreComponents = {
   ChatBox,
   AIMessage,
   UserMessage,
-  StatusIndicator,
-  ErrorOverlay,
-  TriggerWindow,
-  CommandSuggestions,
 }
 
 export type CoreComponentsMap = typeof coreComponents

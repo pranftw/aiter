@@ -3,7 +3,7 @@ import { useChat } from '@ai-sdk/react';
 import { z } from 'zod';
 import { useEffect, useRef } from 'react';
 import { ScrollBoxRenderable } from '@opentui/core';
-import { useTriggerSystem, useComponents } from '@aiter/ui';
+import { useTriggerSystem, useComponents, ErrorOverlay } from '@aiter/ui';
 
 const prepareChat = (
   prompt: string | null,
@@ -25,7 +25,7 @@ export interface ChatContainerProps {
 
 export function ChatContainer({ chat, prompt, streamFunction, agentCommands }: ChatContainerProps) {
   // Get components from context instead of direct imports
-  const { ChatBox, ChatMessages, ErrorOverlay } = useComponents();
+  const { ChatBox, ChatMessages } = useComponents();
   
   const hasSentPrompt = useRef(false);
   const chatHook = useChat({

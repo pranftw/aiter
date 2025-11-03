@@ -1,12 +1,12 @@
-import { useComponents, type TriggerUIData } from '@aiter/ui';
+import type { TriggerUIData } from '../core/use-trigger-system';
 import type { SlashCommand } from '@aiter/core';
+import { TriggerWindow } from '../core/trigger-window';
+import { CommandSuggestions } from './suggestions';
 
 const isCommandWithArgs = (query: string) => 
   query.startsWith('/') && query.slice(1).includes(' ');
 
 export function CommandTriggerUI(triggerUI: TriggerUIData<SlashCommand>) {
-  const { TriggerWindow, CommandSuggestions } = useComponents();
-  
   return (
     <TriggerWindow loading={triggerUI.loading}>
       {!triggerUI.loading && 
