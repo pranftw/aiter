@@ -1,5 +1,5 @@
 import { type UIMessage } from 'ai'
-import { useComponents } from '@aiter/core/components/context'
+import { useComponents } from '@aiter/ui/components/context'
 
 
 export interface ChatMessagesProps {

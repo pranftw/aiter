@@ -1,5 +1,5 @@
-import { useComponents } from '@aiter/core/components/context';
-import type { TriggerUIData } from '@aiter/core/components/triggers/core/use-trigger-system';
+import { useComponents } from '@aiter/ui/components/context';
+import type { TriggerUIData } from '@aiter/ui/components/triggers/core/use-trigger-system';
 import type { SlashCommand } from '@aiter/core/triggers/commands/types';
 
 const isCommandWithArgs = (query: string) => 

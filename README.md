@@ -6,7 +6,8 @@ A powerful terminal-based AI chat interface with a modular agent system and Mode
 
 This repository uses Bun workspaces to manage multiple packages:
 
-- **`packages/core`** - Core runtime library (`@aiter/core`)
+- **`packages/core`** - Core business logic library (`@aiter/core`)
+- **`packages/ui`** - React/OpenTUI components (`@aiter/ui`)
 - **`packages/cli`** - CLI tool for creating new aiter projects and agents
 - **`packages/cli/template`** - Template used for creating new projects (also serves as development workspace)
 
@@ -48,12 +49,22 @@ bun run clean
 
 ### @aiter/core
 
-The core runtime library that provides:
-- UI components for building terminal interfaces
+Core business logic library that provides:
 - Trigger system for commands
 - MCP client management
 - Chat session management
 - Agent resolution system
+- AI transport layer
+- Type definitions and schemas
+
+### @aiter/ui
+
+React/OpenTUI components library that provides:
+- Chat interface components
+- Message renderers
+- Status indicators
+- Trigger UI components
+- Component customization system
 
 ### @aiter/cli
 

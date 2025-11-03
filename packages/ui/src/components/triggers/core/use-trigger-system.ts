@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { createTriggerManager } from '@aiter/core/triggers';
-import type { TriggerDefinition } from '@aiter/core/triggers/core/types';
-import type { ChatHook } from '@aiter/core/lib/types';
+import { createTriggerManager, type TriggerDefinition, type ChatHook } from '@aiter/core';
 
 export interface TriggerUIData<T = any> {
   /** The active trigger */

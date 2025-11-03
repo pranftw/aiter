@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { render, useKeyboard } from '@opentui/react';
+import { ChatContainerWrapper } from '@aiter/ui';
 import { 
-  ChatContainerWrapper, 
   ChatSchema, 
   initializeMCP, 
   cleanup, 

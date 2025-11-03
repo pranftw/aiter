@@ -1,6 +1,4 @@
 import type { useChat } from '@ai-sdk/react';
-import type { UIMessage } from 'ai';
-import type React from 'react';
 import type { z } from 'zod';
 import type { StreamFunctionType } from '../ai/custom-chat-transport';
 import type { SlashCommand } from '../triggers/commands/types';

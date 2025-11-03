@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@aiter/core": "workspace:*",
+    "@aiter/ui": "workspace:*",
     "@ai-sdk/react": "^2.0.44",
     "@modelcontextprotocol/sdk": "^1.18.1",
     "@openrouter/ai-sdk-provider": "^1.2.0",

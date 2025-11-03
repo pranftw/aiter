@@ -8,12 +8,14 @@
   ],
   "scripts": {
     "dev:core": "cd packages/cli/template && bun run src/index.tsx",
-    "typecheck": "bun run typecheck:core && bun run typecheck:cli && bun run typecheck:template",
+    "typecheck": "bun run typecheck:core && bun run typecheck:ui && bun run typecheck:cli && bun run typecheck:template",
     "typecheck:core": "cd packages/core && bun run typecheck",
+    "typecheck:ui": "cd packages/ui && bun run typecheck",
     "typecheck:cli": "cd packages/cli && bun run typecheck",
     "typecheck:template": "cd packages/cli/template && bun run typecheck",
-    "build": "bun run scripts/build-pkg.ts --pkg core && bun run scripts/build-pkg.ts --pkg cli",
+    "build": "bun run scripts/build-pkg.ts --pkg core && bun run scripts/build-pkg.ts --pkg ui && bun run scripts/build-pkg.ts --pkg cli",
     "build:core": "cd packages/core && bun run build",
+    "build:ui": "cd packages/ui && bun run build",
     "build:cli": "cd packages/cli && bun run build",
     "dev:cli": "bun run packages/cli/src/index.ts",
     "clean": "rm -rf packages/*/dist packages/*/node_modules node_modules"

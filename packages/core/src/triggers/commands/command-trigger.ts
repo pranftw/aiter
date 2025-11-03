@@ -1,5 +1,5 @@
-import type { TriggerDefinition, TriggerContext, TriggerResult } from '../core/types';
-import { isTriggerPattern, parseInput } from '../core/utils';
+import type { TriggerDefinition, TriggerContext, TriggerResult } from '@/triggers/core/types';
+import { isTriggerPattern, parseInput } from '@/triggers/core/utils';
 import { CommandProcessor } from './processor';
 import type { SlashCommand } from './types';
 

@@ -12,7 +12,7 @@ const argv = yargs(hideBin(process.argv))
     alias: 'p',
     type: 'string',
     description: 'Package name to build',
-    choices: ['core', 'cli'],
+    choices: ['core', 'cli', 'ui'],
     demandOption: true,
   })
   .option('prod', {
@@ -94,11 +94,39 @@ if (argv.pkg === 'cli') {
   })
 }
 
+if (argv.pkg === 'ui') {
+  console.log('Copying source files for customization...')
+  const srcDir = join(pkgDir, 'src')
+  const srcDest = join(pkgDir, 'dist/src')
+  await fs.copy(srcDir, srcDest, {
+    filter: (src) => {
+      const relativePath = src.replace(srcDir, '')
+      return !relativePath.includes('node_modules') && 
+             !relativePath.includes('.tsbuildinfo')
+    }
+  })
+}
+
 // Create package.json for dist
 const { scripts, devDependencies, publishConfig, main, types, files, ...publishPkg } = pkgJson
 
+// Transform workspace:* dependencies to 'latest'
+const transformWorkspaceDeps = (deps: Record<string, string> | undefined) => {
+  if (!deps) return deps;
+  
+  const transformed = { ...deps };
+  for (const [key, value] of Object.entries(transformed)) {
+    if (value === 'workspace:*') {
+      transformed[key] = 'latest';
+    }
+  }
+  return transformed;
+};
+
 const distPkg = {
   ...publishPkg,
+  dependencies: transformWorkspaceDeps(publishPkg.dependencies),
+  peerDependencies: transformWorkspaceDeps(publishPkg.peerDependencies),
   exports: pkgJson.bin ? undefined : { '.': './index.js' },
   main: pkgJson.bin ? undefined : './index.js',
   types: pkgJson.bin ? undefined : './index.d.ts',

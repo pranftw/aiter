@@ -1,4 +1,3 @@
-export * from './components';
 export * from './triggers';
 export * from './lib';
 export * from './utils';

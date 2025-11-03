@@ -5,9 +5,9 @@ import { z } from 'zod';
 import { useEffect, useRef } from 'react';
 import { ScrollBoxRenderable } from '@opentui/core';
 import { colors } from '@aiter/core/utils/colors';
-import { useTriggerSystem } from '@aiter/core/components/triggers/core/use-trigger-system';
-import { triggerUIRegistry } from '@aiter/core/components/triggers/registry';
-import { useComponents } from '@aiter/core/components/context';
+import { useTriggerSystem } from '@aiter/ui/components/triggers/core/use-trigger-system';
+import { triggerUIRegistry } from '@aiter/ui/components/triggers/registry';
+import { useComponents } from '@aiter/ui/components/context';
 
 const prepareChat = (
   prompt: string | null,

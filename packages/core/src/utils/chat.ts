@@ -2,9 +2,9 @@ import path from 'path';
 import { generateId } from 'ai';
 import fs from 'fs';
 import z from 'zod';
-import { ChatSchema } from '../lib/schema';
+import { ChatSchema } from '@/lib/schema';
 import { mcpManager } from './mcp-manager';
-import type { MCPConfig } from '../lib/types';
+import type { MCPConfig } from '@/lib/types';
 
 
 

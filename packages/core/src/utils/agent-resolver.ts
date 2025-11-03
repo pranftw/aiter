@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import fs from 'fs';
 import path from 'path';
-import type { AgentConfig, MCPConfig } from '../lib/types';
+import type { AgentConfig, MCPConfig } from '@/lib/types';
 
 export interface AgentResolverConfig {
   basePath: string;

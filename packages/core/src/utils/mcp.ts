@@ -1,7 +1,7 @@
 import { experimental_createMCPClient as createMCPClient, type experimental_MCPClient as AISDKMCPClient } from 'ai';
 import { Experimental_StdioMCPTransport as StdioMCPTransport } from 'ai/mcp-stdio';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
-import type { MCPConfig, MCPServerConfig } from '../lib/types';
+import type { MCPConfig, MCPServerConfig } from '@/lib/types';
 
 export interface MCPClient {
   name: string;

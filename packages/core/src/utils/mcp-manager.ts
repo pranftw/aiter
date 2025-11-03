@@ -1,5 +1,5 @@
 import { getMCPClientsFromJSON, getToolsFromMCPClients, closeMCPClients, type MCPClient } from './mcp';
-import type { MCPConfig } from '../lib/types';
+import type { MCPConfig } from '@/lib/types';
 
 export class MCPClientManager {
   private clients: MCPClient[] = [];

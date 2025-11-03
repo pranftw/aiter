@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "./dist",
     "baseUrl": ".",
     "noEmit": false,
@@ -10,8 +9,11 @@
     "declarationMap": true,
     "allowImportingTsExtensions": false,
     "verbatimModuleSyntax": false,
+    "skipLibCheck": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*", "../core/src/*"],
+      "@aiter/ui/*": ["./src/*"],
+      "@aiter/core/*": ["../core/src/*"]
     }
   },
   "include": ["src/**/*"],

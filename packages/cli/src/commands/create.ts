@@ -96,9 +96,29 @@ export const createCommand = {
       if (await fs.pathExists(tsconfigPath)) {
         const tsconfig = await fs.readJson(tsconfigPath);
         
-        // Remove monorepo-specific path mappings
-        if (tsconfig.compilerOptions?.paths?.['@/*']) {
-          tsconfig.compilerOptions.paths['@/*'] = ['./src/*'];
+        // Remove all monorepo-specific path mappings
+        if (tsconfig.compilerOptions?.paths) {
+          const paths = tsconfig.compilerOptions.paths;
+          
+          // Update @/* to only point to local src
+          if (paths['@/*']) {
+            paths['@/*'] = ['./src/*'];
+          }
+          
+          // Remove all @aiter/* aliases (they come from node_modules in standalone projects)
+          for (const key of Object.keys(paths)) {
+            if (key.startsWith('@aiter/')) {
+              delete paths[key];
+            }
+          }
+          
+          // If paths is now empty, remove it entirely
+          if (Object.keys(paths).length === 0) {
+            delete tsconfig.compilerOptions.paths;
+            if (Object.keys(tsconfig.compilerOptions).length === 1 && tsconfig.compilerOptions.baseUrl === '.') {
+              delete tsconfig.compilerOptions.baseUrl;
+            }
+          }
         }
         
         await fs.writeJson(tsconfigPath, tsconfig, { spaces: 2 });
