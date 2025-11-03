@@ -5,6 +5,14 @@ import { ChatBox } from './chat/box'
 import { AIMessage } from './chat/message/ai'
 import { UserMessage } from './chat/message/user'
 
+
+export const coreComponentsWithPath = {
+  'chat/container': ChatContainer,
+  'chat/messages': ChatMessages,
+  'chat/box': ChatBox,
+  'chat/message/ai': AIMessage,
+  'chat/message/user': UserMessage,
+}
 export const coreComponents = {
   ChatContainer,
   ChatMessages,
@@ -12,7 +20,6 @@ export const coreComponents = {
   AIMessage,
   UserMessage,
 }
-
 export type CoreComponentsMap = typeof coreComponents
 export type CustomComponents = Partial<CoreComponentsMap>
 

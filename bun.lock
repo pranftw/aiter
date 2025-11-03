@@ -13,11 +13,12 @@
     },
     "packages/cli": {
       "name": "@aiter/cli",
-      "version": "0.1.6",
+      "version": "0.1.8",
       "bin": {
         "aiter": "./dist/index.js",
       },
       "dependencies": {
+        "@aiter/ui": "workspace:*",
         "@inquirer/prompts": "^7.2.0",
         "chalk": "^5.3.0",
         "fs-extra": "^11.2.0",
@@ -65,7 +66,7 @@
     },
     "packages/core": {
       "name": "@aiter/core",
-      "version": "0.1.4",
+      "version": "0.1.6",
       "dependencies": {
         "@ai-sdk/react": "2.0.76",
         "@modelcontextprotocol/sdk": "^1.18.1",
@@ -95,7 +96,7 @@
     },
     "packages/ui": {
       "name": "@aiter/ui",
-      "version": "0.1.0",
+      "version": "0.1.4",
       "dependencies": {
         "react": "^19.1.1",
         "zod": "^4.1.8",

@@ -9,7 +9,6 @@
     "declarationMap": true,
     "allowImportingTsExtensions": false,
     "verbatimModuleSyntax": false,
-    "skipLibCheck": true,
     "paths": {
       "@/*": ["./src/*", "../core/src/*"],
       "@aiter/ui": ["./src/index.ts"]
