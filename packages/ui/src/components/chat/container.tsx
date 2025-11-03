@@ -3,7 +3,7 @@ import { useChat } from '@ai-sdk/react';
 import { z } from 'zod';
 import { useEffect, useRef } from 'react';
 import { ScrollBoxRenderable } from '@opentui/core';
-import { useTriggerSystem, triggerUIRegistry, useComponents } from '@aiter/ui';
+import { useTriggerSystem, useComponents } from '@aiter/ui';
 
 const prepareChat = (
   prompt: string | null,
@@ -82,7 +82,7 @@ export function ChatContainer({ chat, prompt, streamFunction, agentCommands }: C
           {activeTriggerUI.error ? (
             <ErrorOverlay message={activeTriggerUI.error} onClose={activeTriggerUI.onClose} />
           ) : (
-            triggerUIRegistry[activeTriggerUI.trigger.pattern]?.(activeTriggerUI)
+            activeTriggerUI.renderUI?.(activeTriggerUI)
           )}
         </box>
       )}

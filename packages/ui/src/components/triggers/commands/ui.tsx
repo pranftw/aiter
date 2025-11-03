@@ -4,7 +4,7 @@ import type { SlashCommand } from '@aiter/core';
 const isCommandWithArgs = (query: string) => 
   query.startsWith('/') && query.slice(1).includes(' ');
 
-function CommandTriggerUIComponent(triggerUI: TriggerUIData<SlashCommand>) {
+export function CommandTriggerUI(triggerUI: TriggerUIData<SlashCommand>) {
   const { TriggerWindow, CommandSuggestions } = useComponents();
   
   return (
@@ -22,8 +22,3 @@ function CommandTriggerUIComponent(triggerUI: TriggerUIData<SlashCommand>) {
     </TriggerWindow>
   );
 }
-
-export const CommandTriggerUI = {
-  pattern: '/',
-  render: CommandTriggerUIComponent,
-};

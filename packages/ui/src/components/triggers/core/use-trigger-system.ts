@@ -1,5 +1,16 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { createTriggerManager, type TriggerDefinition, type ChatHook } from '@aiter/core';
+import type { ReactNode } from 'react';
+import { CommandTriggerUI } from '../commands/ui';
+
+// Local map of trigger patterns to their UI renderers
+// Add new triggers here as they're created
+const TRIGGER_UI_MAP: Record<string, (triggerUI: TriggerUIData) => ReactNode> = {
+  '/': CommandTriggerUI,
+  // Add more trigger UIs here:
+  // '@': MentionTriggerUI,
+  // '!': ActionTriggerUI,
+};
 
 export interface TriggerUIData<T = any> {
   /** The active trigger */
@@ -21,6 +32,9 @@ export interface TriggerUIData<T = any> {
   onSelect: (item: T) => void;
   onClose: () => void;
   onNavigate?: (item: T | null) => void;
+  
+  /** UI renderer function - each trigger provides its own UI */
+  renderUI?: (triggerUI: TriggerUIData<T>) => ReactNode;
 }
 
 interface UseTriggerSystemProps {
@@ -83,6 +97,7 @@ export function useTriggerSystem({
             onSelect: (item) => handleItemSelect(item, trigger),
             onClose: handleClose,
             onNavigate: (item) => handleNavigate(item, trigger),
+            renderUI: TRIGGER_UI_MAP[trigger.pattern],
           });
 
           try {
@@ -192,6 +207,7 @@ export function useTriggerSystem({
             onSelect: (item) => handleItemSelect(item, trigger),
             onClose: handleClose,
             onNavigate: (item) => handleNavigate(item, trigger),
+            renderUI: TRIGGER_UI_MAP[trigger.pattern],
           });
         } else {
           setActiveTriggerUI(null);
