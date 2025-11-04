@@ -1,7 +1,28 @@
 {
   "name": "@aiter/core",
-  "version": "0.1.8",
+  "version": "0.1.10",
+  "description": "Core runtime library for building AI terminal user interfaces with MCP integration",
   "type": "module",
+  "keywords": [
+    "ai",
+    "chat",
+    "terminal",
+    "tui",
+    "opentui",
+    "react",
+    "mcp",
+    "model-context-protocol",
+    "vercel-ai-sdk"
+  ],
+  "homepage": "https://github.com/pranftw/aiter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pranftw/aiter.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/pranftw/aiter/issues"
+  },
   "exports": {
     ".": "./src/index.ts"
   },

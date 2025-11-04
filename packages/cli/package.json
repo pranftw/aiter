@@ -1,7 +1,28 @@
 {
   "name": "@aiter/cli",
-  "version": "0.1.12",
+  "version": "0.1.14",
+  "description": "CLI tool for scaffolding aiter applications and agents",
   "type": "module",
+  "keywords": [
+    "ai",
+    "chat",
+    "terminal",
+    "tui",
+    "mcp",
+    "model-context-protocol",
+    "cli",
+    "scaffold",
+    "generator"
+  ],
+  "homepage": "https://github.com/pranftw/aiter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pranftw/aiter.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/pranftw/aiter/issues"
+  },
   "exports": {
     ".": "./src/index.ts"
   },

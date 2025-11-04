@@ -1,127 +1,99 @@
 # @aiter/cli
 
-CLI tool for creating aiter applications and agents.
+CLI tool for scaffolding aiter applications and agents.
 
-## Usage
+Part of the [aiter](https://github.com/pranftw/aiter) project.
+
+## What is aiter?
+
+A powerful terminal-based AI chat interface built with OpenTUI and React, featuring a modular agent system with Model Context Protocol (MCP) integration.
+
+**For developers who want to build with AI, not just use it.** Perfect for experimentation, MCP testing, custom workflows, and understanding how AI interactions actually work.
+
+## Quick Start
 
 ### Create Application
 
-Create a full aiter application with example agent:
-
 ```bash
-# Create full aiter application
-bunx @aiter/cli create app my-app
-
-# With specific path
-bunx @aiter/cli create app my-app --path ./projects
-
-# From monorepo
-bun run create create app my-app
+bunx @aiter/cli create app my-chat-app
+cd my-chat-app
+bun install
+bun run src/index.tsx
 ```
+
+This creates a complete aiter application with:
+- Pre-configured project structure
+- Example agent with sample customizations
+- Component override system
+- Chat session management
+- MCP integration support
 
 ### Add Agent
 
-Add agents with modular customizations. Automatically detects if you're in an existing aiter project:
-
 ```bash
-# Add agent (auto-detects if in existing project)
+# Interactive mode (prompts for customizations)
 bunx @aiter/cli add agent my-agent
-
-# With specific customizations
-bunx @aiter/cli add agent my-agent --customize commands,tools
-
-# With all customizations
-bunx @aiter/cli add agent my-agent --customize all
-
-# Non-interactive mode
+# Non-interactive with specific customizations
+bunx @aiter/cli add agent my-agent --customize commands,tools,mcps
+# Add all customizations
 bunx @aiter/cli add agent my-agent --customize all --interactive false
-
-# In a specific path
-bunx @aiter/cli add agent my-agent --path ./my-project
 ```
 
 ## Commands
 
-### create
+### create app
 
-Create a new aiter resource.
+Create a new aiter application.
 
-**Usage:** `bunx @aiter/cli create <type> <name> [options]`
-
-**Positional Arguments:**
-- `type` - Resource type to create (required)
-  - `app` - Full aiter application
-- `name` - Resource name (required)
+```bash
+bunx @aiter/cli create app <name> [options]
+```
 
 **Options:**
 - `--path`, `-p` - Target directory path (default: current directory)
 
-### add
+**Example:**
+```bash
+bunx @aiter/cli create app my-chat-app --path ~/projects
+```
 
-Add a resource to an existing aiter project.
+### add agent
 
-**Usage:** `bunx @aiter/cli add <type> <name> [options]`
+Add an agent to an existing aiter project.
 
-**Positional Arguments:**
-- `type` - Resource type to add (required)
-  - `agent` - AI agent
-- `name` - Resource name (required)
+```bash
+bunx @aiter/cli add agent <name> [options]
+```
 
 **Options:**
 - `--path`, `-p` - Project directory path (default: current directory)
-- `--customize`, `-c` - Customizations to include: commands, tools, mcps, system-prompts, all
+- `--customize`, `-c` - Customizations to include: `commands`, `tools`, `mcps`, `system-prompts`, `all`
 - `--interactive`, `-i` - Interactive mode (default: true)
 
-## Customizations
+**Example:**
+```bash
+cd my-chat-app
+bunx @aiter/cli add agent coding-assistant --customize commands,tools,mcps
+```
 
-When adding agents, you can choose which customizations to include:
+## Agent Customizations
 
-- **commands** - Slash commands for the chat interface
-- **tools** - AI tools/functions for the agent
+Choose which features to include when creating agents:
+
+- **commands** - Custom slash commands for the chat interface
+- **tools** - AI tools/functions the agent can use
 - **mcps** - Model Context Protocol server configurations
-- **system-prompts** - Custom system prompts for the agent
+- **system-prompts** - Custom system prompts to define agent behavior
 - **all** - Include all customizations
 
-## What Gets Created
+## Documentation
 
-### App Creation
+See the [main aiter repository](https://github.com/pranftw/aiter) for:
+- Full documentation
+- Customization guides
+- Architecture details
+- Examples and tutorials
 
-Creates a complete aiter application with:
+## License
 
-- Pre-configured project structure
-- Example agent with sample customizations
-- Template agent for creating new agents
-- Component override system
-- Chat session management
-- MCP integration support
-- Package.json with dependencies
-
-### Agent Addition
-
-**In existing project:**
-- Creates new agent directory in `src/ai/agents/`
-- Copies selected customizations from template
-- Core files (schema.ts, stream-function.ts)
-
-**Not in existing project:**
-- Shows error message and suggests using `create app` command
-
-## Development
-
-From the cli directory:
-
-```bash
-bun install
-bun run build
-
-# Test locally
-bun run src/index.ts create app test-app --path ./tmp
-bun run src/index.ts add agent test-agent --path ./tmp/test-app
-```
-
-## Publishing
-
-```bash
-# Build and publish with version bump
-bun run build --prod --bump patch
-```
+See LICENSE file.

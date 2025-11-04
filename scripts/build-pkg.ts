@@ -94,6 +94,14 @@ if (argv.pkg === 'cli') {
   })
 }
 
+// Copy README.md for npm homepage
+const readmeSrc = join(pkgDir, 'README.md')
+if (existsSync(readmeSrc)) {
+  console.log('Copying README.md...')
+  const readmeDest = join(pkgDir, 'dist/README.md')
+  await fs.copy(readmeSrc, readmeDest)
+}
+
 // Create package.json for dist
 const { scripts, devDependencies, publishConfig, main, types, files, ...publishPkg } = pkgJson
 
