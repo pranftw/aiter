@@ -4,6 +4,8 @@ A powerful terminal-based AI chat interface built with OpenTUI and React, featur
 
 Built on top of the **[Vercel AI SDK](https://github.com/vercel/ai)** and **[OpenTUI](https://github.com/sst/opentui)**, combining provider-agnostic AI tooling with a modern terminal UI framework.
 
+![aiter screenshot](public/images/screenshot.png)
+
 ## Why aiter?
 
 While tools like Claude Code and other CLI AI agents offer powerful AI assistance, aiter gives you something different: **complete control over how you interact with AI**.
@@ -30,21 +32,21 @@ Create a new aiter application:
 bunx @aiter/cli create app my-chat-app
 cd my-chat-app
 bun install
+# Set up environment variables
+cp .env.template .env
 ```
 
 ### Run
 
 ```bash
-# Start with the default agent
-bun run src/index.tsx
-# Start with a specific agent
+# Start with the example agent
 bun run src/index.tsx --agent example
 # Resume an existing chat
-bun run src/index.tsx --chat chats/abc123.json
+bun run src/index.tsx --agent example --chat chats/abc123.json
 # Start with an initial prompt
-bun run src/index.tsx --prompt "Hello, how are you?"
+bun run src/index.tsx --agent example --prompt "Hello, how are you?"
 # Pipe prompt from stdin
-echo "Explain TypeScript generics" | bun run src/index.tsx -
+echo "Explain TypeScript generics" | bun run src/index.tsx --agent example -
 ```
 
 ---
@@ -240,9 +242,8 @@ git clone https://github.com/pranftw/aiter.git
 cd aiter
 # Install dependencies
 bun install
-# Create packages/cli/template/.env with your configuration
-# Example: MAIN_AGENT_MODEL=anthropic/claude-3.5-sonnet
-# Example: CHATS_PATH=./chats
+# Create .env from template
+cp packages/cli/template/.env.template packages/cli/template/.env
 ```
 
 ### Development Workflow
