@@ -4,8 +4,6 @@ A powerful terminal-based AI chat interface built with OpenTUI and React, featur
 
 Built on top of the **[Vercel AI SDK](https://github.com/vercel/ai)** and **[OpenTUI](https://github.com/sst/opentui)**, combining provider-agnostic AI tooling with a modern terminal UI framework.
 
-![aiter screenshot](public/images/screenshot.png)
-
 ## Why aiter?
 
 While tools like Claude Code and other CLI AI agents offer powerful AI assistance, aiter gives you something different: **complete control over how you interact with AI**.
@@ -19,37 +17,6 @@ While tools like Claude Code and other CLI AI agents offer powerful AI assistanc
 **Customizability**: Terminal-first means scriptable, pipeable, and CI/CD-ready. Modify the UI with React. Inspect and edit conversation JSON directly. Full local control with no telemetry.
 
 **For developers who want to build with AI, not just use it.** Perfect for experimentation, MCP testing, custom workflows, and understanding how AI interactions actually work.
-
----
-
-## Quick Start
-
-### Installation
-
-Create a new aiter application:
-
-```bash
-bunx @aiter/cli create app my-chat-app
-cd my-chat-app
-bun install
-# Set up environment variables
-cp .env.template .env
-```
-
-### Run
-
-```bash
-# Start with the example agent
-bun run src/index.tsx --agent example
-# Resume an existing chat
-bun run src/index.tsx --agent example --chat chats/abc123.json
-# Start with an initial prompt
-bun run src/index.tsx --agent example --prompt "Hello, how are you?"
-# Pipe prompt from stdin
-echo "Explain TypeScript generics" | bun run src/index.tsx --agent example -
-```
-
----
 
 ## Features
 
@@ -67,29 +34,45 @@ echo "Explain TypeScript generics" | bun run src/index.tsx --agent example -
 - **Custom Slash Commands**: Define agent-specific or global slash commands with yargs-style argument parsing
 - **Custom AI Tools**: Add local tools that the AI can use during conversations
 - **Flexible System Prompts**: Customize AI behavior with markdown-based system prompts
-- **Custom UI Components**: Override any component in the chat interface with your own React components
 - **Custom Data Schema**: Define typed data structures for agent-specific state management
 - **Stdin Support**: Pipe prompts directly from shell commands or scripts
 
----
-
-## Creating Custom Agents
-
-Add a new agent to your project:
-
+## Installation
 ```bash
-# Interactive mode (prompts for customizations)
-bunx @aiter/cli add agent my-agent
-# Non-interactive with specific customizations
-bunx @aiter/cli add agent my-agent --customize commands,tools,mcps
-# Add all customizations
-bunx @aiter/cli add agent my-agent --customize all --interactive false
+git clone https://github.com/pranftw/aiter.git
+cd aiter
+mkdir chats
+bun install
+cp .env.template .env # add the envvars
 ```
 
-### Agent Structure
+## Example Usage
+
+### Basic Usage
+```bash
+# Start a new chat with the default agent
+bun run src/index.tsx
+# Start with a specific agent
+bun run src/index.tsx --agent example
+# Resume an existing chat session
+bun run src/index.tsx --chat chats/abc123.json
+# Start with an initial prompt
+bun run src/index.tsx --prompt "Hello, how are you?"
+# Pipe prompt from stdin
+echo "Explain TypeScript generics" | bun run src/index.tsx -
+# Combine options
+bun run src/index.tsx -a example -p "Let's discuss React patterns"
+```
+
+## Customization
+
+### Creating a Custom Agent
+```bash
+# Copy the template to create a new agent
+cp -r src/ai/agents/template src/ai/agents/<AGENT_NAME>
+```
 
 Each agent directory contains:
-
 ```
 src/ai/agents/<AGENT_NAME>/
 ├── commands/           # Custom slash commands
@@ -104,20 +87,13 @@ src/ai/agents/<AGENT_NAME>/
 └── stream-function.ts # Custom stream processing logic
 ```
 
----
-
-## Customization Guide
-
 ### Adding Custom Tools
-
 Create tools in `src/ai/agents/<AGENT_NAME>/tools/` using the AI SDK's `tool()` function. Refer to `src/ai/agents/template` for the basic structure and `src/ai/agents/example` for implementation examples.
 
 ### Adding Custom Slash Commands
-
 Create commands in `src/ai/agents/<AGENT_NAME>/commands/` implementing the `SlashCommand` interface with yargs-style options. Refer to `src/ai/agents/template` for the basic structure and `src/ai/agents/example` for implementation examples.
 
 ### Configuring MCP Servers
-
 ```bash
 cp src/ai/agents/<AGENT_NAME>/mcps/templates/main.json.template src/ai/agents/<AGENT_NAME>/mcps/main.json
 ```
@@ -140,7 +116,7 @@ Edit `src/ai/agents/<AGENT_NAME>/mcps/main.json`:
     },
     "server2": {
       "type": "sse",
-      "url": "https://api.example.com/sse",
+      "url": "https://api.example.com/stream",
       "headers": {}
     }
   }
@@ -148,20 +124,12 @@ Edit `src/ai/agents/<AGENT_NAME>/mcps/main.json`:
 ```
 
 ### Customizing System Prompts
-
 Edit `src/ai/agents/<AGENT_NAME>/system-prompts/main.md` to define the AI's behavior and personality.
 
-### Customizing Components
-
-You can override any UI component by creating a custom version in `src/components/`. The component system automatically merges your custom components with the core components.
-
 ### Custom Data Schema
+Edit `src/ai/agents/<AGENT_NAME>/schema.ts` to define typed data structures for agent-specific state using Zod schemas.
 
-Edit `src/ai/agents/<AGENT_NAME>/schema.ts` to define typed data structures for agent-specific state management.
-
----
-
-## CLI Reference
+## Options
 
 ### Command-line Arguments
 
@@ -173,106 +141,67 @@ Edit `src/ai/agents/<AGENT_NAME>/schema.ts` to define typed data structures for 
 | `--help` | `-h` | - | - | Display help information |
 
 ### Special Input
+- **Stdin**: Use `-` as a positional argument to read the prompt from stdin
+  ```bash
+  echo "My question" | bun run src/index.tsx -
+  ```
+  Note: Cannot be combined with `--prompt`
 
-Use `-` as a positional argument to read the prompt from stdin:
-
+### Usage Examples
 ```bash
+# Start with specific agent
+bun run src/index.tsx --agent my-custom-agent
+# Resume a chat
+bun run src/index.tsx --chat ./chats/xyz789.json
+# Quick one-off question
+bun run src/index.tsx -p "What is TypeScript?"
+# Pipe from command output
 cat question.txt | bun run src/index.tsx -
-echo "My question" | bun run src/index.tsx -
+# Combine agent and prompt
+bun run src/index.tsx -a example -p "Hello"
+# Get help
+bun run src/index.tsx --help
 ```
-
-Note: Cannot be combined with `--prompt`
-
----
 
 ## Architecture
 
-### Packages
-
-- **`@aiter/core`** - Core runtime library providing UI components, trigger system, MCP management, and chat session handling
-- **`@aiter/cli`** - CLI tool for scaffolding new applications and agents
-
 ### Key Components
-
 - **Chat Container**: Main UI component managing the chat interface
 - **Trigger System**: Extensible input processing (commands, context, etc.)
 - **MCP Manager**: Singleton managing Model Context Protocol clients and tools
 - **Command Registry**: Dynamic loading of builtin and agent-specific commands
 - **Custom Transport**: Bridge between UI and AI streaming
-- **Component Context**: System for merging core and custom components
 
 ### Agent System
-
 Each agent is isolated with its own:
 - Tool set (MCP tools + local tools)
 - Command registry (builtin + agent-specific)
 - System prompts and configuration
+- Message rendering logic
 - State schema
 
-### Component System
-
-Components follow a merge pattern:
-1. Core components are provided by `@aiter/core`
-2. Your custom components in `src/components/` override matching names
-3. The `ComponentsProvider` makes all components available via `useComponents()`
-4. Any component can be customized without affecting others
-
----
+### File Structure
+```
+src/
+├── ai/
+│   ├── agents/          # Agent definitions
+│   ├── custom-chat-transport.ts
+│   └── tools/           # Global tools (currently empty)
+├── components/
+│   ├── chat/           # Chat UI components
+│   └── triggers/       # Trigger UI components
+├── hooks/              # Custom React hooks
+├── lib/                # Shared schemas and utilities
+├── triggers/           # Trigger system
+│   ├── commands/       # Command trigger implementation
+│   └── core/           # Core trigger framework
+└── utils/              # Utility functions
+    ├── ai.ts           # AI/MCP utilities
+    ├── chat.ts         # Chat management
+    ├── mcp-manager.ts  # MCP client manager
+    └── yargs.ts        # CLI argument parsing
+```
 
 ## Contributing
 
-We welcome contributions! This is a monorepo managed with Bun workspaces.
-
-### Repository Structure
-
-```
-aiter/
-├── packages/
-│   ├── core/          # @aiter/core - Core runtime library
-│   ├── cli/           # @aiter/cli - CLI tool
-│   │   └── template/  # Template for new projects (also dev workspace)
-└── scripts/           # Build scripts
-```
-
-### Development Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/pranftw/aiter.git
-cd aiter
-# Install dependencies
-bun install
-# Create .env from template
-cp packages/cli/template/.env.template packages/cli/template/.env
-```
-
-### Development Workflow
-
-This monorepo uses **direct source imports** - no build step needed during development!
-
-```bash
-# Run the template workspace (development environment)
-bun dev -a example
-# Make changes to packages/core/src/* or packages/cli/template/src/*
-# Changes are instantly reflected - no rebuild needed!
-# Type check all packages
-bun run typecheck
-# Build packages (only needed for publishing)
-bun run build
-# Clean all builds
-bun run clean
-```
-
-### Testing CLI Commands
-
-```bash
-# Test the create command
-bun run dev:cli create app test-app
-```
-
----
-
-## License
-
-See LICENSE file in each package.
-
+Feel free to submit issues and enhancement requests!
