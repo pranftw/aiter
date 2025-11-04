@@ -39,7 +39,7 @@ export interface MCPConfig {
 }
 
 // Agent configuration containing all agent-specific settings and modules
-export interface AgentConfig {
+export interface Agent {
   name: string;
   streamFunction: StreamFunctionType;
   dataSchema: z.ZodSchema;

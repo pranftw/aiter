@@ -7,9 +7,8 @@ import {
   cleanup, 
   initializeChat,
   createAgentResolver,
-  type StreamFunctionType
+  type Agent
 } from '@aiter/core';
-import path from 'path';
 import { z } from 'zod';
 import { processedArgs } from './utils/yargs';
 import * as customComponents from './components'
@@ -19,12 +18,11 @@ import * as customComponents from './components'
 interface AppProps {
   args: typeof processedArgs;
   chat: z.infer<typeof ChatSchema> | null;
-  streamFunction: StreamFunctionType;
-  agentCommands: Record<string, any>;
+  agent: Agent;
 }
 
 
-function App({ args, chat, streamFunction, agentCommands }: AppProps) {
+function App({ args, chat, agent }: AppProps) {
   useKeyboard((key) => {
     if (key.name==='c' && key.ctrl) {
       cleanup();
@@ -36,8 +34,7 @@ function App({ args, chat, streamFunction, agentCommands }: AppProps) {
       <ChatContainerWrapper 
         chat={chat} 
         prompt={args.prompt} 
-        streamFunction={streamFunction} 
-        agentCommands={agentCommands}
+        agent={agent}
         customComponents={customComponents}
       />
     )
@@ -47,21 +44,22 @@ function App({ args, chat, streamFunction, agentCommands }: AppProps) {
 
 
 async function main(args: typeof processedArgs){
-  const agentResolver = createAgentResolver({
-    basePath: path.join(process.cwd(), 'src/ai/agents')
-  });
-  const agent = await agentResolver.getAgent(args.agent);
-  await initializeMCP(agent.mcpConfig);
+  const agent = await createAgentResolver().getAgent(args.agent);
   const chat = await initializeChat(args.chatId, args.agent, agent.dataSchema);
-  const streamFunction = agent.streamFunction;
-  const agentCommands = agent.commands;
+  await initializeMCP(agent.mcpConfig);
   try {
-    await render(<App args={args} chat={chat} streamFunction={streamFunction} agentCommands={agentCommands}/>, {exitOnCtrlC: false, enableMouseMovement: true});
+    await render(
+      <App 
+        args={args} 
+        chat={chat} 
+        agent={agent}
+      />, 
+      {exitOnCtrlC: false, enableMouseMovement: true}
+    );
   } catch (error) {
     await cleanup();
     console.error('Error:', error);
     process.exit(1);
   }
 }
-
 await main(processedArgs);

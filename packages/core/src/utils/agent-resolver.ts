@@ -1,16 +1,16 @@
 import { z } from 'zod';
 import fs from 'fs';
 import path from 'path';
-import type { AgentConfig, MCPConfig } from '../lib/types';
+import type { Agent, MCPConfig } from '../lib/types';
 
 export interface AgentResolverConfig {
-  basePath: string;
+  basePath?: string;
 }
 
-export function createAgentResolver(config: AgentResolverConfig) {
-  const { basePath } = config;
+export function createAgentResolver(config: AgentResolverConfig = {}) {
+  const { basePath = path.join(process.cwd(), 'src/ai/agents') } = config;
 
-  async function getAgent(agentName: string): Promise<AgentConfig> {
+  async function getAgent(agentName: string): Promise<Agent> {
     const agentPath = path.join(basePath, agentName);
     
   const streamFunction = await import(`${agentPath}/stream-function`);

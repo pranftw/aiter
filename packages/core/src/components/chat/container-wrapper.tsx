@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { z } from 'zod';
 import { ChatSchema } from '@/lib/schema';
-import { type StreamFunctionType } from '@/ai/custom-chat-transport';
+import type { Agent } from '@/lib/types';
 import { ComponentsProvider, coreComponents, type CustomComponents } from '@/components/context';
 
 function validateCustomComponents(customComponents: CustomComponents) {
@@ -23,12 +23,11 @@ function validateCustomComponents(customComponents: CustomComponents) {
 export interface ChatContainerWrapperProps {
   chat: z.infer<typeof ChatSchema>;
   prompt: string | null;
-  streamFunction: StreamFunctionType;
-  agentCommands?: Record<string, any>;
+  agent: Agent;
   customComponents: CustomComponents;
 }
 
-export function ChatContainerWrapper({ chat, prompt, streamFunction, agentCommands, customComponents }: ChatContainerWrapperProps) {
+export function ChatContainerWrapper({ chat, prompt, agent, customComponents }: ChatContainerWrapperProps) {
   // Validate custom components
   validateCustomComponents(customComponents);
   
@@ -46,8 +45,7 @@ export function ChatContainerWrapper({ chat, prompt, streamFunction, agentComman
       <ChatContainer 
         chat={chat}
         prompt={prompt}
-        streamFunction={streamFunction}
-        agentCommands={agentCommands}
+        agent={agent}
       />
     </ComponentsProvider>
   );

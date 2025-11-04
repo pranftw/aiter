@@ -1,4 +1,4 @@
-import { CustomChatTransport, type StreamFunctionType, ChatSchema, colors, useTriggerSystem, triggerUIRegistry, ErrorOverlay } from '@aiter/core';
+import { CustomChatTransport, type Agent, ChatSchema, colors, useTriggerSystem, triggerUIRegistry, ErrorOverlay } from '@aiter/core';
 import { useChat } from '@ai-sdk/react';
 import { z } from 'zod';
 import { useEffect, useRef } from 'react';
@@ -20,15 +20,14 @@ const prepareChat = (
 export interface ChatContainerProps {
   chat: z.infer<typeof ChatSchema>;
   prompt: string | null;
-  streamFunction: StreamFunctionType;
-  agentCommands?: Record<string, any>;
+  agent: Agent;
 }
 
-export function ChatContainer({ chat, prompt, streamFunction, agentCommands }: ChatContainerProps) {
+export function ChatContainer({ chat, prompt, agent }: ChatContainerProps) {
   const hasSentPrompt = useRef(false);
   const chatHook = useChat({
     id: chat.id,
-    transport: new CustomChatTransport(streamFunction, [chat.id, chat.agent]),
+    transport: new CustomChatTransport(agent.streamFunction, [chat.id, chat.agent]),
     messages: chat.messages
   });
   const { messages, sendMessage } = chatHook;
@@ -46,7 +45,7 @@ export function ChatContainer({ chat, prompt, streamFunction, agentCommands }: C
   const { message, setMessage, handleSubmit, activeTriggerUI } = useTriggerSystem({
     chatHook,
     agent: chat.agent,
-    agentCommands,
+    agentCommands: agent.commands,
     onSubmitCallback: toBottom,
   });
   
