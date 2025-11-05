@@ -13,8 +13,8 @@ const __dirname = path.dirname(__filename);
 
 // Get template path - check both production (./template) and dev (../template) locations
 function getTemplatePath(): string {
-  const prodPath = path.join(__dirname, '..', '..', 'template');
-  const devPath = path.join(__dirname, '..', '..', '..', 'template');
+  const prodPath = path.join(__dirname, 'template');
+  const devPath = path.join(__dirname, '..', '..', 'template');
   
   // Check production path first (when running from dist)
   if (fs.existsSync(prodPath)) {

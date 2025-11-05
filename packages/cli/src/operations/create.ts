@@ -20,8 +20,8 @@ export function createTemplateCopyFilter(templatePath: string) {
     const relativePath = path.relative(templatePath, src);
     const basename = path.basename(src);
     
-    // Allow .env.template (before checking general .env exclusion)
-    if (basename === '.env.template') {
+    // Explicitly allow these dotfiles
+    if (basename === '.env.template' || basename === '.gitignore' || basename === '.gitkeep') {
       return true;
     }
     

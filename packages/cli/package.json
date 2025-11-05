@@ -1,6 +1,6 @@
 {
   "name": "@aiter/cli",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "CLI tool for scaffolding aiter applications and agents",
   "type": "module",
   "keywords": [
